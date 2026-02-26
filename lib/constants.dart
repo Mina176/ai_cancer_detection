@@ -1,5 +1,6 @@
 class Sizes {
-  static const double kHorizontalPadding = 16.0;
+  static const double kVerticalPadding = 24.0;
+  static const double kHorizontalPadding = 40.0;
 }
 
 class AppBreakpoints {
