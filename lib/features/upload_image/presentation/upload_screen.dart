@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:cancer_ai_detection/data/prediction.dart';
-import 'package:cancer_ai_detection/presentation/result.dart';
-import 'package:cancer_ai_detection/service/api_service.dart';
+import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
+import 'package:cancer_ai_detection/features/upload_image/presentation/result.dart';
+import 'package:cancer_ai_detection/features/upload_image/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

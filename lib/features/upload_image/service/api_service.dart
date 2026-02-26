@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cancer_ai_detection/data/prediction.dart';
+import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {

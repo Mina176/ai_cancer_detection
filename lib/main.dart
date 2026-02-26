@@ -1,4 +1,5 @@
-import 'package:cancer_ai_detection/presentation/upload_screen.dart';
+import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
+import 'package:cancer_ai_detection/features/upload_image/presentation/upload_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,6 +11,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: UploadScreen());
+    return const MaterialApp(home: HomeScreen());
   }
 }

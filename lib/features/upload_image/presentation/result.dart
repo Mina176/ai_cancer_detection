@@ -1,4 +1,4 @@
-import 'package:cancer_ai_detection/data/prediction.dart';
+import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
 import 'package:flutter/material.dart';
 
 class Result extends StatelessWidget {
