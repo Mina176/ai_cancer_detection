@@ -7,6 +7,7 @@ environment:
   sdk: ^3.10.4
 
 dependencies:
+  awesome_extensions: ^2.1.0
   flutter:
     sdk: flutter
   flutter_localizations:
