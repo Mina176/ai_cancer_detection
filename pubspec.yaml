@@ -9,6 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  go_router: ^17.1.0
+  gp_backend_client:
+    git:
+      url: https://github.com/YoussefLasheen/gp
+      path: gp_backend/gp_backend_client
+      ref: d5fe504bffb32cea5d0d99837f65da1feec3a6b9
   http: ^1.6.0
   image_picker: ^1.2.1
 
