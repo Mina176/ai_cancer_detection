@@ -1,35 +1,25 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
-import 'package:http/http.dart' as http;
+import 'package:gp_backend_client/gp_backend_client.dart';
 
-class ApiService {
-  static const String baseUrl = 'https://gp.5274336.xyz';
-  static const String endpoint = '$baseUrl/predict';
+class ServerpodApiService {
+  final Client client;
 
-  Future<Prediction> analyzeXray(File imageFile) async {
+  ServerpodApiService({required this.client});
+
+  Future<PredictionResult?> analyzeXray(File imageFile) async {
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(endpoint));
+      final Uint8List bytes = await imageFile.readAsBytes();
 
-      request.files.add(
-        await http.MultipartFile.fromPath('image', imageFile.path),
-      );
+      final ByteData byteData = ByteData.view(bytes.buffer);
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
+      final PredictionResult result = await client.prediction.predict(byteData);
 
-      if (response.statusCode == 200) {
-        return Prediction.fromString(responseData);
-      } else if (response.statusCode == 422) {
-        return Prediction.withError(
-          'Validation Error (422): The API rejected the format.\nDetails: $responseData',
-        );
-      } else {
-        return Prediction.withError('Server Error: ${response.statusCode}');
-      }
+      return result;
     } catch (e) {
-      return Prediction.withError(
-        'Failed to connect to the API. Check your internet connection.',
-      );
+      print('Failed to analyze image via Serverpod: $e');
+      return null;
     }
   }
 }

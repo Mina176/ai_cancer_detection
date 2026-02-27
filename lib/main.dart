@@ -1,4 +1,5 @@
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
+import 'package:cancer_ai_detection/features/upload_image/presentation/upload_screen_desktop.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+      home: const UploadScreen(),
     );
   }
 }
