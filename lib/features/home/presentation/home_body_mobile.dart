@@ -1,8 +1,9 @@
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
+import 'package:cancer_ai_detection/widgets/drawer_content.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreenBody extends StatelessWidget {
-  const HomeScreenBody({super.key});
+class HomeBodyMobile extends StatelessWidget {
+  const HomeBodyMobile({super.key});
 
   @override
   Widget build(BuildContext context) {
