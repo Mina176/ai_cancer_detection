@@ -1,6 +1,5 @@
-import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/upload_screen_desktop.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,10 +11,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const UploadScreen(),
+      routerConfig: router,
     );
   }
 }
