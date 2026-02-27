@@ -8,18 +8,10 @@ class HomeBodyDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          DrawerContent(),
-          VerticalDivider(),
-          Center(
-            child: Text(
-              'Desktop Screen Body',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ).expanded(),
-        ],
+    return Center(
+      child: Text(
+        'Desktop Screen Body',
+        style: Theme.of(context).textTheme.headlineMedium,
       ),
     );
   }

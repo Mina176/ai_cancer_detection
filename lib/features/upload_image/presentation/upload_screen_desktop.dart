@@ -56,8 +56,6 @@ class _UploadScreenState extends State<UploadScreen> {
     return Scaffold(
       body: Row(
         children: [
-          DrawerContent().expanded(flex: 2),
-          VerticalDivider(width: 1),
           UploadImageSection(
             selectedImage: selectedImage,
             isLoading: isLoading,

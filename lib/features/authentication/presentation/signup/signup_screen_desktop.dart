@@ -1,5 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
+import 'package:cancer_ai_detection/main.dart';
 import 'package:flutter/material.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class SignupScreenDesktop extends StatelessWidget {
   const SignupScreenDesktop({super.key});
@@ -29,6 +31,7 @@ class _SignupSectionState extends State<SignupSection> {
   String lastName = '';
   String email = '';
   String password = '';
+  AuthSuccess? authInfo = client.auth.authInfo;
   @override
   Widget build(BuildContext context) {
     return Column(
