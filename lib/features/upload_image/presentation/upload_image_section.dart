@@ -12,13 +12,11 @@ class UploadImageSection extends StatelessWidget {
     required this.selectedImage,
     required this.isLoading,
     required this.onPickImage,
-    required this.onProcessImage,
   });
 
   final File? selectedImage;
   final bool isLoading;
   final VoidCallback onPickImage;
-  final VoidCallback onProcessImage;
 
   @override
   Widget build(BuildContext context) {
@@ -56,56 +54,66 @@ class UploadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: DottedBorder(
-        options: RoundedRectDottedBorderOptions(
-          dashPattern: [10, 5],
-          strokeWidth: 2,
-          radius: Radius.circular(6),
-          color: AppTheme.primaryColor,
-        ),
-        child: selectedImage != null
-            ? Image.file(selectedImage!, fit: BoxFit.contain)
-            : Center(
-                child: SizedBox(
-                  height: 320,
-                  width: double.infinity,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF4FAFE),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.cloud_upload_rounded,
-                          size: 48,
-                          color: AppTheme.primaryColor,
-                        ),
-                        24.heightBox,
-                        Text(
-                          'Drag and drop medical scans',
-                          style: context.bodyLarge?.extraBold,
-                        ),
-                        8.heightBox,
-                        Text(
-                          'supports DICOM, JPG, PNG up to 500MB per file',
-                          style: context.bodyMedium?.copyWith(
-                            color: context.theme.hintColor,
-                          ),
-                        ),
-                        24.heightBox,
-                        TextButton(
-                          onPressed: onPickImage,
-                          child: Text('Browse Files'),
-                        ),
-                      ],
-                    ),
+    return selectedImage == null
+        ? Card(
+            child: DottedBorder(
+              options: RoundedRectDottedBorderOptions(
+                dashPattern: const [10, 5],
+                strokeWidth: 2,
+                radius: const Radius.circular(6),
+                color: AppTheme.primaryColor,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF4FAFE),
+                    borderRadius: BorderRadius.circular(6),
                   ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.cloud_upload_rounded,
+                        size: 48,
+                        color: AppTheme.primaryColor,
+                      ),
+                      24.heightBox,
+                      Text(
+                        'Drag and drop medical scans',
+                        style: context.bodyLarge?.extraBold,
+                      ),
+                      8.heightBox,
+                      Text(
+                        'Supports DICOM, JPG, PNG up to 500MB per file',
+                        style: context.bodyMedium?.copyWith(
+                          color: context.theme.hintColor,
+                        ),
+                      ),
+                      24.heightBox,
+                      TextButton(
+                        onPressed: onPickImage,
+                        style: TextButton.styleFrom(
+                          minimumSize: const Size(160, 48),
+                        ),
+                        child: const Text('Browse Files'),
+                      ),
+                    ],
+                  ).paddingAll(32),
                 ),
               ),
-      ).paddingAll(32),
-    );
+            ).paddingAll(32),
+          )
+        : DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Center(
+              child: Image.network(
+                selectedImage!.path,
+              ).paddingSymmetric(vertical: 42),
+            ),
+          );
   }
 }

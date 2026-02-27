@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/constants.dart';
+import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/patient_data_section.dart';
+import 'package:cancer_ai_detection/features/upload_image/presentation/scan_data_section.dart';
 import 'package:cancer_ai_detection/features/upload_image/presentation/result.dart';
 import 'package:cancer_ai_detection/features/upload_image/presentation/upload_image_section.dart';
 import 'package:cancer_ai_detection/features/upload_image/service/api_service.dart';
+import 'package:cancer_ai_detection/widgets/drawer_content.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -21,7 +24,6 @@ class _UploadScreenState extends State<UploadScreen> {
   Prediction? result;
 
   final ImagePicker picker = ImagePicker();
-  final ApiService apiService = ApiService();
 
   Future<void> pickImage() async {
     final XFile? pickedFile = await picker.pickImage(
@@ -44,10 +46,7 @@ class _UploadScreenState extends State<UploadScreen> {
       isLoading = true;
     });
 
-    Prediction prediction = await apiService.analyzeXray(selectedImage!);
-
     setState(() {
-      result = prediction;
       isLoading = false;
     });
   }
@@ -57,14 +56,58 @@ class _UploadScreenState extends State<UploadScreen> {
     return Scaffold(
       body: Row(
         children: [
+          DrawerContent().expanded(flex: 2),
+          VerticalDivider(width: 1),
           UploadImageSection(
             selectedImage: selectedImage,
             isLoading: isLoading,
             onPickImage: pickImage,
+          ).expanded(flex: 6),
+          VerticalDivider(width: 1),
+          ScanDataSection(
+            result: result,
+            isLoading: isLoading,
             onProcessImage: processImage,
-          ).expanded(flex: 5),
-          PatientDataSection().expanded(flex: 2),
+            onCancel: () {
+              setState(() {
+                selectedImage = null;
+                result = null;
+              });
+            },
+          ).expanded(flex: 3),
         ],
+      ),
+    );
+  }
+}
+
+class HeaderSection extends StatelessWidget {
+  const HeaderSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.kHorizontalPadding,
+          vertical: Sizes.kVerticalPadding,
+        ),
+        child: Row(
+          children: [
+            Text(
+              'Cancer AI Detection',
+              style: context.headlineMedium?.extraBold,
+            ),
+            Spacer(),
+            Text(
+              'Upload and Analyze Diagnostic Scans',
+              style: context.bodyMedium?.copyWith(
+                color: context.theme.hintColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
