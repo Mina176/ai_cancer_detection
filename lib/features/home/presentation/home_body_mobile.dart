@@ -1,5 +1,3 @@
-import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
-import 'package:cancer_ai_detection/widgets/drawer_content.dart';
 import 'package:flutter/material.dart';
 
 class HomeBodyMobile extends StatelessWidget {

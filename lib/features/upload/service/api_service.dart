@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:cancer_ai_detection/features/upload/data/prediction.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 
 class ServerpodApiService {

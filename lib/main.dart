@@ -1,12 +1,9 @@
-import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/upload_screen_desktop.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
-import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
-import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 late Client client;
 Future<void> main() async {
