@@ -20,7 +20,7 @@ dependencies:
     git:
       url: https://github.com/YoussefLasheen/gp
       path: gp_backend/gp_backend_client
-      ref: d5fe504bffb32cea5d0d99837f65da1feec3a6b9
+      ref: 1b68d44ead81e70e6c7dd956250274e372935344
   http: ^1.6.0
   image_picker: ^1.2.1
   serverpod_auth_idp_flutter: ^3.3.1
