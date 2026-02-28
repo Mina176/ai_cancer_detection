@@ -1,6 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
-import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
+import 'package:cancer_ai_detection/features/upload/data/prediction.dart';
 import 'package:flutter/material.dart';
 
 class ScanDataSection extends StatelessWidget {

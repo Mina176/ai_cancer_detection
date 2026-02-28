@@ -1,5 +1,5 @@
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/upload_screen_desktop.dart';
+import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/upload_screen_desktop.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';

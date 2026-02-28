@@ -6,8 +6,8 @@ import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
-class UploadImageSection extends StatelessWidget {
-  const UploadImageSection({
+class UploadScanSection extends StatelessWidget {
+  const UploadScanSection({
     super.key,
     required this.selectedImage,
     required this.isLoading,

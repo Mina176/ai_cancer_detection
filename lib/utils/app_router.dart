@@ -3,7 +3,7 @@ import 'package:cancer_ai_detection/features/authentication/presentation/signin/
 import 'package:cancer_ai_detection/features/authentication/presentation/signup/signup_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/upload_screen_desktop.dart';
+import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

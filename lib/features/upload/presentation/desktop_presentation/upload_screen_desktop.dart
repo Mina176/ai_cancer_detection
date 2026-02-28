@@ -2,23 +2,22 @@ import 'dart:io';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
-import 'package:cancer_ai_detection/features/upload_image/data/prediction.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/scan_data_section.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/result.dart';
-import 'package:cancer_ai_detection/features/upload_image/presentation/upload_image_section.dart';
-import 'package:cancer_ai_detection/features/upload_image/service/api_service.dart';
+import 'package:cancer_ai_detection/features/upload/data/prediction.dart';
+import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/scan_data_section.dart';
+import 'package:cancer_ai_detection/features/upload/service/api_service.dart';
+import 'package:cancer_ai_detection/features/upload_image/desktop_presentation/upload_scan_section.dart';
 import 'package:cancer_ai_detection/widgets/drawer_content.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UploadScreen extends StatefulWidget {
-  const UploadScreen({super.key});
+class UploadScreenDesktop extends StatefulWidget {
+  const UploadScreenDesktop({super.key});
 
   @override
-  State<UploadScreen> createState() => _UploadScreenState();
+  State<UploadScreenDesktop> createState() => _UploadScreenDesktopState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _UploadScreenDesktopState extends State<UploadScreenDesktop> {
   File? selectedImage;
   bool isLoading = false;
   Prediction? result;
@@ -56,7 +55,7 @@ class _UploadScreenState extends State<UploadScreen> {
     return Scaffold(
       body: Row(
         children: [
-          UploadImageSection(
+          UploadScanSection(
             selectedImage: selectedImage,
             isLoading: isLoading,
             onPickImage: pickImage,
