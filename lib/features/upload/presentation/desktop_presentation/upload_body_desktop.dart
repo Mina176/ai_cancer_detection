@@ -17,7 +17,6 @@ class UploadBodyDesktop extends StatefulWidget {
 
 class _UploadBodyDesktopState extends State<UploadBodyDesktop> {
   File? selectedImage;
-  bool isLoading = false;
   Prediction? result;
 
   final ImagePicker picker = ImagePicker();
@@ -43,12 +42,10 @@ class _UploadBodyDesktopState extends State<UploadBodyDesktop> {
         children: [
           UploadScanSection(
             selectedImage: selectedImage,
-            isLoading: isLoading,
             onPickImage: pickImage,
           ).expanded(flex: 6),
           VerticalDivider(width: 1),
           ScanDataSection(
-            isLoading: isLoading,
             onCancel: () {
               setState(() {
                 selectedImage = null;

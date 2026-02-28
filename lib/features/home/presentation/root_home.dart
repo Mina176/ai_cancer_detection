@@ -28,8 +28,7 @@ class RootHome extends StatelessWidget {
         } else {
           return Scaffold(
             body: navigationShell,
-            appBar: AppBar(),
-            endDrawer: Drawer(
+            drawer: Drawer(
               child: DrawerContent(
                 navigationShell: navigationShell,
               ),

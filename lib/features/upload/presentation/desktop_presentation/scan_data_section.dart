@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 class ScanDataSection extends StatelessWidget {
   const ScanDataSection({
     super.key,
-    required this.isLoading,
     required this.onCancel,
   });
 
-  final bool isLoading;
   final VoidCallback onCancel;
 
   @override
@@ -19,85 +17,83 @@ class ScanDataSection extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            child: isLoading
-                ? CircularProgressIndicator()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      16.heightBox,
-                      Text(
-                        'Scan Type',
-                        style: context.bodyMedium?.bold,
-                      ).paddingSymmetric(horizontal: 16),
-                      8.heightBox,
-                      DropdownButtonFormField(
-                        items: ['CT Scan', 'MRI', 'X-Ray']
-                            .map(
-                              (type) => DropdownMenuItem(
-                                value: type,
-                                child: Text(type),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) {},
-                        decoration: InputDecoration(
-                          hintText: 'Select scan type',
-                          hintStyle: context.bodyMedium?.copyWith(
-                            color: context.theme.hintColor,
-                          ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                16.heightBox,
+                Text(
+                  'Scan Type',
+                  style: context.bodyMedium?.bold,
+                ).paddingSymmetric(horizontal: 16),
+                8.heightBox,
+                DropdownButtonFormField(
+                  items: ['CT Scan', 'MRI', 'X-Ray']
+                      .map(
+                        (type) => DropdownMenuItem(
+                          value: type,
+                          child: Text(type),
                         ),
-                      ).paddingSymmetric(horizontal: 16),
-                      16.heightBox,
-                      Text(
-                        'Date of Scan',
-                        style: context.bodyMedium?.bold,
-                      ).paddingSymmetric(horizontal: 16),
-                      8.heightBox,
-                      TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: IconButton(
-                            icon: Icon(Icons.calendar_today),
-                            onPressed: () {},
-                          ),
-                          hintText: 'dd/mm/yyyy',
-                          hintStyle: context.bodyMedium?.copyWith(
-                            color: context.theme.hintColor,
-                          ),
-                        ),
-                      ).paddingSymmetric(horizontal: 16),
-                      16.heightBox,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Clinical Notes',
-                            style: context.bodyMedium?.bold,
-                          ),
-                          Text(
-                            'Optional',
-                            style: context.bodyMedium?.copyWith(
-                              color: context.theme.hintColor,
-                            ),
-                          ),
-                        ],
-                      ).paddingSymmetric(horizontal: 16),
-                      8.heightBox,
-                      TextField(
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          hintText:
-                              'Enter relevant symptoms, history, or specific areas of concern...',
-                          hintStyle: context.bodyMedium?.copyWith(
-                            color: context.theme.hintColor,
-                          ),
-                        ),
-                      ).paddingSymmetric(horizontal: 16),
-                    ],
-                  ).paddingSymmetric(vertical: Sizes.kVerticalPadding / 2),
+                      )
+                      .toList(),
+                  onChanged: (value) {},
+                  decoration: InputDecoration(
+                    hintText: 'Select scan type',
+                    hintStyle: context.bodyMedium?.copyWith(
+                      color: context.theme.hintColor,
+                    ),
+                  ),
+                ).paddingSymmetric(horizontal: 16),
+                16.heightBox,
+                Text(
+                  'Date of Scan',
+                  style: context.bodyMedium?.bold,
+                ).paddingSymmetric(horizontal: 16),
+                8.heightBox,
+                TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () {},
+                    ),
+                    hintText: 'dd/mm/yyyy',
+                    hintStyle: context.bodyMedium?.copyWith(
+                      color: context.theme.hintColor,
+                    ),
+                  ),
+                ).paddingSymmetric(horizontal: 16),
+                16.heightBox,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Clinical Notes',
+                      style: context.bodyMedium?.bold,
+                    ),
+                    Text(
+                      'Optional',
+                      style: context.bodyMedium?.copyWith(
+                        color: context.theme.hintColor,
+                      ),
+                    ),
+                  ],
+                ).paddingSymmetric(horizontal: 16),
+                8.heightBox,
+                TextField(
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText:
+                        'Enter relevant symptoms, history, or specific areas of concern...',
+                    hintStyle: context.bodyMedium?.copyWith(
+                      color: context.theme.hintColor,
+                    ),
+                  ),
+                ).paddingSymmetric(horizontal: 16),
+              ],
+            ).paddingSymmetric(vertical: Sizes.kVerticalPadding / 2),
           ),
         ),
         Divider(
-          height: 24, 
+          height: 24,
         ),
         ElevatedButton(
           onPressed: () {},

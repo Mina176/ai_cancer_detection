@@ -10,12 +10,10 @@ class UploadScanSection extends StatelessWidget {
   const UploadScanSection({
     super.key,
     required this.selectedImage,
-    required this.isLoading,
     required this.onPickImage,
   });
 
   final File? selectedImage;
-  final bool isLoading;
   final VoidCallback onPickImage;
 
   @override
