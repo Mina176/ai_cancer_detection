@@ -36,18 +36,6 @@ class _UploadBodyDesktopState extends State<UploadBodyDesktop> {
     }
   }
 
-  Future<void> processImage() async {
-    if (selectedImage == null) return;
-
-    setState(() {
-      isLoading = true;
-    });
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +48,7 @@ class _UploadBodyDesktopState extends State<UploadBodyDesktop> {
           ).expanded(flex: 6),
           VerticalDivider(width: 1),
           ScanDataSection(
-            result: result,
             isLoading: isLoading,
-            onProcessImage: processImage,
             onCancel: () {
               setState(() {
                 selectedImage = null;

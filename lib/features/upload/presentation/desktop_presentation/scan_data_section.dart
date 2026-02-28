@@ -6,15 +6,11 @@ import 'package:flutter/material.dart';
 class ScanDataSection extends StatelessWidget {
   const ScanDataSection({
     super.key,
-    required this.result,
     required this.isLoading,
-    required this.onProcessImage,
     required this.onCancel,
   });
 
-  final Prediction? result;
   final bool isLoading;
-  final VoidCallback onProcessImage;
   final VoidCallback onCancel;
 
   @override
@@ -101,19 +97,11 @@ class ScanDataSection extends StatelessWidget {
           ),
         ),
         Divider(
-          height: 32,
+          height: 24, 
         ),
         ElevatedButton(
-          onPressed: onProcessImage,
-          child: isLoading ? Text('Analyzing...') : Text('Start Analysis'),
-        ).paddingSymmetric(horizontal: 16),
-        8.heightBox,
-        TextButton(
-          onPressed: onCancel,
-          style: TextButton.styleFrom(
-            minimumSize: const Size(double.infinity, 48),
-          ),
-          child: Text('Cancel Upload'),
+          onPressed: () {},
+          child: Text('Upload'),
         ).paddingSymmetric(horizontal: 16),
         8.heightBox,
       ],
