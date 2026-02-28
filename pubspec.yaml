@@ -23,6 +23,8 @@ dependencies:
       ref: d5fe504bffb32cea5d0d99837f65da1feec3a6b9
   http: ^1.6.0
   image_picker: ^1.2.1
+  serverpod_auth_idp_flutter: ^3.3.1
+  serverpod_flutter: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -31,3 +33,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/

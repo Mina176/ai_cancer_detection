@@ -1,20 +1,23 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class DrawerContent extends StatefulWidget {
-  const DrawerContent({super.key});
+class DrawerContent extends StatelessWidget {
+  const DrawerContent({super.key, required this.navigationShell});
+  final StatefulNavigationShell navigationShell;
+  
+  void onTap(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
 
-  @override
-  State<DrawerContent> createState() => _DrawerContentState();
-}
-
-class _DrawerContentState extends State<DrawerContent> {
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     List<String> menuItems = [
       'Home',
-      'Scan',
+      'Scan ',
       'Settings',
       'Help',
     ];
@@ -50,12 +53,8 @@ class _DrawerContentState extends State<DrawerContent> {
                 ListTile(
                   leading: Icon(menuIcons[index]),
                   title: Text(menuItems[index]),
-                  selected: selectedIndex == index,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                  },
+                  selected: navigationShell.currentIndex == index,
+                  onTap: () => onTap(index),
                 ),
                 4.heightBox,
               ],
