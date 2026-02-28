@@ -1,22 +1,21 @@
 import 'dart:io';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
-import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/upload/data/prediction.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/scan_data_section.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/upload_scan_section.dart';
-import 'package:cancer_ai_detection/widgets/drawer_content.dart';
+import 'package:cancer_ai_detection/features/upload/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UploadScreen extends StatefulWidget {
-  const UploadScreen({super.key});
+class UploadBodyDesktop extends StatefulWidget {
+  const UploadBodyDesktop({super.key});
 
   @override
-  State<UploadScreen> createState() => _UploadScreenState();
+  State<UploadBodyDesktop> createState() => _UploadBodyDesktopState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _UploadBodyDesktopState extends State<UploadBodyDesktop> {
   File? selectedImage;
   bool isLoading = false;
   Prediction? result;
