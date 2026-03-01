@@ -12,8 +12,8 @@ class SigninScreenDesktop extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          SigninLeftSideImage().expanded(),
-          SigninSection().expanded(flex: 2),
+          Expanded(child: SigninLeftSideImage()),
+          Expanded(flex: 2, child: SigninSection()),
         ],
       ),
     );

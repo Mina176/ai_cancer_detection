@@ -1,5 +1,5 @@
 class Sizes {
-  static const double kVerticalPadding = 24.0;
+  static const double kVerticalPadding = 12.0;
   static const double kHorizontalPadding = 20.0;
 }
 
