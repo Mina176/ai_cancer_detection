@@ -1,5 +1,9 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class HomeBodyDesktop extends StatelessWidget {
   const HomeBodyDesktop({super.key});

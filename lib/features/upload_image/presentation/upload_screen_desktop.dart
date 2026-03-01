@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/upload/data/prediction.dart';
-import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/scan_data_section.dart';
-import 'package:cancer_ai_detection/features/upload/presentation/desktop_presentation/upload_scan_section.dart';
+import 'package:cancer_ai_detection/features/upload/presentation/scan_data_form.dart';
+import 'package:cancer_ai_detection/features/upload/presentation/upload_scan_section.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -53,22 +53,12 @@ class _UploadScreenState extends State<UploadScreen> {
       body: Row(
         children: [
           UploadScanSection(
+            onCancel: () {},
             selectedImage: selectedImage,
-            isLoading: isLoading,
             onPickImage: pickImage,
           ).expanded(flex: 6),
           VerticalDivider(width: 1),
-          ScanDataSection(
-            result: result,
-            isLoading: isLoading,
-            onProcessImage: processImage,
-            onCancel: () {
-              setState(() {
-                selectedImage = null;
-                result = null;
-              });
-            },
-          ).expanded(flex: 3),
+          ScanDataForm().expanded(flex: 3),
         ],
       ),
     );

@@ -4,8 +4,10 @@ import 'package:cancer_ai_detection/features/authentication/presentation/signup/
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
+import 'package:cancer_ai_detection/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -17,7 +19,7 @@ const String uploadRoute = '/upload';
 
 final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: authWrapperRoute,
+  initialLocation: client.auth.isAuthenticated ? authWrapperRoute : homeRoute,
   routes: [
     GoRoute(
       path: authWrapperRoute,

@@ -11,8 +11,8 @@ class SignupScreenDesktop extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          SignupLeftSideImage().expanded(),
-          SignupSection().expanded(flex: 2),
+          Expanded(child: SignupLeftSideImage()),
+          Expanded(flex: 2, child: SignupSection()),
         ],
       ),
     );
@@ -46,45 +46,49 @@ class _SignupSectionState extends State<SignupSection> {
         20.heightBox,
         Row(
           children: [
-            Column(
-              spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'First Name',
-                  style: context.bodyMedium?.medium.bold,
-                ),
-                TextField(
-                  onChanged: (value) => firstName = value,
-                  decoration: InputDecoration(
-                    hintText: 'First Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+            Expanded(
+              child: Column(
+                spacing: 4,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'First Name',
+                    style: context.bodyMedium?.medium.bold,
+                  ),
+                  TextField(
+                    onChanged: (value) => firstName = value,
+                    decoration: InputDecoration(
+                      hintText: 'First Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ).expanded(),
+                ],
+              ),
+            ),
             20.widthBox,
-            Column(
-              spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Last Name',
-                  style: context.bodyMedium?.medium.bold,
-                ),
-                TextField(
-                  onChanged: (value) => lastName = value,
-                  decoration: InputDecoration(
-                    hintText: 'Last Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+            Expanded(
+              child: Column(
+                spacing: 4,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Last Name',
+                    style: context.bodyMedium?.medium.bold,
+                  ),
+                  TextField(
+                    onChanged: (value) => lastName = value,
+                    decoration: InputDecoration(
+                      hintText: 'Last Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ).expanded(),
+                ],
+              ),
+            ),
           ],
         ),
         Text(

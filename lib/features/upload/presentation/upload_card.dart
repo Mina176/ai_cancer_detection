@@ -1,66 +1,33 @@
 import 'dart:io';
 
-import 'package:awesome_extensions/awesome_extensions_flutter.dart';
-import 'package:cancer_ai_detection/constants.dart';
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-
-class UploadScanSection extends StatelessWidget {
-  const UploadScanSection({
-    super.key,
-    required this.selectedImage,
-    required this.isLoading,
-    required this.onPickImage,
-  });
-
-  final File? selectedImage;
-  final bool isLoading;
-  final VoidCallback onPickImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text('Upload Diagnostic Scan', style: context.displaySmall?.extraBold),
-        4.heightBox,
-        Text(
-          'Upload patient imaging files for AI-assisted diagnostic analysis.',
-          style: context.bodyLarge?.copyWith(color: context.theme.hintColor),
-        ),
-        32.heightBox,
-        UploadCard(
-          selectedImage: selectedImage,
-          onPickImage: onPickImage,
-        ),
-      ],
-    ).paddingSymmetric(
-      horizontal: Sizes.kHorizontalPadding,
-      vertical: Sizes.kVerticalPadding,
-    );
-  }
-}
 
 class UploadCard extends StatelessWidget {
   const UploadCard({
     super.key,
     required this.selectedImage,
     required this.onPickImage,
+    required this.onCancel,
   });
 
   final File? selectedImage;
   final VoidCallback onPickImage;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
     return selectedImage == null
         ? Card(
+            elevation: 0,
+            color: Colors.transparent,
             child: DottedBorder(
-              options: RoundedRectDottedBorderOptions(
-                dashPattern: const [10, 5],
+              options: const RoundedRectDottedBorderOptions(
+                dashPattern: [10, 5],
                 strokeWidth: 2,
-                radius: const Radius.circular(6),
+                radius: Radius.circular(16),
                 color: AppTheme.primaryColor,
               ),
               child: SizedBox(
@@ -68,7 +35,7 @@ class UploadCard extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: const Color(0xFFF4FAFE),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +43,7 @@ class UploadCard extends StatelessWidget {
                       const Icon(
                         Icons.cloud_upload_rounded,
                         size: 48,
-                        color: AppTheme.primaryColor,
+                        color: Colors.blue,
                       ),
                       24.heightBox,
                       Text(
@@ -85,7 +52,7 @@ class UploadCard extends StatelessWidget {
                       ),
                       8.heightBox,
                       Text(
-                        'Supports DICOM, JPG, PNG up to 500MB per file',
+                        'Supports DICOM, JPG, PNG up to 500MB',
                         style: context.bodyMedium?.copyWith(
                           color: context.theme.hintColor,
                         ),
@@ -102,17 +69,27 @@ class UploadCard extends StatelessWidget {
                   ).paddingAll(32),
                 ),
               ),
-            ).paddingAll(32),
+            ),
           )
         : DecoratedBox(
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Center(
-              child: Image.network(
-                selectedImage!.path,
-              ).paddingSymmetric(vertical: 42),
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Center(
+                  child: Image.network(
+                    selectedImage!.path,
+                    fit: BoxFit.contain,
+                  ).paddingSymmetric(vertical: 24),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white),
+                  onPressed: onCancel,
+                ),
+              ],
             ),
           );
   }
