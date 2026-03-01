@@ -29,6 +29,10 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        env:
+          GIT_CONFIG_COUNT: 1
+          GIT_CONFIG_KEY_0: url.https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/.insteadOf
+          GIT_CONFIG_VALUE_0: https://github.com/
 
       - name: Build web
         run: flutter build web --release --base-href "/ai_cancer_detection/"
