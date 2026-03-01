@@ -1,3 +1,4 @@
+import 'package:cancer_ai_detection/features/home/presentation/home_body_desktop.dart';
 import 'package:flutter/material.dart';
 
 class HomeBodyMobile extends StatelessWidget {
@@ -5,14 +6,10 @@ class HomeBodyMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Text(
-          'Home Screen Body',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
+    return Column(
+      children: [
+        HomeBody(),
+      ],
     );
   }
 }
