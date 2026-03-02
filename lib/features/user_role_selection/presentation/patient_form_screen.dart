@@ -136,13 +136,4 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
       ),
     );
   }
-
-  Future<void> _selectDataOfBirth() async {
-    await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-  }
 }
