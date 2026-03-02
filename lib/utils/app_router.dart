@@ -1,9 +1,11 @@
 import 'package:cancer_ai_detection/features/authentication/presentation/auth_wrapper.dart';
-import 'package:cancer_ai_detection/features/authentication/presentation/signin/signin_screen.dart';
-import 'package:cancer_ai_detection/features/authentication/presentation/signup/signup_screen.dart';
+import 'package:cancer_ai_detection/features/authentication/presentation/signin_screen.dart';
+import 'package:cancer_ai_detection/features/authentication/presentation/signup_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
+import 'package:cancer_ai_detection/features/user_role_selection/presentation/patient_form_screen.dart';
+import 'package:cancer_ai_detection/features/user_role_selection/presentation/select_role_screen.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,13 +15,17 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 const String authWrapperRoute = '/';
 const String homeRoute = '/home';
+const String selectRoleRoute = '/select-role';
+const String patientFormRoute = '/patient-form';
 const String signinRoute = '/signin';
 const String signupRoute = '/signup';
 const String uploadRoute = '/upload';
 
 final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: client.auth.isAuthenticated ? authWrapperRoute : homeRoute,
+  initialLocation: client.auth.isAuthenticated
+      ? authWrapperRoute
+      : selectRoleRoute,
   routes: [
     GoRoute(
       path: authWrapperRoute,
@@ -37,6 +43,18 @@ final GoRouter router = GoRouter(
       path: signupRoute,
       builder: (BuildContext context, GoRouterState state) {
         return const SignupScreen();
+      },
+    ),
+    GoRoute(
+      path: selectRoleRoute,
+      builder: (BuildContext context, GoRouterState state) {
+        return const SelectRoleScreen();
+      },
+    ),
+    GoRoute(
+      path: patientFormRoute,
+      builder: (BuildContext context, GoRouterState state) {
+        return const PatientFormScreen();
       },
     ),
     StatefulShellRoute.indexedStack(
