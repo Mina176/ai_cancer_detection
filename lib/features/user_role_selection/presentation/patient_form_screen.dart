@@ -1,5 +1,7 @@
 import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
 
@@ -123,6 +125,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                       alcoholFreq: alcoholFrequency,
                       bloodType: selectedBloodType,
                     );
+                    context.go(homeRoute);
                   }
                 },
                 child: Text('submit'),
