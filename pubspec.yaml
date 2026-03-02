@@ -17,12 +17,10 @@ dependencies:
   go_router: ^17.1.0
   google_fonts: ^8.0.2
   gp_backend_client:
-    git:
-      url: https://github.com/YoussefLasheen/gp
-      path: gp_backend/gp_backend_client
-      ref: 1b68d44ead81e70e6c7dd956250274e372935344
+    path: ./gp/gp_backend/gp_backend_client
   http: ^1.6.0
   image_picker: ^1.2.1
+  intl: ^0.20.2
   serverpod_auth_idp_flutter: ^3.3.1
   serverpod_flutter: ^3.3.1
 

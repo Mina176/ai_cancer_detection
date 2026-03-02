@@ -392,11 +392,9 @@ packages:
   gp_backend_client:
     dependency: "direct main"
     description:
-      path: "gp_backend/gp_backend_client"
-      ref: "1b68d44ead81e70e6c7dd956250274e372935344"
-      resolved-ref: "1b68d44ead81e70e6c7dd956250274e372935344"
-      url: "https://github.com/YoussefLasheen/gp"
-    source: git
+      path: "gp/gp_backend/gp_backend_client"
+      relative: true
+    source: path
     version: "0.0.0"
   hooks:
     dependency: transitive
@@ -487,7 +485,7 @@ packages:
     source: hosted
     version: "0.2.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
