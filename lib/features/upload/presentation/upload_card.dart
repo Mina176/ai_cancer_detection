@@ -4,22 +4,23 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class UploadCard extends StatelessWidget {
   const UploadCard({
     super.key,
-    required this.selectedImage,
+    required this.imageBytes,
     required this.onPickImage,
     required this.onCancel,
   });
 
-  final File? selectedImage;
+  final Uint8List? imageBytes;
   final VoidCallback onPickImage;
   final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
-    return selectedImage == null
+    return imageBytes == null
         ? Card(
             elevation: 0,
             color: Colors.transparent,
@@ -76,20 +77,23 @@ class UploadCard extends StatelessWidget {
               color: Colors.black,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Center(
-                  child: Image.network(
-                    selectedImage!.path,
-                    fit: BoxFit.contain,
-                  ).paddingSymmetric(vertical: 24),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: onCancel,
-                ),
-              ],
+            child: SizedBox(
+              height: 300,
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Center(
+                    child: Image.memory(
+                      imageBytes!,
+                      fit: BoxFit.contain,
+                    ).paddingSymmetric(vertical: 24),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: onCancel,
+                  ),
+                ],
+              ),
             ),
           );
   }

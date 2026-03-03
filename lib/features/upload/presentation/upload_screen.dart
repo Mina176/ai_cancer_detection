@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/scan_data_form.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/sticky_upload_button.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_scan_section.dart';
+import 'package:cancer_ai_detection/main.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
@@ -16,8 +19,12 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  File? selectedImage;
+  XFile? selectedXFile;
+  Uint8List? webImageBytes;
   final ImagePicker picker = ImagePicker();
+  DateTime selectedDate = DateTime.now();
+  ScanType selectedScanType = ScanType.mri;
+  BodyPart selectedBodyPart = BodyPart.head;
 
   Future<void> pickImage() async {
     final XFile? pickedFile = await picker.pickImage(
@@ -26,16 +33,25 @@ class _UploadScreenState extends State<UploadScreen> {
       maxHeight: 1024,
     );
     if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
       setState(() {
-        selectedImage = File(pickedFile.path);
+        selectedXFile = pickedFile;
+        webImageBytes = bytes;
       });
     }
   }
 
-  void clearSelection() {
-    setState(() {
-      selectedImage = null;
-    });
+  void uploadScan() async {
+    if (webImageBytes != null) {
+      final ByteData imageByteData = ByteData.view(webImageBytes!.buffer);
+      await client.medicalScan.uploadMyScan(
+        imageByteData,
+        scanType: selectedScanType,
+        bodyPart: selectedBodyPart,
+        scanDate: selectedDate,
+      );
+      print('Scan uploaded successfully');
+    }
   }
 
   @override
@@ -56,12 +72,13 @@ class _UploadScreenState extends State<UploadScreen> {
               children: [
                 Expanded(
                   flex: 6,
-                  child: SingleChildScrollView(
-                    child: UploadScanSection(
-                      selectedImage: selectedImage,
-                      onPickImage: pickImage,
-                      onCancel: clearSelection,
-                    ),
+                  child: UploadScanSection(
+                    imageBytes: webImageBytes,
+                    onPickImage: pickImage,
+                    onCancel: () => setState(() {
+                      selectedXFile = null;
+                      webImageBytes = null;
+                    }),
                   ),
                 ),
                 const VerticalDivider(width: 1),
@@ -69,8 +86,29 @@ class _UploadScreenState extends State<UploadScreen> {
                   flex: 3,
                   child: Column(
                     children: [
-                      Expanded(child: const ScanDataForm()),
-                      StickyUploadButton(onPressed: clearSelection),
+                      Expanded(
+                        child: ScanDataForm(
+                          scanType: selectedScanType,
+                          bodyPart: selectedBodyPart,
+                          onScanChanged: (value) {
+                            setState(() {
+                              selectedScanType = value!;
+                            });
+                          },
+                          onBodyPartChanged: (value) {
+                            setState(() {
+                              selectedBodyPart = value!;
+                            });
+                          },
+                          selectedDate: selectedDate,
+                          onSelectDate: (date) {
+                            setState(() {
+                              selectedDate = date;
+                            });
+                          },
+                        ),
+                      ),
+                      StickyUploadButton(onPressed: uploadScan),
                     ],
                   ),
                 ),
@@ -86,16 +124,38 @@ class _UploadScreenState extends State<UploadScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         UploadScanSection(
-                          selectedImage: selectedImage,
+                          imageBytes: webImageBytes,
                           onPickImage: pickImage,
-                          onCancel: clearSelection,
+                          onCancel: () => setState(() {
+                            selectedXFile = null;
+                            webImageBytes = null;
+                          }),
                         ),
-                        const ScanDataForm(),
+                        ScanDataForm(
+                          scanType: selectedScanType,
+                          bodyPart: selectedBodyPart,
+                          onScanChanged: (value) {
+                            setState(() {
+                              selectedScanType = value!;
+                            });
+                          },
+                          onBodyPartChanged: (value) {
+                            setState(() {
+                              selectedBodyPart = value!;
+                            });
+                          },
+                          selectedDate: selectedDate,
+                          onSelectDate: (date) {
+                            setState(() {
+                              selectedDate = date;
+                            });
+                          },
+                        ),
                       ],
                     ),
                   ),
                 ),
-                StickyUploadButton(onPressed: clearSelection),
+                StickyUploadButton(onPressed: uploadScan),
               ],
             ),
     );

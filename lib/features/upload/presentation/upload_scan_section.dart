@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
@@ -9,12 +10,12 @@ import 'package:flutter/material.dart';
 class UploadScanSection extends StatelessWidget {
   const UploadScanSection({
     super.key,
-    required this.selectedImage,
+    required this.imageBytes,
     required this.onPickImage,
     required this.onCancel,
   });
 
-  final File? selectedImage;
+  final Uint8List? imageBytes;
   final VoidCallback onPickImage;
   final VoidCallback onCancel;
 
@@ -22,7 +23,6 @@ class UploadScanSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return context.isLandscape
         ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -38,7 +38,7 @@ class UploadScanSection extends StatelessWidget {
               ),
               32.heightBox,
               UploadCard(
-                selectedImage: selectedImage,
+                imageBytes: imageBytes,
                 onPickImage: onPickImage,
                 onCancel: onCancel,
               ),
@@ -48,7 +48,7 @@ class UploadScanSection extends StatelessWidget {
             vertical: Sizes.kVerticalPadding,
           )
         : UploadCard(
-            selectedImage: selectedImage,
+            imageBytes: imageBytes,
             onPickImage: onPickImage,
             onCancel: onCancel,
           ).paddingSymmetric(
