@@ -16,8 +16,6 @@ const String authRoute = '/';
 const String homeRoute = '/home';
 const String selectRoleRoute = '/select-role';
 const String patientFormRoute = '/patient-form';
-const String signinRoute = '/signin';
-const String signupRoute = '/signup';
 const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
 final GoRouter router = GoRouter(
@@ -27,19 +25,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: authRoute,
       builder: (BuildContext context, GoRouterState state) {
-        return const SigninScreen();
-      },
-    ),
-    GoRoute(
-      path: signinRoute,
-      builder: (BuildContext context, GoRouterState state) {
-        return const SigninScreen();
-      },
-    ),
-    GoRoute(
-      path: signupRoute,
-      builder: (BuildContext context, GoRouterState state) {
-        return const SignupScreen();
+        return const AuthScreen();
       },
     ),
     GoRoute(

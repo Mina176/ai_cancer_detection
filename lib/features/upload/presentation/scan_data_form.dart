@@ -1,51 +1,99 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
+import 'package:intl/intl.dart';
 
 class ScanDataForm extends StatelessWidget {
-  const ScanDataForm({super.key});
-
+  const ScanDataForm({
+    super.key,
+    required this.scanType,
+    required this.bodyPart,
+    required this.onScanChanged,
+    required this.onBodyPartChanged,
+    required this.selectedDate,
+    required this.onSelectDate,
+  });
+  final ValueChanged<ScanType?> onScanChanged;
+  final ValueChanged<BodyPart?> onBodyPartChanged;
+  final ScanType scanType;
+  final BodyPart bodyPart;
+  final DateTime selectedDate;
+  final ValueChanged<DateTime> onSelectDate;
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           'Scan Type',
           style: context.bodyMedium?.bold,
         ),
-        8.heightBox,
-        DropdownButtonFormField<String>(
-          items: ['CT Scan', 'MRI', 'X-Ray']
-              .map((type) => DropdownMenuItem(value: type, child: Text(type)))
+        DropdownButtonFormField<ScanType>(
+          items: ScanType.values
+              .map(
+                (type) => DropdownMenuItem(value: type, child: Text(type.name)),
+              )
               .toList(),
-          onChanged: (value) {},
+          onChanged: onScanChanged,
           decoration: InputDecoration(
-            hintText: 'Select scan type',
+            hintText: ScanType.values.first.name,
             hintStyle: context.bodyMedium?.copyWith(
               color: context.theme.hintColor,
             ),
           ),
         ),
-        16.heightBox,
+        Text(
+          'Body Part',
+          style: context.bodyMedium?.bold,
+        ),
+        DropdownButtonFormField<BodyPart>(
+          items: BodyPart.values
+              .map(
+                (type) => DropdownMenuItem(value: type, child: Text(type.name)),
+              )
+              .toList(),
+          onChanged: onBodyPartChanged,
+          decoration: InputDecoration(
+            hintText: BodyPart.values.first.name,
+            hintStyle: context.bodyMedium?.copyWith(
+              color: context.theme.hintColor,
+            ),
+          ),
+        ),
         Text(
           'Date of Scan',
           style: context.bodyMedium?.bold,
         ),
-        8.heightBox,
-        TextField(
-          decoration: InputDecoration(
-            prefixIcon: IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () {},
-            ),
-            hintText: 'dd/mm/yyyy',
-            hintStyle: context.bodyMedium?.copyWith(
-              color: context.theme.hintColor,
-            ),
+        ListTile(
+          dense: true,
+          onTap: () async {
+            final pickedDate = await showDatePicker(
+              context: context,
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              initialDate: DateTime.now(),
+              builder: (context, child) => Padding(
+                padding: EdgeInsetsGeometry.symmetric(
+                  vertical: 32,
+                  horizontal: 16,
+                ),
+                child: child,
+              ),
+            );
+            if (pickedDate != null) {
+              onSelectDate(pickedDate);
+            }
+          },
+          leading: Icon(Icons.calendar_month),
+          title: const Text(
+            "Date",
+          ),
+          subtitle: Text(
+            DateFormat(' d/M/y').format(selectedDate),
           ),
         ),
-        16.heightBox,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -58,7 +106,6 @@ class ScanDataForm extends StatelessWidget {
             ),
           ],
         ),
-        8.heightBox,
         TextField(
           maxLines: 4,
           decoration: InputDecoration(
@@ -69,7 +116,6 @@ class ScanDataForm extends StatelessWidget {
             ),
           ),
         ),
-        24.heightBox,
       ],
     ).paddingSymmetric(
       horizontal: Sizes.kHorizontalPadding,
