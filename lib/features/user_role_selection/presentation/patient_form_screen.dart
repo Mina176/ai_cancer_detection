@@ -120,8 +120,6 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     client.patientProfileModelEdit.update(
                       dob: selectedDate,
                       gender: selectedGender,
-                      height: height,
-                      weight: weight,
                       alcoholFreq: alcoholFrequency,
                       bloodType: selectedBloodType,
                     );
