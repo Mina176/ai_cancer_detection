@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_card.dart';
-import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
 import 'package:flutter/material.dart';
 
 class UploadScanSection extends StatelessWidget {

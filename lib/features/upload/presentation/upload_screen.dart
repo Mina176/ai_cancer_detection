@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/scan_data_form.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/sticky_upload_button.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_scan_section.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 
 class UploadScreen extends StatefulWidget {

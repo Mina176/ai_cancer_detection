@@ -1,5 +1,7 @@
 import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
 
@@ -118,11 +120,10 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     client.patientProfileModelEdit.update(
                       dob: selectedDate,
                       gender: selectedGender,
-                      height: height,
-                      weight: weight,
                       alcoholFreq: alcoholFrequency,
                       bloodType: selectedBloodType,
                     );
+                    context.go(homeRoute);
                   }
                 },
                 child: Text('submit'),
@@ -131,15 +132,6 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _selectDataOfBirth() async {
-    await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
     );
   }
 }
