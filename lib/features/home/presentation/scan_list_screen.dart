@@ -12,7 +12,7 @@ class ScanListScreen extends StatelessWidget {
       appBar: context.isLandscape
           ? null
           : AppBar(
-              title: Text('Scan History'),
+              title: Text('Scan History.'),
             ),
       body: FutureBuilder(
         future: client.medicalScan.listMyScans(),
