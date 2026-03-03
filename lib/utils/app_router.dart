@@ -13,7 +13,7 @@ import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
-const String authWrapperRoute = '/';
+const String authRoute = '/';
 const String homeRoute = '/home';
 const String selectRoleRoute = '/select-role';
 const String patientFormRoute = '/patient-form';
@@ -23,14 +23,12 @@ const String uploadRoute = '/upload';
 
 final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: client.auth.isAuthenticated
-      ? authWrapperRoute
-      : selectRoleRoute,
+  initialLocation: client.auth.isAuthenticated ? selectRoleRoute : authRoute,
   routes: [
     GoRoute(
-      path: authWrapperRoute,
+      path: authRoute,
       builder: (BuildContext context, GoRouterState state) {
-        return const AuthWrapper();
+        return const SigninScreen();
       },
     ),
     GoRoute(
