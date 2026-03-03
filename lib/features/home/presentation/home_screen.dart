@@ -55,37 +55,39 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        FutureBuilder<List<MedicalScanModel>>(
-          future: client.medicalScan.listMyScans(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            }
-            final scans = snapshot.data ?? [];
-            final lastThreeScans = scans.length <= 3
-                ? scans
-                : scans.sublist(scans.length - 3);
-            if (scans.isEmpty) {
-              return const Center(child: Text('No scans available'));
-            }
-            return ListView.builder(
-              itemCount: lastThreeScans.length,
-              itemBuilder: (context, index) {
-                return ScanList(scan: lastThreeScans[index]);
-              },
-            );
-          },
+        Expanded(
+          child: FutureBuilder<List<MedicalScanModel>>(
+            future: client.medicalScan.listMyScans(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              }
+              final scans = snapshot.data ?? [];
+              final lastThreeScans = scans.length <= 3
+                  ? scans
+                  : scans.sublist(scans.length - 3);
+              if (scans.isEmpty) {
+                return const Center(child: Text('No scans available'));
+              }
+              return ListView.builder(
+                itemCount: lastThreeScans.length,
+                itemBuilder: (context, index) {
+                  return ScanListWidget(scan: lastThreeScans[index]);
+                },
+              );
+            },
+          ),
         ),
       ],
     );
   }
 }
 
-class ScanList extends StatelessWidget {
-  const ScanList({
+class ScanListWidget extends StatelessWidget {
+  const ScanListWidget({
     super.key,
     required this.scan,
   });
@@ -93,14 +95,9 @@ class ScanList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        children: [
-          Text(scan.id.toString()),
-          Text(scan.uploadedAt.toString()),
-          Text(scan.scanDate.toString()),
-          Text(scan.scanType.name),
-          Text(scan.bodyPart.toString()),
-        ],
+      child: ListTile(
+        title: Text(scan.scanType.name),
+        subtitle: Text(scan.bodyPart.name),
       ),
     );
   }
