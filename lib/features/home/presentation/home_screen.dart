@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,19 +30,78 @@ class HomeScreen extends StatelessWidget {
         ),
         Text(
           'Quick Scan',
-          style: context.headlineSmall?.extraBold,
+          style: context.bodyMedium?.extraBold,
         ),
         Row(
           children: [
             ScanOptions(
               icon: Icons.medical_information,
             ),
-            ScanOptions(
-              icon: Icons.medical_information,
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Recent Analyses',
+              style: context.bodyMedium?.extraBold,
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                'View All',
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
           ],
         ),
+        FutureBuilder<List<MedicalScanModel>>(
+          future: client.medicalScan.listMyScans(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+            final scans = snapshot.data ?? [];
+            final lastThreeScans = scans.length <= 3
+                ? scans
+                : scans.sublist(scans.length - 3);
+            if (scans.isEmpty) {
+              return const Center(child: Text('No scans available'));
+            }
+            return ListView.builder(
+              itemCount: lastThreeScans.length,
+              itemBuilder: (context, index) {
+                return ScanList(scan: lastThreeScans[index]);
+              },
+            );
+          },
+        ),
       ],
+    );
+  }
+}
+
+class ScanList extends StatelessWidget {
+  const ScanList({
+    super.key,
+    required this.scan,
+  });
+  final MedicalScanModel scan;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          Text(scan.id.toString()),
+          Text(scan.uploadedAt.toString()),
+          Text(scan.scanDate.toString()),
+          Text(scan.scanType.name),
+          Text(scan.bodyPart.toString()),
+        ],
+      ),
     );
   }
 }
