@@ -201,13 +201,9 @@ class UserCard extends StatelessWidget {
 
         child: Row(
           children: [
-            Stack(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  child: Text('JD'),
-                ),
-              ],
+            CircleAvatar(
+              radius: 20,
+              child: Text('JD'),
             ),
             SizedBox(
               width: 12,
