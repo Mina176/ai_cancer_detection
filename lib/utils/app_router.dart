@@ -3,6 +3,7 @@ import 'package:cancer_ai_detection/features/authentication/presentation/signup_
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/home/presentation/scan_list_screen.dart';
+import 'package:cancer_ai_detection/features/patient_profile/presentation/pateint_profile_screen.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/patient_form_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/select_role_screen.dart';
@@ -20,6 +21,8 @@ const String patientFormRoute = '/patient-form';
 const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
 const String allScansRoute = '/scan-list';
+const String patientProfileRoute = '/patient-profile';
+
 final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: client.auth.isAuthenticated ? selectRoleRoute : authRoute,
@@ -55,6 +58,10 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   path: allScansRoute,
                   builder: (context, state) => const ScanListScreen(),
+                ),
+                GoRoute(
+                  path: patientProfileRoute,
+                  builder: (context, state) => const PateintProfileScreen(),
                 ),
               ],
             ),
