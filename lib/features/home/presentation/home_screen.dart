@@ -1,3 +1,4 @@
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
@@ -193,26 +194,29 @@ class UserCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
       ),
 
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 16,
-        ),
+      child: InkWell(
+        onTap: () => router.go('$homeRoute$patientProfileRoute'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
 
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              child: Text('JD'),
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            Text(
-              'Dr.Reynolds',
-              style: context.bodyMedium?.bold,
-            ),
-          ],
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                child: Text('JD'),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Text(
+                'Dr.Reynolds',
+                style: context.bodyMedium?.bold,
+              ),
+            ],
+          ),
         ),
       ),
     );
