@@ -106,7 +106,13 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      StickyUploadButton(onPressed: uploadScan),
+                      ElevatedButton(
+                        onPressed: uploadScan,
+                        child: const Text('Upload'),
+                      ).paddingSymmetric(
+                        horizontal: Sizes.kHorizontalPadding,
+                        vertical: Sizes.kVerticalPadding,
+                      ),
                     ],
                   ),
                 ),
@@ -153,7 +159,13 @@ class _UploadScreenState extends State<UploadScreen> {
                     ),
                   ),
                 ),
-                StickyUploadButton(onPressed: uploadScan),
+                ElevatedButton(
+                  onPressed: uploadScan,
+                  child: const Text('Upload'),
+                ).paddingSymmetric(
+                  horizontal: Sizes.kHorizontalPadding,
+                  vertical: Sizes.kVerticalPadding,
+                ),
               ],
             ),
     );

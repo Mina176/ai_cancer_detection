@@ -15,48 +15,88 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ElevatedButton(
-          onPressed: () => client.auth.signOutDevice(),
-          child: Text('Log out'),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Greeting(),
-            UserCard(),
-          ],
-        ),
-        Text(
-          'Quick Scan',
-          style: context.bodyMedium?.extraBold,
-        ),
-        Row(
-          children: [
-            ScanOptions(
-              icon: Icons.medical_information,
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Recent Analyses',
-              style: context.bodyMedium?.extraBold,
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'View All',
-                style: TextStyle(color: Colors.blue),
+    return Scaffold(
+      appBar: context.isLandscape
+          ? null
+          : AppBar(
+              forceMaterialTransparency: true,
+              title: const Text('Home Screen'),
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () => Scaffold.of(context).openDrawer(),
               ),
             ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.only(
+          left: Sizes.kHorizontalPadding,
+          right: Sizes.kHorizontalPadding,
+          bottom: Sizes.kBottomButtonPadding,
         ),
-        Expanded(
+        child: HomeBody(),
+      ),
+    );
+  }
+}
+
+class HomeBody extends StatelessWidget {
+  const HomeBody({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Header(),
+              8.heightBox,
+              Text(
+                'Quick Scan',
+                style: context.bodyMedium?.extraBold,
+              ),
+              8.heightBox,
+            ],
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 120,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return ScanOptions(
+                  icon: Icons.medical_information,
+                );
+              },
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Recent Analyses',
+                  style: context.bodyMedium?.extraBold,
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'View All',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
           child: FutureBuilder<List<MedicalScanModel>>(
             future: client.medicalScan.listMyScans(),
             builder: (context, snapshot) {
@@ -74,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const Center(child: Text('No scans available'));
               }
               return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: lastThreeScans.length,
                 itemBuilder: (context, index) {
                   return ScanListWidget(scan: lastThreeScans[index]);
@@ -82,6 +124,23 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
+      ],
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Greeting(),
+        UserCard(),
       ],
     );
   }
@@ -114,32 +173,33 @@ class ScanOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 16,
-          runSpacing: 12,
-          children: [
-            DecoratedBox(
-              decoration: ShapeDecoration(
-                color: const Color(0xFFDBEAFE),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
+    return SizedBox(
+      height: 120,
+      child: Card(
+        margin: const EdgeInsets.only(right: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 16,
+            children: [
+              DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: const Color(0xFFDBEAFE),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(19.52),
+                  child: Icon(
+                    icon,
+                    color: const Color(0xff0EA5E9),
+                  ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(19.52),
-                child: Icon(
-                  icon,
-                  color: const Color(0xff0EA5E9),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              child: Column(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text(
@@ -149,12 +209,11 @@ class ScanOptions extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     'Thoracic X-Ray Analysis',
-                    softWrap: true,
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -193,32 +252,39 @@ class UserCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(24),
       ),
-
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 8,
           horizontal: 16,
         ),
-
-        child: Row(
-          children: [
-            Stack(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  child: Text('JD'),
-                ),
-              ],
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            Text(
-              'Dr.Reynolds',
-              style: context.bodyMedium?.bold,
-            ),
-          ],
-        ),
+        child: context.isLandscape
+            ? Row(
+                children: [
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        child: Text('JD'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    'Dr.Reynolds',
+                    style: context.bodyMedium?.bold,
+                  ),
+                ],
+              )
+            : Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    child: Text('JD'),
+                  ),
+                ],
+              ),
       ),
     );
   }
