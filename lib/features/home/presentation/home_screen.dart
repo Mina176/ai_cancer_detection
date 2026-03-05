@@ -1,3 +1,4 @@
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
