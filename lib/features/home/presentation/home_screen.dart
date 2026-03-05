@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
-import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:dotted_border/dotted_border.dart';

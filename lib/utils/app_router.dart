@@ -1,5 +1,4 @@
 import 'package:cancer_ai_detection/features/authentication/presentation/signin_screen.dart';
-import 'package:cancer_ai_detection/features/authentication/presentation/signup_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/home/presentation/scan_list_screen.dart';
