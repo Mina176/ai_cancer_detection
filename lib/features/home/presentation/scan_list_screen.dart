@@ -1,4 +1,3 @@
-import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/helpers.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +29,12 @@ class ScanListScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: scans.length,
             itemBuilder: (context, index) {
-              return ScanListWidget(
-                scan: scans[index],
+              final scan = scans[index];
+              return Card(
+                child: ListTile(
+                  title: Text(scan.scanType.name),
+                  subtitle: Text(scan.bodyPart.name),
+                ),
               );
             },
           );
