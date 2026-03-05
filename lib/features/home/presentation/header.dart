@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
+import 'package:cancer_ai_detection/main.dart';
 import 'package:flutter/material.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -42,6 +46,7 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = client.userProfileEdit.get();
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(
@@ -58,30 +63,49 @@ class UserCard extends StatelessWidget {
         child: context.isLandscape
             ? Row(
                 children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        child: Text('JD'),
-                      ),
-                    ],
+                  CircleAvatar(
+                    radius: 20,
+                    child: Text(''),
                   ),
                   SizedBox(
                     width: 12,
                   ),
-                  Text(
-                    'Dr.Reynolds',
-                    style: context.bodyMedium?.bold,
+                  FutureBuilder(
+                    future: user,
+                    builder: (context, asyncSnapshot) {
+                      return Text(
+                        asyncSnapshot.data?.fullName ?? '',
+                        style: context.bodyMedium?.bold,
+                      );
+                    },
                   ),
                 ],
               )
-            : Stack(
-                children: [
-                  CircleAvatar(
+            : FutureBuilder(
+                future: user,
+                builder: (context, asyncSnapshot) {
+                  return CircleAvatar(
                     radius: 20,
-                    child: Text('JD'),
-                  ),
-                ],
+                    child: asyncSnapshot.data?.imageUrl != null
+                        ? Image.network(
+                            asyncSnapshot.data!.imageUrl!.toString(),
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            asyncSnapshot.data?.fullName != null
+                                ? asyncSnapshot.data!.fullName!
+                                      .split(' ')
+                                      .map((e) => e[0])
+                                      .take(2)
+                                      .join()
+                                : 'User'
+                                      .split(' ')
+                                      .map((e) => e[0])
+                                      .take(2)
+                                      .join(),
+                          ),
+                  );
+                },
               ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart'
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/home/presentation/scan_list_screen.dart';
 import 'package:cancer_ai_detection/features/patient_profile/presentation/pateint_profile_screen.dart';
+import 'package:cancer_ai_detection/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/patient_form_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/select_role_screen.dart';
@@ -77,9 +78,8 @@ final GoRouter router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/help',
-              builder: (context, state) =>
-                  const Center(child: Text('Help Screen')),
+              path: settingsRoute,
+              builder: (context, state) => const SettingsScreen(),
             ),
           ],
         ),
