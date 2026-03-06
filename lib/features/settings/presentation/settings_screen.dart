@@ -37,7 +37,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
       await client.userProfileEdit.setUserImage(imageByteData);
 
-      await ref.refresh(userProfileProvider.future);
+      final _ = await ref.refresh(userProfileProvider.future);
     }
   }
 
@@ -54,7 +54,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       if (newFullName != null && newFullName!.trim().isNotEmpty) {
         await client.userProfileEdit.changeFullName(newFullName!.trim());
       }
-      await ref.refresh(userProfileProvider.future);
+      final _ = await ref.refresh(userProfileProvider.future);
 
       if (context.mounted) context.go(homeRoute);
     } finally {
@@ -71,11 +71,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           : AppBar(
               forceMaterialTransparency: true,
               title: const Text('Settings'),
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () => Scaffold.of(context).openDrawer(),
               ),
             ),
       body: userProfileAsync.when(
