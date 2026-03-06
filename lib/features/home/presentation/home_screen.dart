@@ -28,9 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
       body: Padding(
-        padding: const EdgeInsets.only(
+        padding: EdgeInsets.only(
           left: Sizes.kHorizontalPadding,
           right: Sizes.kHorizontalPadding,
+          top: context.isLandscape ? Sizes.kVerticalPadding : 0,
           bottom: Sizes.kBottomButtonPadding,
         ),
         child: CustomScrollView(
@@ -51,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 120,
+                height: 140,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 10,

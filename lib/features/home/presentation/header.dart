@@ -6,6 +6,7 @@ import 'package:cancer_ai_detection/features/settings/presentation/settings_scre
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
+import 'package:cancer_ai_detection/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -53,62 +54,46 @@ class UserCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfileAsync = ref.watch(userProfileProvider);
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          width: 1,
-          color: const Color(0xFFF3F4F6),
+    return GestureDetector(
+      onTap: () => context.go(settingsRoute),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: const Color(0xFFF3F4F6),
+          ),
+          borderRadius: BorderRadius.circular(24),
         ),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 16,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
+          child: userProfileAsync.when(
+            data: (profile) => Row(
+              children: [
+                ProfileImage(
+                  profile: profile,
+                  radius: 20,
+                ),
+                if (context.isLandscape) 8.widthBox,
+                if (context.isLandscape)
+                  Text(
+                    userProfileAsync.asData?.value.userName ?? 'User',
+                    style: context.bodyMedium?.extraBold,
+                  ),
+              ],
+            ),
+            loading: () => CircleAvatar(
+              radius: 20,
+              child: Text(''),
+            ),
+            error: (error, stack) => CircleAvatar(
+              radius: 20,
+              child: Text(''),
+            ),
+          ),
         ),
-        child: context.isLandscape
-            ? Row(
-                children: [
-                  CircleAvatar(
-                    radius: 20,
-                    child: Text(''),
-                  ),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  userProfileAsync.when(
-                    data: (profile) => ProfileImage(
-                      profile: profile,
-                      radius: 20,
-                    ),
-                    loading: () => CircleAvatar(
-                      radius: 20,
-                      child: Text(''),
-                    ),
-                    error: (error, stack) => CircleAvatar(
-                      radius: 20,
-                      child: Text(''),
-                    ),
-                  ),
-                ],
-              )
-            : userProfileAsync.when(
-                data: (profile) => GestureDetector(
-                  onTap: () => context.go(settingsRoute),
-                  child: ProfileImage(
-                    profile: profile,
-                    radius: 20,
-                  ),
-                ),
-                loading: () => CircleAvatar(
-                  radius: 20,
-                  child: Text(''),
-                ),
-                error: (error, stack) => CircleAvatar(
-                  radius: 20,
-                  child: Text(''),
-                ),
-              ),
       ),
     );
   }
