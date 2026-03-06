@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
+import 'package:cancer_ai_detection/features/settings/data/allergies_provider.dart';
 import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
@@ -65,6 +66,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final userProfileAsync = ref.watch(userProfileProvider);
+    final allergiesAsync = ref.watch(allergiesProvider);
     return Scaffold(
       appBar: context.isLandscape
           ? null
@@ -116,12 +118,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             ),
                             onSaved: (value) => newFullName = value,
                           ),
-                          ListTile(
-                            title: const Text('Allergies'),
-                            subtitle: Text('peanut, shellfish, pollen'),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            onTap: () =>
-                                context.go('$settingsRoute/$allergiesRoute'),
+                          Card(
+                            child: ListTile(
+                              title: const Text('Allergies'),
+                              subtitle: allergiesAsync.when(
+                                data: (allergies) => Text(
+                                  allergies.map((a) => a.allergen).join(', '),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                loading: () => const Text(''),
+                                error: (error, stack) => Text('Error: $error'),
+                              ),
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              onTap: () =>
+                                  context.go('$settingsRoute/$allergiesRoute'),
+                            ),
                           ),
                         ],
                       ),
