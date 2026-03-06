@@ -71,9 +71,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           : AppBar(
               forceMaterialTransparency: true,
               title: const Text('Settings'),
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
+              leading: Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
               ),
             ),
       body: userProfileAsync.when(
