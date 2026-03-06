@@ -1,6 +1,7 @@
 import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
@@ -17,7 +18,7 @@ Future<void> main() async {
   } catch (e) {
     print('Failed to initialize Serverpod auth: $e');
   }
-  runApp(const MainApp());
+  runApp(ProviderScope(child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
