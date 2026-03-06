@@ -10,10 +10,9 @@ class ScanOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 120,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
-        margin: const EdgeInsets.only(right: 16),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Row(
