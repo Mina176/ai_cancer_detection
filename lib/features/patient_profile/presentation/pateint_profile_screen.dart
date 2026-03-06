@@ -48,8 +48,6 @@ class _PateintProfileScreenState extends State<PateintProfileScreen> {
                       Text(
                         'emergencyContactPhone:${patientInfo.emergencyContactPhone}',
                       ),
-                      Text('allergies:${patientInfo.allergies}'),
-                      Text('medications:${patientInfo.medications}'),
                       Text('smokingStatus:${patientInfo.smokingStatus}'),
                       Text('phone:${patientInfo.phone}'),
                       Text('address:${patientInfo.address}'),
