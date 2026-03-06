@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   awesome_extensions: ^2.1.0
+  build_runner: ^2.12.2
   dotted_border: ^3.1.0
   flutter:
     sdk: flutter
@@ -22,6 +23,7 @@ dependencies:
   http: ^1.6.0
   image_picker: ^1.2.1
   intl: ^0.20.2
+  riverpod_annotation: ^4.0.2
   riverpod_sqflite: ^0.4.2
   serverpod_auth_idp_flutter: ^3.3.1
   serverpod_flutter: ^3.3.1
@@ -29,6 +31,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  riverpod_generator: ^4.0.3
   flutter_lints: ^6.0.0
 
 flutter:
