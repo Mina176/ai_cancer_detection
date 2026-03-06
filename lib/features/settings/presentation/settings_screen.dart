@@ -120,7 +120,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             title: const Text('Allergies'),
                             subtitle: Text('peanut, shellfish, pollen'),
                             trailing: const Icon(Icons.arrow_forward_ios),
-                            onTap: () => context.go(allergiesRoute),
+                            onTap: () =>
+                                context.go('$settingsRoute/$allergiesRoute'),
                           ),
                         ],
                       ),
