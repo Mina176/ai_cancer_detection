@@ -22,6 +22,8 @@ class AppTheme {
       ),
       appBarTheme: const AppBarTheme(
         elevation: 0,
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         titleSpacing: Sizes.kHorizontalPadding,
         toolbarHeight: 80,
         actionsPadding: EdgeInsets.symmetric(

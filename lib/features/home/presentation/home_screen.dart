@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: context.isLandscape
           ? null
           : AppBar(
-              forceMaterialTransparency: true,
               title: const Text('Home Screen'),
               leading: IconButton(
                 icon: const Icon(Icons.menu),

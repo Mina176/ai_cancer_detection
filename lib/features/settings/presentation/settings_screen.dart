@@ -69,7 +69,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: context.isLandscape
           ? null
           : AppBar(
-              forceMaterialTransparency: true,
               title: const Text('Settings'),
               leading: IconButton(
                 icon: const Icon(Icons.menu),

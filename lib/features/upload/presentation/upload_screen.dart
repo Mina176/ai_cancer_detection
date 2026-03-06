@@ -57,7 +57,6 @@ class _UploadScreenState extends State<UploadScreen> {
       appBar: context.isLandscape
           ? null
           : AppBar(
-              forceMaterialTransparency: true,
               title: const Text('Upload Scan'),
               leading: IconButton(
                 icon: const Icon(Icons.menu),
