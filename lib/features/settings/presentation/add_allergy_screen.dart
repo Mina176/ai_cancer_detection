@@ -78,13 +78,13 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Allergen',
                         ),
-                        onSaved: (value) => allergen = value ?? '',
+                        onChanged: (value) => allergen = value,
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Reaction',
                         ),
-                        onSaved: (value) => reaction = value ?? '',
+                        onChanged: (value) => reaction = value,
                       ),
                       DropdownButtonFormField<AllergySeverity>(
                         items: const [
@@ -106,7 +106,6 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
                           labelText: 'Severity',
                         ),
                       ),
-                      16.heightBox,
                     ],
                   ),
                 ),
