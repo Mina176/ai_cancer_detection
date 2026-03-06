@@ -1,8 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
+import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
+import 'package:cancer_ai_detection/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/theming/app_theme.dart';
+import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class Header extends StatelessWidget {
@@ -39,14 +45,14 @@ class Greeting extends StatelessWidget {
   }
 }
 
-class UserCard extends StatelessWidget {
+class UserCard extends ConsumerWidget {
   const UserCard({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final user = client.userProfileEdit.get();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userProfileAsync = ref.watch(userProfileProvider);
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(
@@ -70,42 +76,38 @@ class UserCard extends StatelessWidget {
                   SizedBox(
                     width: 12,
                   ),
-                  FutureBuilder(
-                    future: user,
-                    builder: (context, asyncSnapshot) {
-                      return Text(
-                        asyncSnapshot.data?.fullName ?? '',
-                        style: context.bodyMedium?.bold,
-                      );
-                    },
+                  userProfileAsync.when(
+                    data: (profile) => ProfileImage(
+                      profile: profile,
+                      radius: 20,
+                    ),
+                    loading: () => CircleAvatar(
+                      radius: 20,
+                      child: Text(''),
+                    ),
+                    error: (error, stack) => CircleAvatar(
+                      radius: 20,
+                      child: Text(''),
+                    ),
                   ),
                 ],
               )
-            : FutureBuilder(
-                future: user,
-                builder: (context, asyncSnapshot) {
-                  return CircleAvatar(
+            : userProfileAsync.when(
+                data: (profile) => GestureDetector(
+                  onTap: () => context.go(settingsRoute),
+                  child: ProfileImage(
+                    profile: profile,
                     radius: 20,
-                    child: asyncSnapshot.data?.imageUrl != null
-                        ? Image.network(
-                            asyncSnapshot.data!.imageUrl!.toString(),
-                            fit: BoxFit.cover,
-                          )
-                        : Text(
-                            asyncSnapshot.data?.fullName != null
-                                ? asyncSnapshot.data!.fullName!
-                                      .split(' ')
-                                      .map((e) => e[0])
-                                      .take(2)
-                                      .join()
-                                : 'User'
-                                      .split(' ')
-                                      .map((e) => e[0])
-                                      .take(2)
-                                      .join(),
-                          ),
-                  );
-                },
+                  ),
+                ),
+                loading: () => CircleAvatar(
+                  radius: 20,
+                  child: Text(''),
+                ),
+                error: (error, stack) => CircleAvatar(
+                  radius: 20,
+                  child: Text(''),
+                ),
               ),
       ),
     );
