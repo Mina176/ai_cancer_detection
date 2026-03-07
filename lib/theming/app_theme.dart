@@ -14,9 +14,10 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: Color(0xFFF6F7F8),
       cardTheme: CardThemeData(
+        margin: EdgeInsets.zero,
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(8),
           side: BorderSide(color: Color(0xFFE2E8F0)),
         ),
       ),
