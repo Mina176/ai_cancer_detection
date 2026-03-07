@@ -2,7 +2,6 @@ import 'package:cancer_ai_detection/features/authentication/presentation/signin_
 import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart';
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/home/presentation/scan_list_screen.dart';
-import 'package:cancer_ai_detection/features/patient_profile/presentation/pateint_profile_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/add_allergy_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/allergies_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/settings_screen.dart';
@@ -62,10 +61,6 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   path: allScansRoute,
                   builder: (context, state) => const ScanListScreen(),
-                ),
-                GoRoute(
-                  path: patientProfileRoute,
-                  builder: (context, state) => const PateintProfileScreen(),
                 ),
               ],
             ),
