@@ -17,8 +17,6 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
   DateTime selectedDate = DateTime.now();
   Gender? selectedGender;
   BloodType? selectedBloodType;
-  double? height;
-  double? weight;
   String? smokingStatus;
   int? smokingYears;
   String? alcoholFrequency;
@@ -86,18 +84,6 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                 }),
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Height'),
-                onChanged: (value) => setState(() {
-                  height = double.tryParse(value);
-                }),
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: 'Weight'),
-                onChanged: (value) {
-                  weight = double.tryParse(value);
-                },
-              ),
-              TextFormField(
                 decoration: InputDecoration(hintText: 'Smoking Status'),
                 onChanged: (value) => smokingStatus = value,
               ),
@@ -120,6 +106,8 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     client.patientProfileModelEdit.update(
                       dob: selectedDate,
                       gender: selectedGender,
+                      smokingStatus: smokingStatus,
+                      smokingYears: smokingYears,
                       alcoholFreq: alcoholFrequency,
                       bloodType: selectedBloodType,
                     );
