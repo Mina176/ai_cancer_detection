@@ -2,6 +2,7 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/settings/data/allergies_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/widgets/sticky_bottom_form_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
@@ -55,74 +56,50 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: context.isLandscape
-          ? null
-          : AppBar(
-              title: const Text('Add Allergy'),
-            ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.kHorizontalPadding,
-        ),
+    return StickyBottomFormLayout(
+      title: 'Add Allergy',
+      formContent: Form(
+        key: formKey,
         child: Column(
+          spacing: 12,
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    spacing: 12,
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Allergen',
-                        ),
-                        onChanged: (value) => allergen = value,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Reaction',
-                        ),
-                        onChanged: (value) => reaction = value,
-                      ),
-                      DropdownButtonFormField<AllergySeverity>(
-                        items: const [
-                          DropdownMenuItem(
-                            value: AllergySeverity.mild,
-                            child: Text('Mild'),
-                          ),
-                          DropdownMenuItem(
-                            value: AllergySeverity.moderate,
-                            child: Text('Moderate'),
-                          ),
-                          DropdownMenuItem(
-                            value: AllergySeverity.severe,
-                            child: Text('Severe'),
-                          ),
-                        ],
-                        onChanged: (value) => severity = value!,
-                        decoration: const InputDecoration(
-                          labelText: 'Severity',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Allergen',
               ),
+              onChanged: (value) => allergen = value,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: Sizes.kBottomButtonPadding,
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Reaction',
               ),
-              child: ElevatedButton(
-                onPressed: isLoading ? null : saveAllergy,
-                child: const Text('Save'),
+              onChanged: (value) => reaction = value,
+            ),
+            DropdownButtonFormField<AllergySeverity>(
+              items: const [
+                DropdownMenuItem(
+                  value: AllergySeverity.mild,
+                  child: Text('Mild'),
+                ),
+                DropdownMenuItem(
+                  value: AllergySeverity.moderate,
+                  child: Text('Moderate'),
+                ),
+                DropdownMenuItem(
+                  value: AllergySeverity.severe,
+                  child: Text('Severe'),
+                ),
+              ],
+              onChanged: (value) => severity = value!,
+              decoration: const InputDecoration(
+                labelText: 'Severity',
               ),
             ),
           ],
         ),
       ),
+      isLoading: isLoading,
+      onSave: saveAllergy,
     );
   }
 }
