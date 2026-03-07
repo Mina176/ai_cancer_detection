@@ -10,31 +10,31 @@ part of 'profile_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(UserProfileNotifier)
-final userProfileProvider = UserProfileModelNotifierProvider._();
+final userProfileProvider = UserProfileNotifierProvider._();
 
-final class UserProfileModelNotifierProvider
+final class UserProfileNotifierProvider
     extends $AsyncNotifierProvider<UserProfileNotifier, UserProfileModel> {
-  UserProfileModelNotifierProvider._()
+  UserProfileNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'userProfileModelProvider',
+        name: r'userProfileProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$userProfileModelNotifierHash();
+  String debugGetCreateSourceHash() => _$userProfileNotifierHash();
 
   @$internal
   @override
   UserProfileNotifier create() => UserProfileNotifier();
 }
 
-String _$userProfileModelNotifierHash() =>
-    r'c1368b94aa71877925a9eb9e48533f215bcd7f0b';
+String _$userProfileNotifierHash() =>
+    r'7295c92938df566ddd2b6c9b9fd080bfc27ffe2a';
 
 abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfileModel> {
   FutureOr<UserProfileModel> build();
