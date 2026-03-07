@@ -1,27 +1,28 @@
+import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
-class ProfileImage extends StatelessWidget {
+class ProfileImage extends ConsumerWidget {
   const ProfileImage({
     super.key,
-    required this.profile,
     this.radius = 50,
   });
 
-  final UserProfileModel profile;
   final double radius;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userProfileAsync = ref.watch(userProfileProvider);
     return CircleAvatar(
       radius: radius,
       backgroundImage: NetworkImage(
-        profile.imageUrl != null
-            ? '${profile.imageUrl!.toString().replaceAll(
+        userProfileAsync.value?.imageUrl != null
+            ? '${userProfileAsync.value!.imageUrl!.toString().replaceAll(
                 'http://localhost:6000',
                 'https://gp-api.lasheen.dev',
               )}&v=${DateTime.now().millisecondsSinceEpoch}'
-            : 'https://ui-avatars.com/api/?name=${profile.fullName ?? 'User'}&size=200&background=2B9DEE&color=fff',
+            : 'https://ui-avatars.com/api/?name=${userProfileAsync.value?.fullName ?? 'User'}&size=200&background=2B9DEE&color=fff',
       ),
     );
   }

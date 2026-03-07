@@ -73,7 +73,6 @@ class UserCard extends ConsumerWidget {
             data: (profile) => Row(
               children: [
                 ProfileImage(
-                  profile: profile,
                   radius: 20,
                 ),
                 if (context.isLandscape) 8.widthBox,

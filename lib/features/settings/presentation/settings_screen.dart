@@ -99,7 +99,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         spacing: 14,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ProfileImage(profile: profile, radius: 50),
+                          ProfileImage(radius: 50),
                           TextButton(
                             onPressed: pickProfileImage,
                             child: const Text('Change Profile Picture'),
