@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/settings/data/allergies_provider.dart';
+import 'package:cancer_ai_detection/features/settings/data/medication_provider.dart';
 import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
@@ -10,6 +11,8 @@ import 'package:cancer_ai_detection/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
+import 'package:gp_backend_client/src/protocol/allergy/allergy.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -66,6 +69,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final userProfileAsync = ref.watch(userProfileProvider);
     final allergiesAsync = ref.watch(allergiesProvider);
+    final medicationsAsync = ref.watch(medicationsProvider);
     return Scaffold(
       appBar: context.isLandscape
           ? null
@@ -117,21 +121,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             ),
                             onSaved: (value) => newFullName = value,
                           ),
-                          Card(
-                            child: ListTile(
-                              title: const Text('Allergies'),
-                              subtitle: allergiesAsync.when(
-                                data: (allergies) => Text(
-                                  allergies.map((a) => a.allergen).join(', '),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                loading: () => const Text(''),
-                                error: (error, stack) => Text('Error: $error'),
-                              ),
-                              trailing: const Icon(Icons.arrow_forward_ios),
-                              onTap: () =>
-                                  context.go('$settingsRoute/$allergiesRoute'),
-                            ),
+                          UserInfoListTile(
+                            title: 'Allergires',
+                            asyncData: allergiesAsync,
+                            onTap: () =>
+                                context.go('$settingsRoute/$allergiesRoute'),
+                            itemLabelBuilder: (allergy) => allergy.allergen,
+                          ),
+                          UserInfoListTile(
+                            title: 'Medications',
+                            asyncData: medicationsAsync,
+                            onTap: () =>
+                                context.go('$settingsRoute/$medicationsRoute'),
+                            itemLabelBuilder: (medication) => medication.name,
                           ),
                         ],
                       ),
@@ -154,6 +156,43 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
+      ),
+    );
+  }
+}
+
+class UserInfoListTile<T> extends StatelessWidget {
+  const UserInfoListTile({
+    super.key,
+    required this.title,
+    required this.asyncData,
+    required this.onTap,
+    required this.itemLabelBuilder,
+  });
+
+  final String title;
+  final AsyncValue<List<T>> asyncData;
+  final VoidCallback onTap;
+  final String Function(T) itemLabelBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(title),
+        subtitle: asyncData.when(
+          data: (data) {
+            if (data.isEmpty) return const Text('None added yet');
+            return Text(
+              data.map(itemLabelBuilder).join(', '),
+              overflow: TextOverflow.ellipsis,
+            );
+          },
+          loading: () => const Text(''),
+          error: (error, stack) => Text('Error: $error'),
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: onTap,
       ),
     );
   }
