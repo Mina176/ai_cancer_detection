@@ -1,7 +1,6 @@
 import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class ProfileImage extends ConsumerWidget {
   const ProfileImage({

@@ -1,16 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
 import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
-import 'package:cancer_ai_detection/features/settings/presentation/settings_screen.dart';
-import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/theming/app_theme.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
 import 'package:cancer_ai_detection/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class Header extends StatelessWidget {
   const Header({

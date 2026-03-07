@@ -3,8 +3,6 @@ import 'package:cancer_ai_detection/features/home/presentation/scan_option.dart'
 import 'package:cancer_ai_detection/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
-import 'package:cancer_ai_detection/main.dart';
-import 'package:gp_backend_client/gp_backend_client.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
