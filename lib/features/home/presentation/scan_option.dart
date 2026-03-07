@@ -1,56 +1,44 @@
+import 'package:cancer_ai_detection/constants.dart';
 import 'package:flutter/material.dart';
 
 class ScanOption extends StatelessWidget {
   const ScanOption({
     super.key,
-    required this.icon,
+    required this.model,
   });
 
-  final IconData icon;
+  final QuickActionModel model;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 16,
-            children: [
-              DecoratedBox(
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFDBEAFE),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(19.52),
-                  child: Icon(
-                    icon,
-                    color: const Color(0xff0EA5E9),
-                  ),
-                ),
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 12,
+        children: [
+          DecoratedBox(
+            decoration: ShapeDecoration(
+              color: const Color(0xFFDBEAFE),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Cancer Screen',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Thoracic X-Ray Analysis',
-                  ),
-                ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Icon(
+                model.icon,
+                color: const Color(0xff0EA5E9),
               ),
-            ],
+            ),
           ),
-        ),
+          SizedBox(
+            width: 100,
+            child: Text(
+              model.title,
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
       ),
     );
   }

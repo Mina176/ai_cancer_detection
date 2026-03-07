@@ -49,71 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 140,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return ScanOption(
-                      icon: Icons.medical_information,
-                    );
-                  },
+            SliverFillRemaining(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: context.isLandscape ? 3 : 2,
+                  childAspectRatio: context.isLandscape ? 3 : 2,
                 ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Recent Analyses',
-                      style: context.bodyMedium?.extraBold,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'View All',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: FutureBuilder<List<MedicalScanModel>>(
-                future: client.medicalScan.listMyScans(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return Center(child: Text(snapshot.error.toString()));
-                  }
-                  final scans = snapshot.data ?? [];
-                  final lastThreeScans = scans.length <= 3
-                      ? scans
-                      : scans.sublist(scans.length - 3);
-                  if (scans.isEmpty) {
-                    return const Center(child: Text('No scans available'));
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: lastThreeScans.length,
-                    itemBuilder: (context, index) {
-                      final scan = lastThreeScans[index];
-                      return Card(
-                        child: ListTile(
-                          title: Text(scan.scanType.name),
-                          subtitle: Text(scan.bodyPart.name),
-                        ),
-                      );
-                    },
+                itemCount: quickActions.length,
+                itemBuilder: (context, index) {
+                  return ScanOption(
+                    model: quickActions[index],
                   );
                 },
               ),
