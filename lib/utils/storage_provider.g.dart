@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'allergies_provider.dart';
+part of 'storage_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,43 +9,43 @@ part of 'allergies_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(allergies)
-final allergiesProvider = AllergiesProvider._();
+@ProviderFor(storage)
+final storageProvider = StorageProvider._();
 
-final class AllergiesProvider
+final class StorageProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<AllergyModel>>,
-          List<AllergyModel>,
-          FutureOr<List<AllergyModel>>
+          AsyncValue<Storage<String, String>>,
+          Storage<String, String>,
+          FutureOr<Storage<String, String>>
         >
     with
-        $FutureModifier<List<AllergyModel>>,
-        $FutureProvider<List<AllergyModel>> {
-  AllergiesProvider._()
+        $FutureModifier<Storage<String, String>>,
+        $FutureProvider<Storage<String, String>> {
+  StorageProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'allergiesProvider',
+        name: r'storageProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$allergiesHash();
+  String debugGetCreateSourceHash() => _$storageHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<AllergyModel>> $createElement(
+  $FutureProviderElement<Storage<String, String>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<AllergyModel>> create(Ref ref) {
-    return allergies(ref);
+  FutureOr<Storage<String, String>> create(Ref ref) {
+    return storage(ref);
   }
 }
 
-String _$allergiesHash() => r'c0fe820fd531f03f678541fd84098f507d77caac';
+String _$storageHash() => r'f8427593bfa5320e93dad796f14d0bf6a462287e';

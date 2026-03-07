@@ -6,5 +6,5 @@ part 'allergies_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<List<AllergyModel>> allergies(Ref ref) async {
-  return client.allergy.listMyAllergies();
+  return await client.allergy.listMyAllergies();
 }
