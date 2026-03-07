@@ -1,5 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/constants.dart';
+import 'package:cancer_ai_detection/widgets/date_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
@@ -66,33 +67,10 @@ class ScanDataForm extends StatelessWidget {
           'Date of Scan',
           style: context.bodyMedium?.bold,
         ),
-        ListTile(
-          dense: true,
-          onTap: () async {
-            final pickedDate = await showDatePicker(
-              context: context,
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              initialDate: DateTime.now(),
-              builder: (context, child) => Padding(
-                padding: EdgeInsetsGeometry.symmetric(
-                  vertical: 32,
-                  horizontal: 16,
-                ),
-                child: child,
-              ),
-            );
-            if (pickedDate != null) {
-              onSelectDate(pickedDate);
-            }
-          },
-          leading: Icon(Icons.calendar_month),
-          title: const Text(
-            "Date",
-          ),
-          subtitle: Text(
-            DateFormat(' d/M/y').format(selectedDate),
-          ),
+        DateListTile(
+          title: 'Date',
+          onSelectDate: onSelectDate,
+          selectedDate: selectedDate,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
