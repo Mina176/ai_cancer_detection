@@ -3,7 +3,9 @@ import 'package:cancer_ai_detection/features/home/presentation/home_screen.dart'
 import 'package:cancer_ai_detection/features/home/presentation/root_home.dart';
 import 'package:cancer_ai_detection/features/home/presentation/scan_list_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/add_allergy_screen.dart';
+import 'package:cancer_ai_detection/features/settings/presentation/add_medication_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/allergies_screen.dart';
+import 'package:cancer_ai_detection/features/settings/presentation/medications_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/patient_form_screen.dart';
@@ -25,6 +27,8 @@ const String allScansRoute = '/scan-list';
 const String patientProfileRoute = '/patient-profile';
 const String allergiesRoute = 'allergies';
 const String addAllergyRoute = 'add-allergy';
+const String medicationsRoute = 'medications';
+const String addMedicationRoute = 'add-medication';
 
 final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
@@ -87,6 +91,20 @@ final GoRouter router = GoRouter(
                     GoRoute(
                       path: addAllergyRoute,
                       builder: (context, state) => const AddAllergyScreen(),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: medicationsRoute,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const MedicationsScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                      path: addMedicationRoute,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return const AddMedicationScreen();
+                      },
                     ),
                   ],
                 ),
