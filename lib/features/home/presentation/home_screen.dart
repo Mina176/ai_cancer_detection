@@ -50,8 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverFillRemaining(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: context.isLandscape ? 3 : 2,
-                  childAspectRatio: context.isLandscape ? 3 : 2,
+                  crossAxisCount: context.isLandscape ? 3 : 1,
+                  childAspectRatio: context.isLandscape ? 3 : 3.5,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
                 ),
                 itemCount: quickActions.length,
                 itemBuilder: (context, index) {

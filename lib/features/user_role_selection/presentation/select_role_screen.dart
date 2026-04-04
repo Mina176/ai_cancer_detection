@@ -8,26 +8,27 @@ class SelectRoleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: UserOption(
-              icon: Icons.local_hospital,
-              text: 'Doctor',
-              onTap: () {},
+      body: Center(
+        child: Row(
+          children: [
+            Expanded(
+              child: UserOption(
+                icon: Icons.local_hospital,
+                text: 'Doctor',
+                onTap: () {},
+              ),
             ),
-          ),
-          Expanded(
-            child: UserOption(
-              icon: Icons.person,
-              text: 'Patient',
-              onTap: () {
-                context.go(patientFormRoute);
-              },
+            Expanded(
+              child: UserOption(
+                icon: Icons.person,
+                text: 'Patient',
+                onTap: () {
+                  context.go(patientFormRoute);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -45,15 +46,18 @@ class UserOption extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon),
-            Text(text),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon),
+              Text(text),
+            ],
+          ),
         ),
       ),
     );
