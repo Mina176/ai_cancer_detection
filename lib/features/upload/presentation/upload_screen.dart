@@ -3,6 +3,7 @@ import 'package:cancer_ai_detection/constants.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/scan_data_form.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_scan_section.dart';
 import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +23,6 @@ class _UploadScreenState extends State<UploadScreen> {
   DateTime selectedDate = DateTime.now();
   ScanType selectedScanType = ScanType.mri;
   BodyPart selectedBodyPart = BodyPart.head;
-
   Future<void> pickImage() async {
     final XFile? pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -38,7 +38,7 @@ class _UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  void uploadScan() async {
+  Future<void> uploadScan() async {
     if (webImageBytes != null) {
       final ByteData imageByteData = ByteData.view(webImageBytes!.buffer);
       await client.medicalScan.uploadMyScan(
@@ -47,7 +47,6 @@ class _UploadScreenState extends State<UploadScreen> {
         bodyPart: selectedBodyPart,
         scanDate: selectedDate,
       );
-      print('Scan uploaded successfully');
     }
   }
 
@@ -104,12 +103,9 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: uploadScan,
-                        child: const Text('Upload'),
-                      ).paddingSymmetric(
-                        horizontal: Sizes.kHorizontalPadding,
-                        vertical: Sizes.kVerticalPadding,
+                      PrimaryButton(
+                        onPressed: () => uploadScan(),
+                        label: 'Upload',
                       ),
                     ],
                   ),
@@ -157,12 +153,9 @@ class _UploadScreenState extends State<UploadScreen> {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                PrimaryButton(
                   onPressed: uploadScan,
-                  child: const Text('Upload'),
-                ).paddingSymmetric(
-                  horizontal: Sizes.kHorizontalPadding,
-                  vertical: Sizes.kVerticalPadding,
+                  label: 'Upload',
                 ),
               ],
             ),

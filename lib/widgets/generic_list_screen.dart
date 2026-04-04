@@ -26,16 +26,28 @@ class GenericListScreen<T> extends StatelessWidget {
       ),
       appBar: context.isLandscape ? null : AppBar(title: Text(title)),
       body: asyncData.when(
-        data: (items) => Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Sizes.kHorizontalPadding,
-            vertical: context.isLandscape ? Sizes.kVerticalPadding : 0,
-          ),
-          child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) => itemBuilder(context, items[index]),
-          ),
-        ),
+        data: (items) {
+          if (items.isEmpty) {
+            return Center(
+              child: Text(
+                'No $title added yet.\nTap the + button to add.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
+          }
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Sizes.kHorizontalPadding,
+              vertical: context.isLandscape ? Sizes.kVerticalPadding : 0,
+            ),
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) =>
+                  itemBuilder(context, items[index]),
+            ),
+          );
+        },
         error: (error, _) => Center(child: Text('Error: $error')),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),

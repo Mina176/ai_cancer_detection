@@ -21,13 +21,9 @@ class _AddMedicationScreenState extends ConsumerState<AddMedicationScreen> {
   String dosage = '';
   String frequency = '';
   DateTime startDate = DateTime.now();
-  bool isLoading = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  void saveMedication() async {
+  Future<void> saveMedication() async {
     if (!formKey.currentState!.validate()) return;
-
-    setState(() => isLoading = true);
-
     try {
       final profile = await client.patientProfileModelEdit.getOrCreate();
       await client.medication.addMedications([
@@ -44,14 +40,9 @@ class _AddMedicationScreenState extends ConsumerState<AddMedicationScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error saving allergy: $e'),
-            backgroundColor: Colors.red,
-          ),
+          const SnackBar(content: Text('Failed to save medication')),
         );
       }
-    } finally {
-      if (mounted) setState(() => isLoading = false);
     }
   }
 
@@ -92,7 +83,6 @@ class _AddMedicationScreenState extends ConsumerState<AddMedicationScreen> {
           ],
         ),
       ),
-      isLoading: isLoading,
       onSave: saveMedication,
     );
   }

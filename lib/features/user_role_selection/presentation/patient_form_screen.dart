@@ -1,5 +1,6 @@
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
+import 'package:cancer_ai_detection/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
@@ -21,6 +22,44 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
   int? smokingYears;
   String? alcoholFrequency;
   String? exerciseFrequency;
+
+  Future<void> onSaved() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      await client.patientProfileModelEdit.update(
+        dob: selectedDate,
+        gender: selectedGender,
+        smokingStatus: smokingStatus,
+        smokingYears: smokingYears,
+        alcoholFreq: alcoholFrequency,
+        bloodType: selectedBloodType,
+      );
+      if (!mounted) return;
+      context.go(homeRoute);
+    }
+  }
+
+  Future<void> pickDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      initialDate: DateTime.now(),
+      builder: (context, child) => Padding(
+        padding: EdgeInsetsGeometry.symmetric(
+          vertical: 32,
+          horizontal: 16,
+        ),
+        child: child,
+      ),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,26 +71,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
             children: [
               ListTile(
                 dense: true,
-                onTap: () async {
-                  final pickedDate = await showDatePicker(
-                    context: context,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    initialDate: DateTime.now(),
-                    builder: (context, child) => Padding(
-                      padding: EdgeInsetsGeometry.symmetric(
-                        vertical: 32,
-                        horizontal: 16,
-                      ),
-                      child: child,
-                    ),
-                  );
-                  if (pickedDate != null) {
-                    setState(() {
-                      selectedDate = pickedDate;
-                    });
-                  }
-                },
+                onTap: () => pickDate(context),
                 leading: Icon(Icons.calendar_month),
                 title: const Text(
                   "Date",
@@ -99,22 +119,9 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                 decoration: InputDecoration(hintText: 'Exercise Frequnecy'),
                 onChanged: (value) => exerciseFrequency = value,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-                    client.patientProfileModelEdit.update(
-                      dob: selectedDate,
-                      gender: selectedGender,
-                      smokingStatus: smokingStatus,
-                      smokingYears: smokingYears,
-                      alcoholFreq: alcoholFrequency,
-                      bloodType: selectedBloodType,
-                    );
-                    context.go(homeRoute);
-                  }
-                },
-                child: Text('submit'),
+              PrimaryButton(
+                label: 'submit',
+                onPressed: () => onSaved(),
               ),
             ],
           ),

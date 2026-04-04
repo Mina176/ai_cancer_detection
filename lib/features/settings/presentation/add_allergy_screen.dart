@@ -19,14 +19,10 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
   String reaction = '';
   AllergySeverity severity = AllergySeverity.mild;
   DateTime diagnosedDate = DateTime.now();
-  bool isLoading = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  void saveAllergy() async {
+  Future<void> saveAllergy() async {
     if (!formKey.currentState!.validate()) return;
-
-    setState(() => isLoading = true);
-
     try {
       final profile = await client.patientProfileModelEdit.getOrCreate();
       await client.allergy.addAllergies([
@@ -38,19 +34,14 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
           diagnosedDate: diagnosedDate,
         ),
       ]);
+      if (!mounted) return;
       ref.invalidate(allergiesProvider);
-      if (mounted) context.pop();
+      context.pop();
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error saving allergy: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => isLoading = false);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save allergy: $e')),
+      );
     }
   }
 
@@ -98,7 +89,6 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
           ],
         ),
       ),
-      isLoading: isLoading,
       onSave: saveAllergy,
     );
   }

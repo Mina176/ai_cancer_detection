@@ -7,6 +7,7 @@ import 'package:cancer_ai_detection/features/settings/data/medication_provider.d
 import 'package:cancer_ai_detection/features/settings/data/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
+import 'package:cancer_ai_detection/widgets/primary_button.dart';
 import 'package:cancer_ai_detection/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool isLoading = false;
 
   String? newUserName;
   String? newFullName;
@@ -44,25 +44,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
-  Future<void> saveChanges(BuildContext context) async {
+  Future<void> saveChanges() async {
     if (!formKey.currentState!.validate()) return;
     formKey.currentState!.save();
 
-    setState(() => isLoading = true);
-
-    try {
-      if (newUserName != null && newUserName!.trim().isNotEmpty) {
-        await client.userProfileEdit.changeUserName(newUserName!.trim());
-      }
-      if (newFullName != null && newFullName!.trim().isNotEmpty) {
-        await client.userProfileEdit.changeFullName(newFullName!.trim());
-      }
-      final _ = await ref.refresh(userProfileProvider.future);
-
-      if (context.mounted) context.go(homeRoute);
-    } finally {
-      if (mounted) setState(() => isLoading = false);
+    if (newUserName != null && newUserName!.trim().isNotEmpty) {
+      await client.userProfileEdit.changeUserName(newUserName!.trim());
     }
+    if (newFullName != null && newFullName!.trim().isNotEmpty) {
+      await client.userProfileEdit.changeFullName(newFullName!.trim());
+    }
+    final _ = await ref.refresh(userProfileProvider.future);
+
+    if (mounted) context.go(homeRoute);
   }
 
   @override
@@ -84,7 +78,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         data: (profile) => Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Sizes.kHorizontalPadding,
-            vertical: Sizes.kVerticalPadding,
           ),
           child: Column(
             children: [
@@ -141,15 +134,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: isLoading ? null : () => saveChanges(context),
-                child: isLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(),
-                      )
-                    : const Text('Save Changes'),
+              PrimaryButton(
+                label: 'Save Changes',
+                onPressed: saveChanges,
               ),
             ],
           ),

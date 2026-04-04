@@ -1,18 +1,17 @@
 import 'package:cancer_ai_detection/constants.dart';
+import 'package:cancer_ai_detection/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 
 class StickyBottomFormLayout extends StatelessWidget {
   final String title;
   final Widget formContent;
-  final bool isLoading;
-  final VoidCallback? onSave;
+  final Future<void> Function() onSave;
 
   const StickyBottomFormLayout({
     super.key,
     required this.title,
     required this.formContent,
-    required this.isLoading,
     required this.onSave,
   });
 
@@ -35,11 +34,9 @@ class StickyBottomFormLayout extends StatelessWidget {
               padding: const EdgeInsets.only(
                 bottom: Sizes.kBottomButtonPadding,
               ),
-              child: ElevatedButton(
-                onPressed: isLoading ? null : onSave,
-                child: isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Save'),
+              child: PrimaryButton(
+                label: 'Save',
+                onPressed: onSave,
               ),
             ),
           ],
