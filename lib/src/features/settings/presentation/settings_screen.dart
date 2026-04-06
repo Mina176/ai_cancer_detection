@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/allergies_provider.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +55,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
     final _ = await ref.refresh(userProfileProvider.future);
 
-    if (mounted) context.go(homeRoute);
+    if (mounted) context.goNamed(AppRoute.home.name);
   }
 
   @override
@@ -117,14 +117,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             title: 'Allergires',
                             asyncData: allergiesAsync,
                             onTap: () =>
-                                context.go('$settingsRoute/$allergiesRoute'),
+                                context.goNamed(AppRoute.allergies.name),
                             itemLabelBuilder: (allergy) => allergy.allergen,
                           ),
                           UserInfoListTile(
                             title: 'Medications',
                             asyncData: medicationsAsync,
                             onTap: () =>
-                                context.go('$settingsRoute/$medicationsRoute'),
+                                context.goNamed(AppRoute.medications.name),
                             itemLabelBuilder: (medication) => medication.name,
                           ),
                         ],

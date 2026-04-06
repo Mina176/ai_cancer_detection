@@ -1,9 +1,9 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:cancer_ai_detection/src/common_widgets/generic_list_screen.dart';
 import 'package:cancer_ai_detection/src/common_widgets/swipe_to_delete_wrapper.dart';
+import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,8 +19,7 @@ class MedicationsScreen extends ConsumerWidget {
     return GenericListScreen<MedicationModel>(
       title: 'Medications',
       asyncData: medicationAsyncValue,
-      onAddPressed: () =>
-          context.go('$settingsRoute/$medicationsRoute/$addMedicationRoute'),
+      onAddPressed: () => context.goNamed(AppRoute.addMedication.name),
       itemBuilder: (context, medication) {
         return SwipeToDeleteWrapper(
           itemKey: ValueKey(medication.id),

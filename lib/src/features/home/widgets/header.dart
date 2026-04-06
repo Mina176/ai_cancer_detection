@@ -1,7 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
-import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
+import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -49,7 +49,7 @@ class UserCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfileAsync = ref.watch(userProfileProvider);
     return GestureDetector(
-      onTap: () => context.go(settingsRoute),
+      onTap: () => context.goNamed(AppRoute.settings.name),
       child: Card(
         shape: RoundedRectangleBorder(
           side: BorderSide(

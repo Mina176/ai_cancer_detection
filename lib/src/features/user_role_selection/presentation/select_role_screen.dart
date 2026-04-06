@@ -1,4 +1,4 @@
-import 'package:cancer_ai_detection/src/routing/app_router.dart';
+import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,7 +16,7 @@ class SelectRoleScreen extends StatelessWidget {
                 icon: Icons.local_hospital,
                 text: 'Doctor',
                 onTap: () {
-                  context.go(doctorFormRoute);
+                  context.goNamed(AppRoute.doctorForm.name);
                 },
               ),
             ),
@@ -25,7 +25,7 @@ class SelectRoleScreen extends StatelessWidget {
                 icon: Icons.person,
                 text: 'Patient',
                 onTap: () {
-                  context.go(patientFormRoute);
+                  context.goNamed(AppRoute.patientForm.name);
                 },
               ),
             ),
