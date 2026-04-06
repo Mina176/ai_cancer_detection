@@ -1,4 +1,5 @@
 import 'package:cancer_ai_detection/src/features/authentication/signin_screen.dart';
+import 'package:cancer_ai_detection/src/features/doctor/doctor_form_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/root_home.dart';
 import 'package:cancer_ai_detection/src/features/home/scan_list_screen.dart';
@@ -8,7 +9,6 @@ import 'package:cancer_ai_detection/src/features/settings/presentation/allergies
 import 'package:cancer_ai_detection/src/features/settings/presentation/medications_screen.dart';
 import 'package:cancer_ai_detection/src/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/src/features/upload/upload_screen.dart';
-import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/doctor_form_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/patient_form_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/select_role_screen.dart';
 import 'package:cancer_ai_detection/main.dart';

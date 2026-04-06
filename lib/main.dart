@@ -13,7 +13,11 @@ Future<void> main() async {
   client = Client(serverUrl)
     ..connectivityMonitor = FlutterConnectivityMonitor()
     ..authSessionManager = FlutterAuthSessionManager();
-  await client.auth.initialize();
+  try {
+    await client.auth.initialize();
+  } catch (e) {
+    print('Error initializing authentication: $e');
+  }
   runApp(ProviderScope(child: const MainApp()));
 }
 
