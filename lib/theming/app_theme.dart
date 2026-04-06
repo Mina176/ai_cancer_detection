@@ -26,15 +26,12 @@ class AppTheme {
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         titleSpacing: Sizes.kHorizontalPadding,
-        toolbarHeight: 80,
         actionsPadding: EdgeInsets.symmetric(
           horizontal: Sizes.kHorizontalPadding,
         ),
       ),
       listTileTheme: ListTileThemeData(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
+        contentPadding: const EdgeInsets.symmetric(),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

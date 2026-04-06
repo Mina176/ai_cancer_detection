@@ -30,14 +30,9 @@ class StickyBottomFormLayout extends StatelessWidget {
                 child: formContent,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: Sizes.kBottomButtonPadding,
-              ),
-              child: PrimaryButton(
-                label: 'Save',
-                onPressed: onSave,
-              ),
+            PrimaryButton(
+              label: 'Save',
+              onPressed: onSave,
             ),
           ],
         ),

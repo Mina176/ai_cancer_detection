@@ -1,10 +1,11 @@
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/utils/app_router.dart';
-import 'package:cancer_ai_detection/widgets/primary_button.dart';
+import 'package:cancer_ai_detection/widgets/date_picker_list_tile.dart';
+import 'package:cancer_ai_detection/widgets/gender_selector.dart';
+import 'package:cancer_ai_detection/widgets/sticky_bottom_form_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
-import 'package:intl/intl.dart';
 
 class PatientFormScreen extends StatefulWidget {
   const PatientFormScreen({super.key});
@@ -39,57 +40,23 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
     }
   }
 
-  Future<void> pickDate(BuildContext context) async {
-    final pickedDate = await showDatePicker(
-      context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      initialDate: DateTime.now(),
-      builder: (context, child) => Padding(
-        padding: EdgeInsetsGeometry.symmetric(
-          vertical: 32,
-          horizontal: 16,
-        ),
-        child: child,
-      ),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        selectedDate = pickedDate;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
+      body: StickyBottomFormLayout(
+        title: 'Patient Form',
+        formContent: Form(
           key: formKey,
           child: Column(
             spacing: 8,
             children: [
-              ListTile(
-                dense: true,
-                onTap: () => pickDate(context),
-                leading: Icon(Icons.calendar_month),
-                title: const Text(
-                  "Date",
-                ),
-                subtitle: Text(
-                  DateFormat(' d/M/y').format(selectedDate),
-                ),
+              DatePickerListTile(
+                initialDate: selectedDate,
+                onDateChanged: (date) => setState(() => selectedDate = date),
               ),
-              Text('Gender'),
-              DropdownButtonFormField(
-                decoration: InputDecoration(hintText: 'Gender'),
-                items: [
-                  DropdownMenuItem(value: Gender.male, child: Text('Male')),
-                  DropdownMenuItem(value: Gender.female, child: Text('Female')),
-                ],
-                onChanged: (value) {
-                  selectedGender = value;
-                },
+              GenderSelector(
+                selectedGender: selectedGender,
+                onChanged: (value) => setState(() => selectedGender = value),
               ),
               DropdownButtonFormField<BloodType>(
                 decoration: const InputDecoration(hintText: 'Blood Type'),
@@ -119,13 +86,10 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                 decoration: InputDecoration(hintText: 'Exercise Frequnecy'),
                 onChanged: (value) => exerciseFrequency = value,
               ),
-              PrimaryButton(
-                label: 'submit',
-                onPressed: () => onSaved(),
-              ),
             ],
           ),
         ),
+        onSave: () => onSaved(),
       ),
     );
   }
