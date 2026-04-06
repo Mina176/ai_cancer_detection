@@ -1,9 +1,13 @@
 import 'package:cancer_ai_detection/src/features/authentication/signin_screen.dart';
 import 'package:cancer_ai_detection/src/features/doctor/doctor_form_screen.dart';
+import 'package:cancer_ai_detection/src/features/health_measurement/presentation/add_health_measurements_screen.dart';
+import 'package:cancer_ai_detection/src/features/health_measurement/presentation/health_measurements_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/root_home.dart';
 import 'package:cancer_ai_detection/src/features/home/scan_list_screen.dart';
 import 'package:cancer_ai_detection/src/features/allergies/presentation/add_allergy_screen.dart';
+import 'package:cancer_ai_detection/src/features/medical_history/presentation/add_medical_history_screen.dart';
+import 'package:cancer_ai_detection/src/features/medical_history/presentation/medical_history_screen.dart';
 import 'package:cancer_ai_detection/src/features/medication/presentation/add_medication_screen.dart';
 import 'package:cancer_ai_detection/src/features/allergies/presentation/allergies_screen.dart';
 import 'package:cancer_ai_detection/src/features/medication/presentation/medications_screen.dart';
@@ -32,6 +36,10 @@ const String allergiesRoute = 'allergies';
 const String addAllergyRoute = 'add-allergy';
 const String medicationsRoute = 'medications';
 const String addMedicationRoute = 'add-medication';
+const String medicalHistoryRoute = 'medical-history';
+const String addMedicalHistoryRoute = 'add-medical-history';
+const String healthMeasurmentsRoute = 'health-measurments';
+const String addHealthMeasurmentRoute = 'add-health-measurment';
 
 final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
@@ -125,6 +133,38 @@ final GoRouter router = GoRouter(
                       path: addMedicationRoute,
                       builder: (BuildContext context, GoRouterState state) {
                         return const AddMedicationScreen();
+                      },
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  name: AppRoute.medicalHistory.name,
+                  path: medicalHistoryRoute,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const MedicalHistoryScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                      name: AppRoute.addMedicalHistory.name,
+                      path: addMedicalHistoryRoute,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return const AddMedicalHistoryScreen();
+                      },
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  name: AppRoute.healthMeasurments.name,
+                  path: healthMeasurmentsRoute,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const HealthMeasurementsScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                      name: AppRoute.addHealthMeasurment.name,
+                      path: addHealthMeasurmentRoute,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return const AddHealthMeasurementsScreen();
                       },
                     ),
                   ],

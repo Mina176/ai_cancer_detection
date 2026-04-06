@@ -11,4 +11,8 @@ enum AppRoute {
   addAllergy,
   medications,
   addMedication,
+  medicalHistory,
+  addMedicalHistory,
+  healthMeasurments,
+  addHealthMeasurment,
 }
