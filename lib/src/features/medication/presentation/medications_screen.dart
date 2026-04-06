@@ -1,5 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
-import 'package:cancer_ai_detection/src/features/settings/controller/allergies_provider.dart';
+import 'package:cancer_ai_detection/src/features/medication/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/generic_list_screen.dart';
 import 'package:cancer_ai_detection/src/common_widgets/swipe_to_delete_wrapper.dart';
@@ -10,30 +10,30 @@ import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
 
-class AllergiesScreen extends ConsumerWidget {
-  const AllergiesScreen({super.key});
+class MedicationsScreen extends ConsumerWidget {
+  const MedicationsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allergiesAsyncValue = ref.watch(allergiesProvider);
-    return GenericListScreen<AllergyModel>(
-      title: 'Allergies',
-      asyncData: allergiesAsyncValue,
-      onAddPressed: () => context.goNamed(AppRoute.addAllergy.name),
-      itemBuilder: (context, allergy) {
+    final medicationAsyncValue = ref.watch(medicationsProvider);
+    return GenericListScreen<MedicationModel>(
+      title: 'Medications',
+      asyncData: medicationAsyncValue,
+      onAddPressed: () => context.goNamed(AppRoute.addMedication.name),
+      itemBuilder: (context, medication) {
         return SwipeToDeleteWrapper(
-          itemKey: ValueKey(allergy.id),
+          itemKey: ValueKey(medication.id),
           child: Card(
             child: ListTile(
-              title: Text(allergy.allergen),
-              subtitle: Text(allergy.reaction),
+              title: Text(medication.name),
+              subtitle: Text(medication.dosage),
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(allergy.severity.name),
+                  Text(medication.frequency),
                   8.heightBox,
                   Text(
-                    DateFormat(' d/M/y').format(allergy.diagnosedDate),
+                    DateFormat(' d/M/y').format(medication.startDate),
                   ),
                 ],
               ),
@@ -41,8 +41,8 @@ class AllergiesScreen extends ConsumerWidget {
           ),
           onConfirmDelete: () async {
             try {
-              await client.allergy.removeAllergies([allergy.id!]);
-              ref.invalidate(allergiesProvider);
+              await client.medication.removeMedications([medication.id!]);
+              ref.invalidate(medicationsProvider);
               return true;
             } catch (e) {
               if (context.mounted) {

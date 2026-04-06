@@ -1,4 +1,4 @@
-import 'package:cancer_ai_detection/src/features/settings/controller/medication_provider.dart';
+import 'package:cancer_ai_detection/src/features/medication/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/date_list_tile.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
