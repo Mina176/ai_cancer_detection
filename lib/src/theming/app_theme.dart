@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,12 +32,11 @@ class AppTheme {
         ),
       ),
       listTileTheme: ListTileThemeData(
-        contentPadding: const EdgeInsets.symmetric(),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         selectedColor: primaryColor,
-        // ignore: deprecated_member_use
         selectedTileColor: primaryColor.withOpacity(0.1),
       ),
       inputDecorationTheme: InputDecorationTheme(
