@@ -51,7 +51,7 @@ class _DatePickerListTileState extends State<DatePickerListTile> {
       onTap: () => pickDate(context),
       leading: Icon(Icons.calendar_month),
       title: const Text(
-        "Date",
+        "Date of Birth",
       ),
       subtitle: Text(
         DateFormat(' d/M/y').format(selectedDate),

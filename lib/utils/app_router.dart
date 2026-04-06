@@ -8,6 +8,7 @@ import 'package:cancer_ai_detection/features/settings/presentation/allergies_scr
 import 'package:cancer_ai_detection/features/settings/presentation/medications_screen.dart';
 import 'package:cancer_ai_detection/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/features/upload/presentation/upload_screen.dart';
+import 'package:cancer_ai_detection/features/user_role_selection/presentation/doctor_form_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/patient_form_screen.dart';
 import 'package:cancer_ai_detection/features/user_role_selection/presentation/select_role_screen.dart';
 import 'package:cancer_ai_detection/main.dart';
@@ -20,6 +21,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
 const String authRoute = '/';
 const String homeRoute = '/home';
 const String selectRoleRoute = '/select-role';
+const String doctorFormRoute = '/doctor-form';
 const String patientFormRoute = '/patient-form';
 const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
@@ -50,6 +52,12 @@ final GoRouter router = GoRouter(
       path: patientFormRoute,
       builder: (BuildContext context, GoRouterState state) {
         return const PatientFormScreen();
+      },
+    ),
+    GoRoute(
+      path: doctorFormRoute,
+      builder: (BuildContext context, GoRouterState state) {
+        return const DoctorFormScreen();
       },
     ),
     StatefulShellRoute.indexedStack(

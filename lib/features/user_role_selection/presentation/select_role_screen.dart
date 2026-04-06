@@ -15,7 +15,9 @@ class SelectRoleScreen extends StatelessWidget {
               child: UserOption(
                 icon: Icons.local_hospital,
                 text: 'Doctor',
-                onTap: () {},
+                onTap: () {
+                  context.go(doctorFormRoute);
+                },
               ),
             ),
             Expanded(
