@@ -6,7 +6,7 @@ import 'package:cancer_ai_detection/src/features/settings/controller/allergies_p
 import 'package:cancer_ai_detection/src/features/settings/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/utils/app_router.dart';
+import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:flutter/material.dart';

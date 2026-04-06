@@ -1,0 +1,14 @@
+enum AppRoute {
+  auth,
+  selectRole,
+  doctorForm,
+  patientForm,
+  home,
+  scanList,
+  upload,
+  settings,
+  allergies,
+  addAllergy,
+  medications,
+  addMedication,
+}

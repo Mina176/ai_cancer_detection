@@ -1,4 +1,4 @@
-import 'package:cancer_ai_detection/src/utils/app_router.dart';
+import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

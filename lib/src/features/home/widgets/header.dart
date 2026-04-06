@@ -1,6 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
-import 'package:cancer_ai_detection/src/utils/app_router.dart';
+import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

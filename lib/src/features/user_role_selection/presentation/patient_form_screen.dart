@@ -1,6 +1,6 @@
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/date_list_tile.dart';
-import 'package:cancer_ai_detection/src/utils/app_router.dart';
+import 'package:cancer_ai_detection/src/routing/app_router.dart';
 import 'package:cancer_ai_detection/src/common_widgets/gender_selector.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
 import 'package:flutter/material.dart';
