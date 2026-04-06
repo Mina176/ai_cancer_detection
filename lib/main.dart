@@ -1,5 +1,5 @@
-import 'package:cancer_ai_detection/theming/app_theme.dart';
-import 'package:cancer_ai_detection/utils/app_router.dart';
+import 'package:cancer_ai_detection/src/theming/app_theme.dart';
+import 'package:cancer_ai_detection/src/utils/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
@@ -13,11 +13,7 @@ Future<void> main() async {
   client = Client(serverUrl)
     ..connectivityMonitor = FlutterConnectivityMonitor()
     ..authSessionManager = FlutterAuthSessionManager();
-  try {
-    await client.auth.initialize();
-  } catch (e) {
-    print('Failed to initialize Serverpod auth: $e');
-  }
+  await client.auth.initialize();
   runApp(ProviderScope(child: const MainApp()));
 }
 
