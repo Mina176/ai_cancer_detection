@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/features/health_measurement/controller/health_measurement_provider.dart';
 import 'package:cancer_ai_detection/src/features/medical_history/controller/medical_history_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
@@ -65,7 +66,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final allergiesAsync = ref.watch(allergiesProvider);
     final medicationsAsync = ref.watch(medicationsProvider);
     final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
-    // final healthMeasurementsAsync = ref.watch(healthMeasurementsProvider);
+    final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
     return Scaffold(
       appBar: context.isLandscape
           ? null
@@ -138,15 +139,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             itemLabelBuilder: (medicalHistory) =>
                                 medicalHistory.title,
                           ),
-                          // UserInfoListTile(
-                          //   title: 'Health Measurements',
-                          //   asyncData: healthMeasurementsAsync,
-                          //   onTap: () => context.goNamed(
-                          //     AppRoute.healthMeasurments.name,
-                          //   ),
-                          //   itemLabelBuilder: (healthMeasurements) =>
-                          //       healthMeasurements.title,
-                          // ),
+                          UserInfoListTile(
+                            title: 'Health Measurements',
+                            asyncData: healthMeasurementsAsync,
+                            onTap: () => context.goNamed(
+                              AppRoute.healthMeasurments.name,
+                            ),
+                            itemLabelBuilder: (measurement) =>
+                                '${measurement.name.name}: ${measurement.value}',
+                          ),
                         ],
                       ),
                     ),

@@ -1,7 +1,7 @@
 import 'package:cancer_ai_detection/src/features/authentication/signin_screen.dart';
 import 'package:cancer_ai_detection/src/features/doctor/doctor_form_screen.dart';
-import 'package:cancer_ai_detection/src/features/health_measurement/presentation/add_health_measurements_screen.dart';
-import 'package:cancer_ai_detection/src/features/health_measurement/presentation/health_measurements_screen.dart';
+import 'package:cancer_ai_detection/src/features/health_measurement/presentation/add_health_measurement_screen.dart';
+import 'package:cancer_ai_detection/src/features/health_measurement/presentation/health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/root_home.dart';
 import 'package:cancer_ai_detection/src/features/home/scan_list_screen.dart';
@@ -161,10 +161,10 @@ final GoRouter router = GoRouter(
                   },
                   routes: [
                     GoRoute(
-                      name: AppRoute.addHealthMeasurment.name,
+                      name: AppRoute.addHealthMeasurement.name,
                       path: addHealthMeasurmentRoute,
                       builder: (BuildContext context, GoRouterState state) {
-                        return const AddHealthMeasurementsScreen();
+                        return const AddHealthMeasurementScreen();
                       },
                     ),
                   ],

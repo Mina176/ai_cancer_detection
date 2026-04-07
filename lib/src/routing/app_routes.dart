@@ -14,5 +14,5 @@ enum AppRoute {
   medicalHistory,
   addMedicalHistory,
   healthMeasurments,
-  addHealthMeasurment,
+  addHealthMeasurement,
 }
