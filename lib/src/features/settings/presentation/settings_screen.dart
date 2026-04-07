@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/features/medical_history/controller/medical_history_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:cancer_ai_detection/src/features/allergies/controllers/allergies_provider.dart';
@@ -63,6 +64,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final userProfileAsync = ref.watch(userProfileProvider);
     final allergiesAsync = ref.watch(allergiesProvider);
     final medicationsAsync = ref.watch(medicationsProvider);
+    final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
+    // final healthMeasurementsAsync = ref.watch(healthMeasurementsProvider);
     return Scaffold(
       appBar: context.isLandscape
           ? null
@@ -127,6 +130,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                 context.goNamed(AppRoute.medications.name),
                             itemLabelBuilder: (medication) => medication.name,
                           ),
+                          UserInfoListTile(
+                            title: 'Medical History',
+                            asyncData: medicalHistoryAsync,
+                            onTap: () =>
+                                context.goNamed(AppRoute.medicalHistory.name),
+                            itemLabelBuilder: (medicalHistory) =>
+                                medicalHistory.title,
+                          ),
+                          // UserInfoListTile(
+                          //   title: 'Health Measurements',
+                          //   asyncData: healthMeasurementsAsync,
+                          //   onTap: () => context.goNamed(
+                          //     AppRoute.healthMeasurments.name,
+                          //   ),
+                          //   itemLabelBuilder: (healthMeasurements) =>
+                          //       healthMeasurements.title,
+                          // ),
                         ],
                       ),
                     ),

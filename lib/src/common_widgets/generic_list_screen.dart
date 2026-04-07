@@ -41,10 +41,11 @@ class GenericListScreen<T> extends StatelessWidget {
               horizontal: Sizes.kHorizontalPadding,
               vertical: context.isLandscape ? Sizes.kVerticalPadding : 0,
             ),
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: items.length,
               itemBuilder: (context, index) =>
                   itemBuilder(context, items[index]),
+              separatorBuilder: (context, index) => 6.heightBox,
             ),
           );
         },
