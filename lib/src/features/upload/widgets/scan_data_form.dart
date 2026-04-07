@@ -22,81 +22,83 @@ class ScanDataForm extends StatelessWidget {
   final ValueChanged<DateTime> onSelectDate;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 12,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Scan Type',
-          style: context.bodyMedium?.bold,
-        ),
-        DropdownButtonFormField<ScanType>(
-          items: ScanType.values
-              .map(
-                (type) => DropdownMenuItem(value: type, child: Text(type.name)),
-              )
-              .toList(),
-          onChanged: onScanChanged,
-          decoration: InputDecoration(
-            hintText: ScanType.values.first.name,
-            hintStyle: context.bodyMedium?.copyWith(
-              color: context.theme.hintColor,
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        spacing: 12,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Scan Type',
+            style: context.bodyMedium?.bold,
           ),
-        ),
-        Text(
-          'Body Part',
-          style: context.bodyMedium?.bold,
-        ),
-        DropdownButtonFormField<BodyPart>(
-          items: BodyPart.values
-              .map(
-                (type) => DropdownMenuItem(value: type, child: Text(type.name)),
-              )
-              .toList(),
-          onChanged: onBodyPartChanged,
-          decoration: InputDecoration(
-            hintText: BodyPart.values.first.name,
-            hintStyle: context.bodyMedium?.copyWith(
-              color: context.theme.hintColor,
-            ),
-          ),
-        ),
-        Text(
-          'Date of Scan',
-          style: context.bodyMedium?.bold,
-        ),
-        DateListTile(
-          title: 'Date',
-          onSelectDate: onSelectDate,
-          selectedDate: selectedDate,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Clinical Notes', style: context.bodyMedium?.bold),
-            Text(
-              'Optional',
-              style: context.bodyMedium?.copyWith(
+          DropdownButtonFormField<ScanType>(
+            items: ScanType.values
+                .map(
+                  (type) =>
+                      DropdownMenuItem(value: type, child: Text(type.name)),
+                )
+                .toList(),
+            onChanged: onScanChanged,
+            decoration: InputDecoration(
+              hintText: ScanType.values.first.name,
+              hintStyle: context.bodyMedium?.copyWith(
                 color: context.theme.hintColor,
               ),
             ),
-          ],
-        ),
-        TextField(
-          maxLines: 4,
-          decoration: InputDecoration(
-            hintText:
-                'Enter relevant symptoms, history, or specific areas of concern...',
-            hintStyle: context.bodyMedium?.copyWith(
-              color: context.theme.hintColor,
+          ),
+          Text(
+            'Body Part',
+            style: context.bodyMedium?.bold,
+          ),
+          DropdownButtonFormField<BodyPart>(
+            items: BodyPart.values
+                .map(
+                  (type) =>
+                      DropdownMenuItem(value: type, child: Text(type.name)),
+                )
+                .toList(),
+            onChanged: onBodyPartChanged,
+            decoration: InputDecoration(
+              hintText: BodyPart.values.first.name,
+              hintStyle: context.bodyMedium?.copyWith(
+                color: context.theme.hintColor,
+              ),
             ),
           ),
-        ),
-      ],
-    ).paddingSymmetric(
-      horizontal: Sizes.kHorizontalPadding,
-      vertical: Sizes.kVerticalPadding,
+          Text(
+            'Date of Scan',
+            style: context.bodyMedium?.bold,
+          ),
+          DateListTile(
+            title: 'Date',
+            onSelectDate: onSelectDate,
+            selectedDate: selectedDate,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Clinical Notes', style: context.bodyMedium?.bold),
+              Text(
+                'Optional',
+                style: context.bodyMedium?.copyWith(
+                  color: context.theme.hintColor,
+                ),
+              ),
+            ],
+          ),
+          TextField(
+            maxLines: 4,
+            decoration: InputDecoration(
+              hintText:
+                  'Enter relevant symptoms, history, or specific areas of concern...',
+              hintStyle: context.bodyMedium?.copyWith(
+                color: context.theme.hintColor,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

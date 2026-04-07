@@ -40,17 +40,11 @@ class UploadScanSection extends StatelessWidget {
                 onCancel: onCancel,
               ),
             ],
-          ).paddingSymmetric(
-            horizontal: Sizes.kHorizontalPadding,
-            vertical: Sizes.kVerticalPadding,
           )
         : UploadCard(
             imageBytes: imageBytes,
             onPickImage: onPickImage,
             onCancel: onCancel,
-          ).paddingSymmetric(
-            horizontal: Sizes.kHorizontalPadding,
-            vertical: Sizes.kVerticalPadding,
           );
   }
 }
