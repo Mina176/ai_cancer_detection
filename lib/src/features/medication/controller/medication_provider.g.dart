@@ -34,7 +34,7 @@ final class MedicationsProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$medicationseHash();
+  String debugGetCreateSourceHash() => _$medicationsHash();
 
   @$internal
   @override
@@ -48,4 +48,4 @@ final class MedicationsProvider
   }
 }
 
-String _$medicationseHash() => r'b19f34a0a4e79d5473da54558b2bc4e0b53fe6fd';
+String _$medicationsHash() => r'fb88b6c7f819ff5530797b8c02e1968bf8d62ae6';
