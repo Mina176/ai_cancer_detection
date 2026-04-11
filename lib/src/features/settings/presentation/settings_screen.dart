@@ -80,76 +80,74 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: userProfileAsync.when(
         data: (profile) => Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: Sizes.kHorizontalPadding,
+            horizontal: context.isLandscape
+                ? Sizes.kHorizontalPadding
+                : Sizes.kHorizontalPadding,
           ),
           child: Column(
             children: [
+              context.isLandscape
+                  ? Sizes.kVerticalPadding.heightBox
+                  : 0.heightBox,
               Expanded(
                 child: SingleChildScrollView(
                   child: Form(
                     key: formKey,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: context.isLandscape
-                            ? 0
-                            : Sizes.kVerticalPadding,
-                      ),
-                      child: Column(
-                        spacing: 14,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ProfileImage(radius: 50),
-                          TextButton(
-                            onPressed: pickProfileImage,
-                            child: const Text('Change Profile Picture'),
+                    child: Column(
+                      spacing: 14,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ProfileImage(radius: 50),
+                        TextButton(
+                          onPressed: pickProfileImage,
+                          child: const Text('Change Profile Picture'),
+                        ),
+                        TextFormField(
+                          initialValue: profile.userName ?? '',
+                          decoration: const InputDecoration(
+                            labelText: 'User Name',
                           ),
-                          TextFormField(
-                            initialValue: profile.userName ?? '',
-                            decoration: const InputDecoration(
-                              labelText: 'User Name',
-                            ),
-                            onSaved: (value) => newUserName = value,
+                          onSaved: (value) => newUserName = value,
+                        ),
+                        TextFormField(
+                          initialValue: profile.fullName ?? '',
+                          decoration: const InputDecoration(
+                            labelText: 'Full Name',
                           ),
-                          TextFormField(
-                            initialValue: profile.fullName ?? '',
-                            decoration: const InputDecoration(
-                              labelText: 'Full Name',
-                            ),
-                            onSaved: (value) => newFullName = value,
+                          onSaved: (value) => newFullName = value,
+                        ),
+                        UserInfoListTile(
+                          title: 'Allergires',
+                          asyncData: allergiesAsync,
+                          onTap: () => context.goNamed(AppRoute.allergies.name),
+                          itemLabelBuilder: (allergy) => allergy.allergen,
+                        ),
+                        UserInfoListTile(
+                          title: 'Medications',
+                          asyncData: medicationsAsync,
+                          onTap: () =>
+                              context.goNamed(AppRoute.medications.name),
+                          itemLabelBuilder: (medication) => medication.name,
+                        ),
+                        UserInfoListTile(
+                          title: 'Medical History',
+                          asyncData: medicalHistoryAsync,
+                          onTap: () =>
+                              context.goNamed(AppRoute.medicalHistory.name),
+                          itemLabelBuilder: (medicalHistory) =>
+                              medicalHistory.title,
+                        ),
+                        UserInfoListTile(
+                          title: 'Health Measurements',
+                          asyncData: healthMeasurementsAsync,
+                          onTap: () => context.goNamed(
+                            AppRoute.healthMeasurments.name,
                           ),
-                          UserInfoListTile(
-                            title: 'Allergires',
-                            asyncData: allergiesAsync,
-                            onTap: () =>
-                                context.goNamed(AppRoute.allergies.name),
-                            itemLabelBuilder: (allergy) => allergy.allergen,
-                          ),
-                          UserInfoListTile(
-                            title: 'Medications',
-                            asyncData: medicationsAsync,
-                            onTap: () =>
-                                context.goNamed(AppRoute.medications.name),
-                            itemLabelBuilder: (medication) => medication.name,
-                          ),
-                          UserInfoListTile(
-                            title: 'Medical History',
-                            asyncData: medicalHistoryAsync,
-                            onTap: () =>
-                                context.goNamed(AppRoute.medicalHistory.name),
-                            itemLabelBuilder: (medicalHistory) =>
-                                medicalHistory.title,
-                          ),
-                          UserInfoListTile(
-                            title: 'Health Measurements',
-                            asyncData: healthMeasurementsAsync,
-                            onTap: () => context.goNamed(
-                              AppRoute.healthMeasurments.name,
-                            ),
-                            itemLabelBuilder: (measurement) =>
-                                '${measurement.name.name}: ${measurement.value}',
-                          ),
-                        ],
-                      ),
+                          itemLabelBuilder: (measurement) =>
+                              '${measurement.name.name}: ${measurement.value}',
+                        ),
+                        1.heightBox,
+                      ],
                     ),
                   ),
                 ),

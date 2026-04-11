@@ -19,27 +19,42 @@ class UploadScanSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return context.isLandscape
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Upload Diagnostic Scan',
-                style: context.displaySmall?.extraBold,
-              ),
-              4.heightBox,
-              Text(
-                'Upload patient imaging files for AI-assisted diagnostic analysis.',
-                style: context.bodyLarge?.copyWith(
-                  color: context.theme.hintColor,
+        ? Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Sizes.kVerticalPadding,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.kHorizontalPadding,
+                  ),
+                  child: Text(
+                    'Upload Diagnostic Scan',
+                    style: context.displaySmall?.extraBold,
+                  ),
                 ),
-              ),
-              32.heightBox,
-              UploadCard(
-                imageBytes: imageBytes,
-                onPickImage: onPickImage,
-                onCancel: onCancel,
-              ),
-            ],
+                4.heightBox,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.kHorizontalPadding,
+                  ),
+                  child: Text(
+                    'Upload patient imaging files for AI-assisted diagnostic analysis.',
+                    style: context.bodyLarge?.copyWith(
+                      color: context.theme.hintColor,
+                    ),
+                  ),
+                ),
+                32.heightBox,
+                UploadCard(
+                  imageBytes: imageBytes,
+                  onPickImage: onPickImage,
+                  onCancel: onCancel,
+                ),
+              ],
+            ),
           )
         : UploadCard(
             imageBytes: imageBytes,

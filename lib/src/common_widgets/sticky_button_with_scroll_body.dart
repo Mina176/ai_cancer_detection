@@ -1,4 +1,5 @@
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
+import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class StickyButtonWithScrollBody extends StatelessWidget {
@@ -24,9 +25,14 @@ class StickyButtonWithScrollBody extends StatelessWidget {
             ),
           ),
         ),
-        PrimaryButton(
-          onPressed: onButtonPressed,
-          label: buttonLabel,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.kHorizontalPadding,
+          ),
+          child: PrimaryButton(
+            onPressed: onButtonPressed,
+            label: buttonLabel,
+          ),
         ),
       ],
     );

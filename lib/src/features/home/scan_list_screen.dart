@@ -1,5 +1,5 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
 class ScanListScreen extends StatelessWidget {

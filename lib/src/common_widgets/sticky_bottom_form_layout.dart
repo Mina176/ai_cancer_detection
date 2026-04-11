@@ -20,11 +20,14 @@ class StickyBottomFormLayout extends StatelessWidget {
     return Scaffold(
       appBar: context.isLandscape ? null : AppBar(title: Text(title)),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: Sizes.kHorizontalPadding,
         ),
         child: Column(
           children: [
+            context.isLandscape
+                ? Sizes.kVerticalPadding.heightBox
+                : 0.heightBox,
             Expanded(
               child: SingleChildScrollView(
                 child: formContent,

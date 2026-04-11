@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_button_with_scroll_body.dart';
 import 'package:cancer_ai_detection/src/features/upload/widgets/scan_data_form.dart';
@@ -105,9 +104,14 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      PrimaryButton(
-                        onPressed: () => uploadScan(),
-                        label: 'Upload',
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.kHorizontalPadding,
+                        ),
+                        child: PrimaryButton(
+                          onPressed: () => uploadScan(),
+                          label: 'Upload',
+                        ),
                       ),
                     ],
                   ),
@@ -115,44 +119,39 @@ class _UploadScreenState extends State<UploadScreen> {
               ],
             )
           // mobile layout
-          : Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.kHorizontalPadding,
-              ),
-              child: StickyButtonWithScrollBody(
-                onButtonPressed: uploadScan,
-                buttonLabel: 'Upload',
-                children: [
-                  UploadScanSection(
-                    imageBytes: webImageBytes,
-                    onPickImage: pickImage,
-                    onCancel: () => setState(() {
-                      selectedXFile = null;
-                      webImageBytes = null;
-                    }),
-                  ),
-                  ScanDataForm(
-                    scanType: selectedScanType,
-                    bodyPart: selectedBodyPart,
-                    onScanChanged: (value) {
-                      setState(() {
-                        selectedScanType = value!;
-                      });
-                    },
-                    onBodyPartChanged: (value) {
-                      setState(() {
-                        selectedBodyPart = value!;
-                      });
-                    },
-                    selectedDate: selectedDate,
-                    onSelectDate: (date) {
-                      setState(() {
-                        selectedDate = date;
-                      });
-                    },
-                  ),
-                ],
-              ),
+          : StickyButtonWithScrollBody(
+              onButtonPressed: uploadScan,
+              buttonLabel: 'Upload',
+              children: [
+                UploadScanSection(
+                  imageBytes: webImageBytes,
+                  onPickImage: pickImage,
+                  onCancel: () => setState(() {
+                    selectedXFile = null;
+                    webImageBytes = null;
+                  }),
+                ),
+                ScanDataForm(
+                  scanType: selectedScanType,
+                  bodyPart: selectedBodyPart,
+                  onScanChanged: (value) {
+                    setState(() {
+                      selectedScanType = value!;
+                    });
+                  },
+                  onBodyPartChanged: (value) {
+                    setState(() {
+                      selectedBodyPart = value!;
+                    });
+                  },
+                  selectedDate: selectedDate,
+                  onSelectDate: (date) {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                ),
+              ],
             ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatefulWidget {
@@ -31,8 +33,8 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 8,
+      padding: EdgeInsets.only(
+        bottom: Sizes.kVerticalPadding,
       ),
       child: ElevatedButton(
         onPressed: isLoading ? null : handlePress,
