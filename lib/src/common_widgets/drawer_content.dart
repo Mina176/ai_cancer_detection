@@ -1,11 +1,14 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class DrawerContent extends StatelessWidget {
   const DrawerContent({super.key, required this.navigationShell});
   final StatefulNavigationShell navigationShell;
-  
+
   void onTap(int index) {
     navigationShell.goBranch(
       index,
@@ -61,6 +64,19 @@ class DrawerContent extends StatelessWidget {
             ).paddingSymmetric(horizontal: 16);
           },
         ),
+        Spacer(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {
+              context.goNamed(AppRoute.auth.name);
+              client.auth.signOutDevice();
+            },
+          ),
+        ),
+        16.heightBox,
       ],
     );
   }
