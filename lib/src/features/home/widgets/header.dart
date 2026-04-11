@@ -1,6 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions_flutter.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
+import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,18 +24,22 @@ class Header extends StatelessWidget {
   }
 }
 
-class Greeting extends StatelessWidget {
+class Greeting extends ConsumerWidget {
   const Greeting({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Good Morning', style: context.headlineMedium?.extraBold),
-        Text("Ready to start today's diagnostics?"),
+        Text(
+          ref.read(userRoleProvider) == 'doctor'
+              ? "Ready to start today's diagnostics?"
+              : "Welcome back!",
+        ),
       ],
     );
   }

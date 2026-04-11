@@ -45,7 +45,7 @@ const String addMedicalHistoryRoute = 'add-medical-history';
 const String healthMeasurmentsRoute = 'health-measurments';
 const String addHealthMeasurmentRoute = 'add-health-measurment';
 
-@Riverpod(keepAlive: true)
+@Riverpod()
 GoRouter router(Ref ref) {
   final userRole = ref.watch(userRoleProvider);
   final hasSelectedRole = userRole != null;

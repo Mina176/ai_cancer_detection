@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'allergies_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod()
 Future<List<AllergyModel>> allergies(Ref ref) async {
   return await client.allergy.listMyAllergies();
 }

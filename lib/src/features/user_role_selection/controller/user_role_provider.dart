@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_role_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod()
 class UserRole extends _$UserRole {
   @override
   String? build() {
