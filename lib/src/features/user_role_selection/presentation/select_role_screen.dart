@@ -1,12 +1,15 @@
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
+import 'package:cancer_ai_detection/src/utils/storage/shared_prefs/shared_prefs_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as ref;
 
-class SelectRoleScreen extends StatelessWidget {
+class SelectRoleScreen extends ConsumerWidget {
   const SelectRoleScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
         child: Row(
@@ -16,6 +19,9 @@ class SelectRoleScreen extends StatelessWidget {
                 icon: Icons.local_hospital,
                 text: 'Doctor',
                 onTap: () {
+                  ref
+                      .read(sharedPreferencesProvider)
+                      .setString('userRole', 'doctor');
                   context.goNamed(AppRoute.doctorForm.name);
                 },
               ),
@@ -25,6 +31,9 @@ class SelectRoleScreen extends StatelessWidget {
                 icon: Icons.person,
                 text: 'Patient',
                 onTap: () {
+                  ref
+                      .read(sharedPreferencesProvider)
+                      .setString('userRole', 'patient');
                   context.goNamed(AppRoute.patientForm.name);
                 },
               ),
