@@ -52,7 +52,6 @@ class AppTheme {
       ),
       dividerTheme: DividerThemeData(
         color: Color(0xFFE2E8F0),
-        thickness: 2,
         space: 32,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
