@@ -13,11 +13,11 @@ import 'package:cancer_ai_detection/src/features/allergies/presentation/allergie
 import 'package:cancer_ai_detection/src/features/medication/presentation/medications_screen.dart';
 import 'package:cancer_ai_detection/src/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/src/features/upload/upload_screen.dart';
+import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/patient_form_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/select_role_screen.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
-import 'package:cancer_ai_detection/src/routing/controller/has_completed_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,7 +47,8 @@ const String addHealthMeasurmentRoute = 'add-health-measurment';
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) {
-  final hasCompletedProfile = ref.watch(hasCompletedProfileProvider);
+  final userRole = ref.watch(userRoleProvider);
+  final hasSelectedRole = userRole != null;
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: authRoute,
@@ -56,19 +57,15 @@ GoRouter router(Ref ref) {
       final isAuthed = client.auth.isAuthenticated;
       final path = state.matchedLocation;
 
-      final isSetupScreen =
-          path == authRoute ||
-          path == selectRoleRoute ||
-          path == doctorFormRoute ||
-          path == patientFormRoute;
-
       if (!isAuthed) {
         return path == authRoute ? null : authRoute;
       }
-      if (path == authRoute) {
-        return hasCompletedProfile ? homeRoute : selectRoleRoute;
+      if (!hasSelectedRole) {
+        return path == selectRoleRoute ? null : selectRoleRoute;
       }
-      if (hasCompletedProfile && isSetupScreen) return homeRoute;
+      if (path == authRoute || path == selectRoleRoute) {
+        return homeRoute;
+      }
 
       return null;
     },

@@ -1,7 +1,6 @@
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
-import 'package:cancer_ai_detection/src/routing/controller/has_completed_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +32,6 @@ class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
       phone: phone,
       bio: bio,
     );
-    ref.read(hasCompletedProfileProvider.notifier).markAsComplete();
     if (!mounted) return;
     context.goNamed(AppRoute.home.name);
   }

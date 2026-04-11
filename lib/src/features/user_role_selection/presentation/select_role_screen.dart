@@ -1,5 +1,5 @@
+import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
-import 'package:cancer_ai_detection/src/utils/storage/shared_prefs/shared_prefs_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -18,9 +18,7 @@ class SelectRoleScreen extends ConsumerWidget {
                 icon: Icons.local_hospital,
                 text: 'Doctor',
                 onTap: () {
-                  ref
-                      .read(sharedPreferencesProvider)
-                      .setString('userRole', 'doctor');
+                  ref.read(userRoleProvider.notifier).setRole('doctor');
                   context.goNamed(AppRoute.doctorForm.name);
                 },
               ),
@@ -30,9 +28,7 @@ class SelectRoleScreen extends ConsumerWidget {
                 icon: Icons.person,
                 text: 'Patient',
                 onTap: () {
-                  ref
-                      .read(sharedPreferencesProvider)
-                      .setString('userRole', 'patient');
+                  ref.read(userRoleProvider.notifier).setRole('patient');
                   context.goNamed(AppRoute.patientForm.name);
                 },
               ),

@@ -3,7 +3,6 @@ import 'package:cancer_ai_detection/src/common_widgets/date_list_tile.dart';
 import 'package:cancer_ai_detection/src/common_widgets/gender_selector.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
-import 'package:cancer_ai_detection/src/routing/controller/has_completed_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +36,6 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
         alcoholFreq: alcoholFrequency,
         bloodType: selectedBloodType,
       );
-      ref.read(hasCompletedProfileProvider.notifier).markAsComplete();
       if (!mounted) return;
       context.goNamed(AppRoute.home.name);
     }

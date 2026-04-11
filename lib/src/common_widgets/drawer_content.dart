@@ -2,10 +2,11 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
-class DrawerContent extends StatelessWidget {
+class DrawerContent extends ConsumerWidget {
   const DrawerContent({super.key, required this.navigationShell});
   final StatefulNavigationShell navigationShell;
 
@@ -17,7 +18,7 @@ class DrawerContent extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<String> menuItems = [
       'Home',
       'Scan ',

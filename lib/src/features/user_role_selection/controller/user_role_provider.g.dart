@@ -9,12 +9,10 @@ part of 'user_role_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(userRole)
+@ProviderFor(UserRole)
 final userRoleProvider = UserRoleProvider._();
 
-final class UserRoleProvider
-    extends $FunctionalProvider<String?, String?, String?>
-    with $Provider<String?> {
+final class UserRoleProvider extends $NotifierProvider<UserRole, String?> {
   UserRoleProvider._()
     : super(
         from: null,
@@ -31,13 +29,7 @@ final class UserRoleProvider
 
   @$internal
   @override
-  $ProviderElement<String?> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  String? create(Ref ref) {
-    return userRole(ref);
-  }
+  UserRole create() => UserRole();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(String? value) {
@@ -48,4 +40,22 @@ final class UserRoleProvider
   }
 }
 
-String _$userRoleHash() => r'70e25c0addfdf97adf5d99618a5ced49b65e9d85';
+String _$userRoleHash() => r'df2a1f45f4c3a7f1ef88ac102d95856e30fe6983';
+
+abstract class _$UserRole extends $Notifier<String?> {
+  String? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<String?, String?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String?, String?>,
+              String?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
