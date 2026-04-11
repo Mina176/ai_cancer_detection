@@ -1,17 +1,19 @@
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
+import 'package:cancer_ai_detection/src/routing/controller/has_completed_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DoctorFormScreen extends StatefulWidget {
+class DoctorFormScreen extends ConsumerStatefulWidget {
   const DoctorFormScreen({super.key});
 
   @override
-  State<DoctorFormScreen> createState() => _DoctorFormScreenState();
+  ConsumerState<DoctorFormScreen> createState() => _DoctorFormScreenState();
 }
 
-class _DoctorFormScreenState extends State<DoctorFormScreen> {
+class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
   final formKey = GlobalKey<FormState>();
   String? specialization;
   String? licenseNumber;
@@ -21,19 +23,19 @@ class _DoctorFormScreenState extends State<DoctorFormScreen> {
   String? bio;
 
   Future<void> onSaved() async {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
-      await client.doctorProfile.update(
-        specialization: specialization,
-        licenseNumber: licenseNumber,
-        hospitalName: hospitalName,
-        yearsOfExperience: yearsOfExperience,
-        phone: phone,
-        bio: bio,
-      );
-      if (!mounted) return;
-      context.goNamed(AppRoute.home.name);
-    }
+    if (!formKey.currentState!.validate()) return;
+    formKey.currentState!.save();
+    await client.doctorProfile.update(
+      specialization: specialization,
+      licenseNumber: licenseNumber,
+      hospitalName: hospitalName,
+      yearsOfExperience: yearsOfExperience,
+      phone: phone,
+      bio: bio,
+    );
+    ref.read(hasCompletedProfileProvider.notifier).markAsComplete();
+    if (!mounted) return;
+    context.goNamed(AppRoute.home.name);
   }
 
   @override
