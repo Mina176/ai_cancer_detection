@@ -42,7 +42,7 @@ final class HasCompletedProfileProvider
 }
 
 String _$hasCompletedProfileHash() =>
-    r'd3c92d30347fc77a57e8cdcc1f003c6983b4eea2';
+    r'e8886d30a28b4448506728d9147bc3b7975e1c7a';
 
 abstract class _$HasCompletedProfile extends $Notifier<bool> {
   bool build();
