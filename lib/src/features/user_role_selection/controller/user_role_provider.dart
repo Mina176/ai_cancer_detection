@@ -9,7 +9,7 @@ class UserRole extends _$UserRole {
     return null;
   }
 
-  void setRole(String role) {
+  void setRole(String? role) {
     state = role;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
+import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,9 +72,9 @@ class DrawerContent extends ConsumerWidget {
           child: ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () {
-              context.goNamed(AppRoute.auth.name);
-              client.auth.signOutDevice();
+            onTap: () async {
+              await client.auth.signOutDevice();
+              ref.read(userRoleProvider.notifier).setRole(null);
             },
           ),
         ),
