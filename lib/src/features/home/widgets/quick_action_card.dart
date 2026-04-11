@@ -1,14 +1,14 @@
-import 'package:cancer_ai_detection/src/enums/patient_quick_action.dart';
+import 'package:cancer_ai_detection/src/enums/action_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class QuickAction extends StatelessWidget {
-  const QuickAction({
+class QuickActionCard extends StatelessWidget {
+  const QuickActionCard({
     super.key,
     required this.model,
   });
 
-  final PatientQuickAction model;
+  final ActionModel model;
 
   @override
   Widget build(BuildContext context) {
