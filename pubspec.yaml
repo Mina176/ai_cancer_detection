@@ -27,6 +27,7 @@ dependencies:
   riverpod_sqflite: ^0.4.2
   serverpod_auth_idp_flutter: ^3.3.1
   serverpod_flutter: ^3.3.1
+  shared_preferences: ^2.5.5
   sqflite: ^2.4.2
 
 dev_dependencies:
