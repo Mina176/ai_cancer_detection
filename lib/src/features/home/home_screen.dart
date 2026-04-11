@@ -1,5 +1,6 @@
+import 'package:cancer_ai_detection/src/enums/patient_quick_action.dart';
 import 'package:cancer_ai_detection/src/features/home/widgets/header.dart';
-import 'package:cancer_ai_detection/src/features/home/widgets/scan_option.dart';
+import 'package:cancer_ai_detection/src/features/home/widgets/quick_action.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
@@ -55,10 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 8,
                   crossAxisSpacing: 8,
                 ),
-                itemCount: quickActions.length,
+                itemCount: PatientQuickAction.values.length,
                 itemBuilder: (context, index) {
-                  return ScanOption(
-                    model: quickActions[index],
+                  return QuickAction(
+                    model: PatientQuickAction.values[index],
                   );
                 },
               ),
