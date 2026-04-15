@@ -1,5 +1,8 @@
 import 'package:cancer_ai_detection/src/features/authentication/signin_screen.dart';
+import 'package:cancer_ai_detection/src/features/doctor/presentation/add_diagnosis_screen.dart';
 import 'package:cancer_ai_detection/src/features/doctor/doctor_form_screen.dart';
+import 'package:cancer_ai_detection/src/features/doctor/presentation/doctor_patients_screen.dart';
+import 'package:cancer_ai_detection/src/features/doctor/presentation/patient_diagnoses_screen.dart';
 import 'package:cancer_ai_detection/src/features/health_measurement/presentation/add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/health_measurement/presentation/health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
@@ -35,6 +38,9 @@ const String patientFormRoute = '/patient-form';
 const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
 const String allScansRoute = '/scan-list';
+const String doctorPatientsRoute = 'doctor-patients';
+const String patientDiagnosesRoute = 'patient-diagnoses/:patientId';
+const String addDiagnosisRoute = 'add-diagnosis';
 const String patientProfileRoute = '/patient-profile';
 const String allergiesRoute = 'allergies';
 const String addAllergyRoute = 'add-allergy';
@@ -109,6 +115,33 @@ GoRouter router(Ref ref) {
                 path: homeRoute,
                 builder: (context, state) => const HomeScreen(),
                 routes: [
+                  GoRoute(
+                    name: AppRoute.doctorPatients.name,
+                    path: doctorPatientsRoute,
+                    builder: (context, state) => const DoctorPatientsScreen(),
+                    routes: [
+                      GoRoute(
+                        name: AppRoute.patientDiagnoses.name,
+                        path: patientDiagnosesRoute,
+                        builder: (context, state) {
+                          final patientId =
+                              state.pathParameters['patientId'] ?? '';
+                          return PatientDiagnosesScreen(patientId: patientId);
+                        },
+                        routes: [
+                          GoRoute(
+                            name: AppRoute.addDiagnosis.name,
+                            path: addDiagnosisRoute,
+                            builder: (context, state) {
+                              final patientId =
+                                  state.pathParameters['patientId'] ?? '';
+                              return AddDiagnosisScreen(patientId: patientId);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   GoRoute(
                     name: AppRoute.scanList.name,
                     path: allScansRoute,
