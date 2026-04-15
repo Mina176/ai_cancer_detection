@@ -22,7 +22,7 @@ final class MedicalHistoryProvider
         argument: null,
         retry: null,
         name: r'medicalHistoryProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -35,7 +35,7 @@ final class MedicalHistoryProvider
   MedicalHistory create() => MedicalHistory();
 }
 
-String _$medicalHistoryHash() => r'fd55003aa3559376b3f3bab098b9fcf007e5fa10';
+String _$medicalHistoryHash() => r'e60090432b4e4c74154db84a01fc86beea40d383';
 
 @JsonPersist()
 abstract class _$MedicalHistoryBase

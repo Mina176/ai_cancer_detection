@@ -28,7 +28,7 @@ final class MedicationsProvider
         argument: null,
         retry: null,
         name: r'medicationsProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -48,4 +48,4 @@ final class MedicationsProvider
   }
 }
 
-String _$medicationsHash() => r'fb88b6c7f819ff5530797b8c02e1968bf8d62ae6';
+String _$medicationsHash() => r'354014e992a98cc7759f04a331e0670d12a2edb9';

@@ -28,7 +28,7 @@ final class AllergiesProvider
         argument: null,
         retry: null,
         name: r'allergiesProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -48,4 +48,4 @@ final class AllergiesProvider
   }
 }
 
-String _$allergiesHash() => r'c0fe820fd531f03f678541fd84098f507d77caac';
+String _$allergiesHash() => r'4bfba46049a6f4be6a2516f9870154099d901955';

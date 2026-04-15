@@ -19,7 +19,7 @@ final class UserRoleProvider extends $NotifierProvider<UserRole, String?> {
         argument: null,
         retry: null,
         name: r'userRoleProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -40,7 +40,7 @@ final class UserRoleProvider extends $NotifierProvider<UserRole, String?> {
   }
 }
 
-String _$userRoleHash() => r'df2a1f45f4c3a7f1ef88ac102d95856e30fe6983';
+String _$userRoleHash() => r'63419b5eb68721ffdb20c439b13f2a85316d3a09';
 
 abstract class _$UserRole extends $Notifier<String?> {
   String? build();

@@ -26,7 +26,7 @@ final class HealthMeasurementProvider
         argument: null,
         retry: null,
         name: r'healthMeasurementProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -39,7 +39,7 @@ final class HealthMeasurementProvider
   HealthMeasurement create() => HealthMeasurement();
 }
 
-String _$healthMeasurementHash() => r'f481fbce7e14765cd7d9b7ebe2b4394ee079ec54';
+String _$healthMeasurementHash() => r'8cd72d0e309b069f227a6ec717274e4098cb28f9';
 
 @JsonPersist()
 abstract class _$HealthMeasurementBase
