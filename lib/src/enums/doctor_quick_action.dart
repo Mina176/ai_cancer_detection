@@ -6,7 +6,22 @@ enum DoctorQuickAction implements ActionModel {
   viewPatients(
     'View Patients',
     Icons.people_alt_rounded,
-    AppRoute.addAllergy,
+    AppRoute.doctorPatients,
+  ),
+  addDiagnosis(
+    'Add Diagnosis',
+    Icons.medical_information_rounded,
+    AppRoute.doctorPatients,
+  ),
+  viewScans(
+    'View Scans',
+    Icons.history_edu_rounded,
+    AppRoute.scanList,
+  ),
+  settings(
+    'Settings',
+    Icons.settings,
+    AppRoute.settings,
   ),
   ;
 
