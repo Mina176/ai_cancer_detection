@@ -48,4 +48,4 @@ final class PatientsProvider
   }
 }
 
-String _$patientsHash() => r'7de4af254680817296de1b61b2c79cc76de27224';
+String _$patientsHash() => r'15b78e0374b026abd0142744e36e3fb196c2c464';

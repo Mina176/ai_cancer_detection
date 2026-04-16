@@ -24,7 +24,7 @@ final class PatientDiagnosesProvider
         $FutureProvider<List<DiagnosisModel>> {
   PatientDiagnosesProvider._({
     required PatientDiagnosesFamily super.from,
-    required String super.argument,
+    required UuidValue super.argument,
   }) : super(
          retry: null,
          name: r'patientDiagnosesProvider',
@@ -51,7 +51,7 @@ final class PatientDiagnosesProvider
 
   @override
   FutureOr<List<DiagnosisModel>> create(Ref ref) {
-    final argument = this.argument as String;
+    final argument = this.argument as UuidValue;
     return patientDiagnoses(ref, argument);
   }
 
@@ -66,10 +66,10 @@ final class PatientDiagnosesProvider
   }
 }
 
-String _$patientDiagnosesHash() => r'86bdfff8927de1daee83c51d57f66cd58f604fb0';
+String _$patientDiagnosesHash() => r'ce0ee346bce784f98c95c5831592e97d9e1d70ac';
 
 final class PatientDiagnosesFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<DiagnosisModel>>, String> {
+    with $FunctionalFamilyOverride<FutureOr<List<DiagnosisModel>>, UuidValue> {
   PatientDiagnosesFamily._()
     : super(
         retry: null,
@@ -79,7 +79,7 @@ final class PatientDiagnosesFamily extends $Family
         isAutoDispose: true,
       );
 
-  PatientDiagnosesProvider call(String patientId) =>
+  PatientDiagnosesProvider call(UuidValue patientId) =>
       PatientDiagnosesProvider._(argument: patientId, from: this);
 
   @override
