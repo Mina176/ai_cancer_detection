@@ -28,7 +28,7 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
   Future<void> onSaved() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      await client.patientProfileModelEdit.update(
+      await client.patientProfile.update(
         dob: selectedDate,
         gender: selectedGender,
         smokingStatus: smokingStatus,

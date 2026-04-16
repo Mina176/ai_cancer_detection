@@ -23,7 +23,7 @@ class _AddAllergyScreenState extends ConsumerState<AddAllergyScreen> {
   Future<void> saveAllergy() async {
     if (!formKey.currentState!.validate()) return;
     try {
-      final profile = await client.patientProfileModelEdit.getOrCreate();
+      final profile = await client.patientProfile.getOrCreate();
       await client.allergy.addAllergies([
         AllergyModel(
           patientProfileId: profile.id!,

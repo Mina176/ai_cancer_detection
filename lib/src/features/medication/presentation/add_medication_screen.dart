@@ -24,7 +24,7 @@ class _AddMedicationScreenState extends ConsumerState<AddMedicationScreen> {
   Future<void> saveMedication() async {
     if (!formKey.currentState!.validate()) return;
     try {
-      final profile = await client.patientProfileModelEdit.getOrCreate();
+      final profile = await client.patientProfile.getOrCreate();
       await client.medication.addMedications([
         MedicationModel(
           patientProfileId: profile.id!,
