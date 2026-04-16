@@ -93,8 +93,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         data: (profile) {
           final profile = userProfileAsync.value;
           final userId = isDoctor
-              ? (profile as DoctorProfileModel).authUserId
-              : (profile as PatientProfileModel).authUserId;
+              ? (profile as DoctorProfileModel).id
+              : (profile as PatientProfileModel).id;
           final fullName = isDoctor
               ? (profile as DoctorProfileModel).fullName
               : (profile as PatientProfileModel).fullName;
@@ -125,6 +125,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           TextFormField(
                             key: ValueKey(userId.toString()),
                             initialValue: userId.toString(),
+                            readOnly: true,
                             decoration: InputDecoration(
                               labelText: 'User ID',
                               suffixIcon: IconButton(
@@ -144,38 +145,40 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             ),
                             onSaved: (value) => newFullName = value,
                           ),
-                          UserInfoListTile(
-                            title: 'Allergires',
-                            asyncData: allergiesAsync,
-                            onTap: () =>
-                                context.goNamed(AppRoute.allergies.name),
-                            itemLabelBuilder: (allergy) => allergy.allergen,
-                          ),
-                          UserInfoListTile(
-                            title: 'Medications',
-                            asyncData: medicationsAsync,
-                            onTap: () =>
-                                context.goNamed(AppRoute.medications.name),
-                            itemLabelBuilder: (medication) => medication.name,
-                          ),
-                          UserInfoListTile(
-                            title: 'Medical History',
-                            asyncData: medicalHistoryAsync,
-                            onTap: () =>
-                                context.goNamed(AppRoute.medicalHistory.name),
-                            itemLabelBuilder: (medicalHistory) =>
-                                medicalHistory.title,
-                          ),
-                          UserInfoListTile(
-                            title: 'Health Measurements',
-                            asyncData: healthMeasurementsAsync,
-                            onTap: () => context.goNamed(
-                              AppRoute.healthMeasurments.name,
+                          if (!isDoctor) ...[
+                            UserInfoListTile(
+                              title: 'Allergires',
+                              asyncData: allergiesAsync,
+                              onTap: () =>
+                                  context.goNamed(AppRoute.allergies.name),
+                              itemLabelBuilder: (allergy) => allergy.allergen,
                             ),
-                            itemLabelBuilder: (measurement) =>
-                                '${measurement.name.name}: ${measurement.value}',
-                          ),
-                          1.heightBox,
+                            UserInfoListTile(
+                              title: 'Medications',
+                              asyncData: medicationsAsync,
+                              onTap: () =>
+                                  context.goNamed(AppRoute.medications.name),
+                              itemLabelBuilder: (medication) => medication.name,
+                            ),
+                            UserInfoListTile(
+                              title: 'Medical History',
+                              asyncData: medicalHistoryAsync,
+                              onTap: () =>
+                                  context.goNamed(AppRoute.medicalHistory.name),
+                              itemLabelBuilder: (medicalHistory) =>
+                                  medicalHistory.title,
+                            ),
+                            UserInfoListTile(
+                              title: 'Health Measurements',
+                              asyncData: healthMeasurementsAsync,
+                              onTap: () => context.goNamed(
+                                AppRoute.healthMeasurments.name,
+                              ),
+                              itemLabelBuilder: (measurement) =>
+                                  '${measurement.name.name}: ${measurement.value}',
+                            ),
+                            1.heightBox,
+                          ],
                         ],
                       ),
                     ),
