@@ -68,27 +68,32 @@ class UploadCard extends StatelessWidget {
               ),
             ),
           )
-        : DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(8),
+        : Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Sizes.kHorizontalPadding,
             ),
-            child: SizedBox(
-              height: 300,
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Center(
-                    child: Image.memory(
-                      imageBytes!,
-                      fit: BoxFit.contain,
-                    ).paddingSymmetric(vertical: 24),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    onPressed: onCancel,
-                  ),
-                ],
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: SizedBox(
+                height: 300,
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Center(
+                      child: Image.memory(
+                        imageBytes!,
+                        fit: BoxFit.contain,
+                      ).paddingSymmetric(vertical: 24),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: onCancel,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

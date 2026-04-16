@@ -40,14 +40,19 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
   Future<void> uploadScan() async {
-    if (webImageBytes != null) {
-      final ByteData imageByteData = ByteData.view(webImageBytes!.buffer);
-      await client.medicalScan.uploadMyScan(
-        imageByteData,
-        scanType: selectedScanType,
-        bodyPart: selectedBodyPart,
-        scanDate: selectedDate,
-      );
+    try {
+      if (webImageBytes != null) {
+        final ByteData imageByteData = ByteData.view(webImageBytes!.buffer);
+        await client.medicalScan.uploadMyScan(
+          imageByteData,
+          scanType: selectedScanType,
+          bodyPart: selectedBodyPart,
+          scanDate: selectedDate,
+        );
+      }
+      print('Scan uploaded successfully');
+    } catch (e) {
+      print('Error uploading scan: $e');
     }
   }
 

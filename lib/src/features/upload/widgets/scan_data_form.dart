@@ -69,12 +69,8 @@ class ScanDataForm extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            'Date of Scan',
-            style: context.bodyMedium?.bold,
-          ),
           DateListTile(
-            title: 'Date',
+            title: 'Date of Scan',
             onSelectDate: onSelectDate,
             selectedDate: selectedDate,
           ),
