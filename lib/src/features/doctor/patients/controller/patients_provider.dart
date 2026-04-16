@@ -6,5 +6,5 @@ part 'patients_provider.g.dart';
 
 @Riverpod()
 Future<List<PatientProfileModel>> patients(Ref ref) async {
-  return await client.patient.listPatients(limit: 20, offset: 5);
+  return await client.patient.listPatients(limit: 30, offset: 0);
 }
