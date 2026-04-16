@@ -14,6 +14,7 @@ Future<void> main() async {
     ..connectivityMonitor = FlutterConnectivityMonitor()
     ..authSessionManager = FlutterAuthSessionManager();
   try {
+    print(client.auth.authInfo?.authUserId ?? 'No user authenticated');
     await client.auth.initialize();
   } catch (e) {
     print('Error initializing authentication: $e');

@@ -1,7 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
-import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,13 +23,11 @@ class DrawerContent extends ConsumerWidget {
       'Home',
       'Scan ',
       'Settings',
-      'Help',
     ];
     List<IconData> menuIcons = [
       Icons.home,
       Icons.qr_code_scanner_rounded,
       Icons.settings,
-      Icons.help_outline,
     ];
     return Column(
       children: [

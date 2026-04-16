@@ -1,4 +1,4 @@
-import 'package:awesome_extensions/awesome_extensions_flutter.dart';
+import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
@@ -54,7 +54,9 @@ class UserCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfileAsync = ref.watch(userProfileProvider);
     return GestureDetector(
-      onTap: () => context.goNamed(AppRoute.settings.name),
+      onTap: () => context.isLandscape
+          ? context.goNamed(AppRoute.settings.name)
+          : context.pushNamed(AppRoute.settings.name),
       child: Card(
         shape: RoundedRectangleBorder(
           side: BorderSide(
