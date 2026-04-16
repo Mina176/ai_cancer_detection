@@ -1,9 +1,11 @@
 import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
-import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
+import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -50,7 +52,10 @@ class UserCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfileAsync = ref.watch(userProfileProvider);
+    final isDoctor = ref.watch(userRoleProvider) == 'doctor';
+    final userProfileAsync = ref.watch(userRoleProvider) == 'doctor'
+        ? ref.watch(doctorProfileProvider)
+        : ref.watch(patientProfileProvider);
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(
@@ -65,19 +70,25 @@ class UserCard extends ConsumerWidget {
           horizontal: 16,
         ),
         child: userProfileAsync.when(
-          data: (profile) => Row(
-            children: [
-              ProfileImage(
-                radius: 20,
-              ),
-              if (context.isLandscape) 8.widthBox,
-              if (context.isLandscape)
-                Text(
-                  userProfileAsync.asData?.value.userName ?? 'User',
-                  style: context.bodyMedium?.extraBold,
+          data: (profile) {
+            final profile = userProfileAsync.value;
+            final name = isDoctor
+                ? (profile as DoctorProfileModel).fullName
+                : (profile as PatientProfileModel).fullName;
+            return Row(
+              children: [
+                ProfileImage(
+                  radius: 20,
                 ),
-            ],
-          ),
+                if (context.isLandscape) 8.widthBox,
+                if (context.isLandscape)
+                  Text(
+                    name ?? 'User',
+                    style: context.bodyMedium?.extraBold,
+                  ),
+              ],
+            );
+          },
           loading: () => CircleAvatar(
             radius: 20,
             child: Text(''),
