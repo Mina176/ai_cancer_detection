@@ -1,5 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
-import 'package:cancer_ai_detection/src/features/medication/controller/medication_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/generic_list_screen.dart';
 import 'package:cancer_ai_detection/src/common_widgets/swipe_to_delete_wrapper.dart';

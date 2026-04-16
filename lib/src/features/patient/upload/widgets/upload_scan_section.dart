@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
-import 'package:cancer_ai_detection/src/features/upload/widgets/upload_card.dart';
+import 'package:cancer_ai_detection/src/features/patient/upload/widgets/upload_card.dart';
 import 'package:flutter/material.dart';
 
 class UploadScanSection extends StatelessWidget {

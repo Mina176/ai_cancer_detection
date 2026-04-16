@@ -8,21 +8,6 @@ enum DoctorQuickAction implements ActionModel {
     Icons.people_alt_rounded,
     AppRoute.doctorPatients,
   ),
-  addDiagnosis(
-    'Add Diagnosis',
-    Icons.medical_information_rounded,
-    AppRoute.doctorPatients,
-  ),
-  viewScans(
-    'View Scans',
-    Icons.history_edu_rounded,
-    AppRoute.scanList,
-  ),
-  settings(
-    'Settings',
-    Icons.settings,
-    AppRoute.settings,
-  ),
   ;
 
   @override

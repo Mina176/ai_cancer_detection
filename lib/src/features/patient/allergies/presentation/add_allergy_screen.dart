@@ -1,5 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
-import 'package:cancer_ai_detection/src/features/allergies/controllers/allergies_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/allergies_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
 import 'package:flutter/material.dart';

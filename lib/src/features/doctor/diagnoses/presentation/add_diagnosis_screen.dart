@@ -1,7 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions_dart.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_bottom_form_layout.dart';
-import 'package:cancer_ai_detection/src/features/doctor/controller/patient_diagnoses_provider.dart';
+import 'package:cancer_ai_detection/src/features/doctor/diagnoses/controller/patient_diagnoses_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';

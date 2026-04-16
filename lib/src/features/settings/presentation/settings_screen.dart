@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
-import 'package:cancer_ai_detection/src/features/health_measurement/controller/health_measurement_provider.dart';
-import 'package:cancer_ai_detection/src/features/medical_history/controller/medical_history_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
-import 'package:cancer_ai_detection/src/features/allergies/controllers/allergies_provider.dart';
-import 'package:cancer_ai_detection/src/features/medication/controller/medication_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/allergies_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';

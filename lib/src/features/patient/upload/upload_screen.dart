@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:cancer_ai_detection/src/common_widgets/sticky_button_with_scroll_body.dart';
-import 'package:cancer_ai_detection/src/features/upload/widgets/scan_data_form.dart';
-import 'package:cancer_ai_detection/src/features/upload/widgets/upload_scan_section.dart';
+import 'package:cancer_ai_detection/src/features/patient/upload/widgets/scan_data_form.dart';
+import 'package:cancer_ai_detection/src/features/patient/upload/widgets/upload_scan_section.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
