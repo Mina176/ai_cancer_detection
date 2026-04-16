@@ -36,20 +36,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       source: ImageSource.gallery,
     );
 
-    //     if (image != null) {
-    //       final uint8ListImage = await image.readAsBytes();
-    //       final ByteData imageByteData = ByteData.view(uint8ListImage.buffer);
-    //       final isDoctor = ref.read(userRoleProvider) == 'doctor';
+    if (image != null) {
+      final uint8ListImage = await image.readAsBytes();
+      final ByteData imageByteData = ByteData.view(uint8ListImage.buffer);
+      final isDoctor = ref.read(userRoleProvider) == 'doctor';
 
-    //       final String uploadedImageUrl = isDoctor ? await client. ;
+      isDoctor
+          ? await client.doctorProfile.update(image: imageByteData)
+          : await client.patientProfile.update(image: imageByteData);
 
-    // if (isDoctor) {
-    //   await client.doctorProfile.update(imageUrl: uploadedImageUrl);
-    // } else {
-    //   await client.patientProfile.update(imageUrl: uploadedImageUrl);
-    // }
-    //       final _ = isDoctor ? await ref.refresh(doctorProfileProvider.future) : await ref.refresh(patientProfileProvider.future);
-    //     }
+      final _ = isDoctor
+          ? await ref.refresh(doctorProfileProvider.future)
+          : await ref.refresh(patientProfileProvider.future);
+    }
   }
 
   Future<void> saveChanges() async {
