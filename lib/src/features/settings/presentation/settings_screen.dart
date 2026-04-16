@@ -12,6 +12,7 @@ import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
@@ -101,6 +102,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         TextButton(
                           onPressed: pickProfileImage,
                           child: const Text('Change Profile Picture'),
+                        ),
+                        TextFormField(
+                          key: ValueKey(profile.authUserId.toString()),
+                          initialValue: profile.authUserId.toString(),
+                          decoration: InputDecoration(
+                            labelText: 'User ID',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.copy),
+                              onPressed: () => Clipboard.setData(
+                                ClipboardData(
+                                  text: profile.authUserId.toString(),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                         TextFormField(
                           initialValue: profile.userName ?? '',
