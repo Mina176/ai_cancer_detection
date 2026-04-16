@@ -2,10 +2,8 @@ import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
-import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -53,45 +51,40 @@ class UserCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfileAsync = ref.watch(userProfileProvider);
-    return GestureDetector(
-      onTap: () => context.isLandscape
-          ? context.goNamed(AppRoute.settings.name)
-          : context.pushNamed(AppRoute.settings.name),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 1,
-            color: const Color(0xFFF3F4F6),
-          ),
-          borderRadius: BorderRadius.circular(24),
+    return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          width: 1,
+          color: const Color(0xFFF3F4F6),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: 16,
-          ),
-          child: userProfileAsync.when(
-            data: (profile) => Row(
-              children: [
-                ProfileImage(
-                  radius: 20,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 16,
+        ),
+        child: userProfileAsync.when(
+          data: (profile) => Row(
+            children: [
+              ProfileImage(
+                radius: 20,
+              ),
+              if (context.isLandscape) 8.widthBox,
+              if (context.isLandscape)
+                Text(
+                  userProfileAsync.asData?.value.userName ?? 'User',
+                  style: context.bodyMedium?.extraBold,
                 ),
-                if (context.isLandscape) 8.widthBox,
-                if (context.isLandscape)
-                  Text(
-                    userProfileAsync.asData?.value.userName ?? 'User',
-                    style: context.bodyMedium?.extraBold,
-                  ),
-              ],
-            ),
-            loading: () => CircleAvatar(
-              radius: 20,
-              child: Text(''),
-            ),
-            error: (error, stack) => CircleAvatar(
-              radius: 20,
-              child: Text(''),
-            ),
+            ],
+          ),
+          loading: () => CircleAvatar(
+            radius: 20,
+            child: Text(''),
+          ),
+          error: (error, stack) => CircleAvatar(
+            radius: 20,
+            child: Text(''),
           ),
         ),
       ),

@@ -19,12 +19,12 @@ class DrawerContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<String> menuItems = [
+    const List<String> menuItems = [
       'Home',
       'Scan ',
       'Settings',
     ];
-    List<IconData> menuIcons = [
+    const List<IconData> menuIcons = [
       Icons.home,
       Icons.qr_code_scanner_rounded,
       Icons.settings,
