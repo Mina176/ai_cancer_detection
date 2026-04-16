@@ -19,14 +19,15 @@ class DrawerContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const List<String> menuItems = [
+    final isDoctor = ref.watch(userRoleProvider) == 'doctor';
+    List<String> menuItems = [
       'Home',
-      'Scan ',
+      isDoctor ? 'Patients' : 'Scan',
       'Settings',
     ];
-    const List<IconData> menuIcons = [
+    List<IconData> menuIcons = [
       Icons.home,
-      Icons.qr_code_scanner_rounded,
+      isDoctor ? Icons.person : Icons.qr_code_scanner_rounded,
       Icons.settings,
     ];
     return Column(
