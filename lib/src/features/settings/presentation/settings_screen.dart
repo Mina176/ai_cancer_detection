@@ -1,13 +1,13 @@
-import 'dart:typed_data';
-
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
+import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/allergies_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
-import 'package:cancer_ai_detection/src/features/settings/controller/profile_provider.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
@@ -36,34 +36,46 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       source: ImageSource.gallery,
     );
 
-    if (image != null) {
-      final uint8ListImage = await image.readAsBytes();
-      final ByteData imageByteData = ByteData.view(uint8ListImage.buffer);
+    //     if (image != null) {
+    //       final uint8ListImage = await image.readAsBytes();
+    //       final ByteData imageByteData = ByteData.view(uint8ListImage.buffer);
+    //       final isDoctor = ref.read(userRoleProvider) == 'doctor';
 
-      await client.userProfileEdit.setUserImage(imageByteData);
+    //       final String uploadedImageUrl = isDoctor ? await client. ;
 
-      final _ = await ref.refresh(userProfileProvider.future);
-    }
+    // if (isDoctor) {
+    //   await client.doctorProfile.update(imageUrl: uploadedImageUrl);
+    // } else {
+    //   await client.patientProfile.update(imageUrl: uploadedImageUrl);
+    // }
+    //       final _ = isDoctor ? await ref.refresh(doctorProfileProvider.future) : await ref.refresh(patientProfileProvider.future);
+    //     }
   }
 
   Future<void> saveChanges() async {
     if (!formKey.currentState!.validate()) return;
     formKey.currentState!.save();
+    final isDoctor = ref.read(userRoleProvider) == 'doctor';
 
-    if (newUserName != null && newUserName!.trim().isNotEmpty) {
-      await client.userProfileEdit.changeUserName(newUserName!.trim());
-    }
     if (newFullName != null && newFullName!.trim().isNotEmpty) {
-      await client.userProfileEdit.changeFullName(newFullName!.trim());
+      isDoctor
+          ? await client.doctorProfile.update(fullName: newFullName!.trim())
+          : await client.patientProfile.update(fullName: newFullName!.trim());
     }
-    final _ = await ref.refresh(userProfileProvider.future);
+
+    final _ = isDoctor
+        ? ref.refresh(doctorProfileProvider)
+        : ref.refresh(patientProfileProvider);
 
     if (mounted) context.goNamed(AppRoute.home.name);
   }
 
   @override
   Widget build(BuildContext context) {
-    final userProfileAsync = ref.watch(userProfileProvider);
+    final isDoctor = ref.read(userRoleProvider) == 'doctor';
+    final userProfileAsync = isDoctor
+        ? ref.watch(doctorProfileProvider)
+        : ref.watch(patientProfileProvider);
     final allergiesAsync = ref.watch(allergiesProvider);
     final medicationsAsync = ref.watch(medicationsProvider);
     final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
@@ -79,102 +91,105 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ),
       body: userProfileAsync.when(
-        data: (profile) => Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: context.isLandscape
-                ? Sizes.kHorizontalPadding
-                : Sizes.kHorizontalPadding,
-          ),
-          child: Column(
-            children: [
-              context.isLandscape
-                  ? Sizes.kVerticalPadding.heightBox
-                  : 0.heightBox,
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      spacing: 14,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ProfileImage(radius: 50),
-                        TextButton(
-                          onPressed: pickProfileImage,
-                          child: const Text('Change Profile Picture'),
-                        ),
-                        TextFormField(
-                          key: ValueKey(profile.authUserId.toString()),
-                          initialValue: profile.authUserId.toString(),
-                          decoration: InputDecoration(
-                            labelText: 'User ID',
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.copy),
-                              onPressed: () => Clipboard.setData(
-                                ClipboardData(
-                                  text: profile.authUserId.toString(),
+        data: (profile) {
+          final profile = userProfileAsync.value;
+          final userId = isDoctor
+              ? (profile as DoctorProfileModel).authUserId
+              : (profile as PatientProfileModel).authUserId;
+          final fullName = isDoctor
+              ? (profile as DoctorProfileModel).fullName
+              : (profile as PatientProfileModel).fullName;
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: context.isLandscape
+                  ? Sizes.kHorizontalPadding
+                  : Sizes.kHorizontalPadding,
+            ),
+            child: Column(
+              children: [
+                context.isLandscape
+                    ? Sizes.kVerticalPadding.heightBox
+                    : 0.heightBox,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        spacing: 14,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ProfileImage(radius: 50),
+                          TextButton(
+                            onPressed: pickProfileImage,
+                            child: const Text('Change Profile Picture'),
+                          ),
+                          TextFormField(
+                            key: ValueKey(userId.toString()),
+                            initialValue: userId.toString(),
+                            decoration: InputDecoration(
+                              labelText: 'User ID',
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.copy),
+                                onPressed: () => Clipboard.setData(
+                                  ClipboardData(
+                                    text: userId.toString(),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        TextFormField(
-                          initialValue: profile.userName ?? '',
-                          decoration: const InputDecoration(
-                            labelText: 'User Name',
+                          TextFormField(
+                            initialValue: fullName ?? '',
+                            decoration: const InputDecoration(
+                              labelText: 'Full Name',
+                            ),
+                            onSaved: (value) => newFullName = value,
                           ),
-                          onSaved: (value) => newUserName = value,
-                        ),
-                        TextFormField(
-                          initialValue: profile.fullName ?? '',
-                          decoration: const InputDecoration(
-                            labelText: 'Full Name',
+                          UserInfoListTile(
+                            title: 'Allergires',
+                            asyncData: allergiesAsync,
+                            onTap: () =>
+                                context.goNamed(AppRoute.allergies.name),
+                            itemLabelBuilder: (allergy) => allergy.allergen,
                           ),
-                          onSaved: (value) => newFullName = value,
-                        ),
-                        UserInfoListTile(
-                          title: 'Allergires',
-                          asyncData: allergiesAsync,
-                          onTap: () => context.goNamed(AppRoute.allergies.name),
-                          itemLabelBuilder: (allergy) => allergy.allergen,
-                        ),
-                        UserInfoListTile(
-                          title: 'Medications',
-                          asyncData: medicationsAsync,
-                          onTap: () =>
-                              context.goNamed(AppRoute.medications.name),
-                          itemLabelBuilder: (medication) => medication.name,
-                        ),
-                        UserInfoListTile(
-                          title: 'Medical History',
-                          asyncData: medicalHistoryAsync,
-                          onTap: () =>
-                              context.goNamed(AppRoute.medicalHistory.name),
-                          itemLabelBuilder: (medicalHistory) =>
-                              medicalHistory.title,
-                        ),
-                        UserInfoListTile(
-                          title: 'Health Measurements',
-                          asyncData: healthMeasurementsAsync,
-                          onTap: () => context.goNamed(
-                            AppRoute.healthMeasurments.name,
+                          UserInfoListTile(
+                            title: 'Medications',
+                            asyncData: medicationsAsync,
+                            onTap: () =>
+                                context.goNamed(AppRoute.medications.name),
+                            itemLabelBuilder: (medication) => medication.name,
                           ),
-                          itemLabelBuilder: (measurement) =>
-                              '${measurement.name.name}: ${measurement.value}',
-                        ),
-                        1.heightBox,
-                      ],
+                          UserInfoListTile(
+                            title: 'Medical History',
+                            asyncData: medicalHistoryAsync,
+                            onTap: () =>
+                                context.goNamed(AppRoute.medicalHistory.name),
+                            itemLabelBuilder: (medicalHistory) =>
+                                medicalHistory.title,
+                          ),
+                          UserInfoListTile(
+                            title: 'Health Measurements',
+                            asyncData: healthMeasurementsAsync,
+                            onTap: () => context.goNamed(
+                              AppRoute.healthMeasurments.name,
+                            ),
+                            itemLabelBuilder: (measurement) =>
+                                '${measurement.name.name}: ${measurement.value}',
+                          ),
+                          1.heightBox,
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              PrimaryButton(
-                label: 'Save Changes',
-                onPressed: saveChanges,
-              ),
-            ],
-          ),
-        ),
+                PrimaryButton(
+                  label: 'Save Changes',
+                  onPressed: saveChanges,
+                ),
+              ],
+            ),
+          );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
