@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 class PatientDiagnosesScreen extends ConsumerWidget {
   const PatientDiagnosesScreen({super.key, required this.patientId});
 
-  final String patientId;
+  final UuidValue patientId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +24,7 @@ class PatientDiagnosesScreen extends ConsumerWidget {
       asyncData: diagnosesAsync,
       onAddPressed: () => GoRouter.of(context).pushNamed(
         AppRoute.addDiagnosis.name,
-        pathParameters: {'patientId': patientId},
+        pathParameters: {'patientId': patientId.toString()},
       ),
       itemBuilder: (context, diagnosis) {
         return SwipeToDeleteWrapper(

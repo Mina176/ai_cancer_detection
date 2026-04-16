@@ -12,7 +12,7 @@ class AddDiagnosisScreen extends ConsumerStatefulWidget {
     required this.patientId,
   });
 
-  final String patientId;
+  final UuidValue patientId;
 
   @override
   ConsumerState<AddDiagnosisScreen> createState() => _AddDiagnosisScreenState();
@@ -32,7 +32,7 @@ class _AddDiagnosisScreenState extends ConsumerState<AddDiagnosisScreen> {
     _formKey.currentState!.save();
 
     try {
-      final patientUuid = UuidValue.fromString(widget.patientId);
+      final patientUuid = widget.patientId;
       await client.diagnosis.create(
         patientId: patientUuid,
         diagnosisText: _diagnosisText,

@@ -7,13 +7,7 @@ part 'patient_diagnoses_provider.g.dart';
 @riverpod
 Future<List<DiagnosisModel>> patientDiagnoses(
   Ref ref,
-  String patientId,
+  UuidValue patientId,
 ) async {
-  final normalizedPatientId = patientId.trim();
-  if (normalizedPatientId.isEmpty) {
-    return [];
-  }
-
-  final parsedPatientId = UuidValue.fromString(normalizedPatientId);
-  return client.diagnosis.list(parsedPatientId);
+  return client.diagnosis.list(patientId);
 }
