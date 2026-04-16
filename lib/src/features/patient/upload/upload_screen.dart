@@ -4,8 +4,10 @@ import 'package:cancer_ai_detection/src/features/patient/upload/widgets/scan_dat
 import 'package:cancer_ai_detection/src/features/patient/upload/widgets/upload_scan_section.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
+import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
@@ -50,6 +52,10 @@ class _UploadScreenState extends State<UploadScreen> {
           scanDate: selectedDate,
         );
       }
+      if (mounted) {
+        context.goNamed(AppRoute.home.name);
+      }
+      selectedXFile = null;
       print('Scan uploaded successfully');
     } catch (e) {
       print('Error uploading scan: $e');
