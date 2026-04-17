@@ -1,4 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/common_widgets/copy_icon.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
@@ -128,13 +129,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             readOnly: true,
                             decoration: InputDecoration(
                               labelText: 'User ID',
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.copy),
-                                onPressed: () => Clipboard.setData(
-                                  ClipboardData(
-                                    text: userId.toString(),
-                                  ),
-                                ),
+                              suffixIcon: CopyIcon(
+                                textToCopy: userId.toString(),
                               ),
                             ),
                           ),
