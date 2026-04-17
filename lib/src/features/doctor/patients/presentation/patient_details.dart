@@ -1,4 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/src/common_widgets/copy_icon.dart';
 import 'package:cancer_ai_detection/src/features/doctor/patients/controller/patient_details_provider.dart';
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/details_card.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
@@ -24,7 +25,6 @@ class PatientDetails extends ConsumerWidget {
             ),
       body: patientAsync.when(
         data: (patient) {
-          print(patient);
           return Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
@@ -46,12 +46,7 @@ class PatientDetails extends ConsumerWidget {
                             CircleAvatar(
                               radius: 40,
                               backgroundImage: patient.imageUrl != null
-                                  ? NetworkImage(
-                                      patient.imageUrl!.replaceAll(
-                                        'localhost',
-                                        '192.168.1.8',
-                                      ),
-                                    )
+                                  ? NetworkImage(patient.imageUrl!)
                                   : null,
                             ),
                             Expanded(
@@ -63,14 +58,30 @@ class PatientDetails extends ConsumerWidget {
                                     patient.fullName ?? 'Unknown Patient',
                                     style: context.headlineSmall?.extraBold,
                                   ),
-                                  Text('Patient ID: ${patient.id}'),
+                                  Flex(
+                                    crossAxisAlignment: context.isLandscape
+                                        ? .center
+                                        : .end,
+                                    direction: context.isLandscape
+                                        ? .horizontal
+                                        : .vertical,
+                                    children: [
+                                      Text(
+                                        'Patient ID: ${patient.id}',
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      CopyIcon(
+                                        textToCopy: patient.id.toString(),
+                                      ),
+                                    ],
+                                  ),
                                   Flex(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     direction: context.isLandscape
                                         ? .horizontal
                                         : .vertical,
-                                    spacing: context.isLandscape ? 8 : 0,
+                                    spacing: 8,
                                     children: [
                                       OutlinedButton(
                                         onPressed: () =>
