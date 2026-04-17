@@ -5,11 +5,12 @@ import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/do
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/patient_details.dart';
 import 'package:cancer_ai_detection/src/features/doctor/diagnoses/presentation/patient_diagnoses_screen.dart';
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/patient_scans_screen.dart';
+import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/scan_ai_analysis_screen.dart';
+import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/scan_details_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/root_home.dart';
-import 'package:cancer_ai_detection/src/features/home/scan_list_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/allergies/presentation/add_allergy_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/presentation/add_medical_history_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/presentation/medical_history_screen.dart';
@@ -25,6 +26,7 @@ import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
@@ -44,6 +46,8 @@ const String doctorPatientsRoute = 'doctor-patients';
 const String patientDetailsRoute = 'patient-details/:patientId';
 const String patientDiagnosesRoute = 'patient-diagnoses/:patientId';
 const String patientScansRoute = 'patient-scans/:patientId';
+const String scanRoute = 'scan';
+const String scanAnalysisRoute = 'ai-analysis';
 const String addDiagnosisRoute = 'add-diagnosis';
 const String patientProfileRoute = '/patient-profile';
 const String allergiesRoute = 'allergies';
@@ -59,6 +63,7 @@ const String addHealthMeasurmentRoute = 'add-health-measurment';
 GoRouter router(Ref ref) {
   final userRole = ref.watch(userRoleProvider);
   final hasSelectedRole = userRole != null;
+  final isDoctor = userRole == 'doctor';
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: authRoute,
@@ -173,13 +178,40 @@ GoRouter router(Ref ref) {
                           );
                           return PatientScansScreen(patientId: patientUuid);
                         },
+                        routes: [
+                          GoRoute(
+                            name: AppRoute.scan.name,
+                            path: scanRoute,
+                            builder: (context, state) {
+                              final scan = state.extra;
+                              return ScanDetailsScreen(
+                                scan: scan is MedicalScanModel ? scan : null,
+                              );
+                            },
+                            routes: [
+                              GoRoute(
+                                name: AppRoute.scanAnalysis.name,
+                                path: scanAnalysisRoute,
+                                builder: (context, state) {
+                                  final extra = state.extra;
+                                  final Map<String, dynamic>? extraMap =
+                                      extra is Map<String, dynamic>
+                                      ? extra
+                                      : null;
+                                  final medicalScan = extra is MedicalScanModel
+                                      ? extra
+                                      : extraMap?['medicalScan']
+                                            as MedicalScanModel?;
+                                  return ScanAiAnalysisScreen(
+                                    medicalScan: medicalScan,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                  GoRoute(
-                    name: AppRoute.scanList.name,
-                    path: allScansRoute,
-                    builder: (context, state) => const ScanListScreen(),
                   ),
                 ],
               ),
@@ -188,9 +220,13 @@ GoRouter router(Ref ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                name: AppRoute.upload.name,
-                path: uploadRoute,
-                builder: (context, state) => const UploadScreen(),
+                name: isDoctor
+                    ? '${AppRoute.doctorPatients.name}Tab'
+                    : AppRoute.upload.name,
+                path: isDoctor ? '/$doctorPatientsRoute' : uploadRoute,
+                builder: (context, state) => isDoctor
+                    ? const DoctorPatientsScreen()
+                    : const UploadScreen(),
               ),
             ],
           ),

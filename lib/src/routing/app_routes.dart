@@ -8,6 +8,8 @@ enum AppRoute {
   patientDetails,
   patientDiagnoses,
   patientScans,
+  scan,
+  scanAnalysis,
   addDiagnosis,
   scanList,
   upload,
