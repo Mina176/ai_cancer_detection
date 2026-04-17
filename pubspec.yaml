@@ -23,6 +23,7 @@ dependencies:
   image_picker: ^1.2.1
   intl: ^0.20.2
   path: ^1.9.1
+  photo_view: ^0.15.0
   riverpod_annotation: ^4.0.2
   riverpod_sqflite: ^0.4.2
   serverpod_auth_idp_flutter: ^3.3.1
