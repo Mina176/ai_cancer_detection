@@ -7,6 +7,9 @@ import 'package:cancer_ai_detection/src/features/doctor/diagnoses/presentation/p
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/patient_scans_screen.dart';
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/scan_ai_analysis_screen.dart';
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/scan_details_screen.dart';
+import 'package:cancer_ai_detection/src/features/lab/presentation/lab_add_health_measurement_screen.dart';
+import 'package:cancer_ai_detection/src/features/lab/presentation/lab_add_scan_screen.dart';
+import 'package:cancer_ai_detection/src/features/lab/presentation/lab_patients_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
@@ -44,6 +47,9 @@ const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
 const String allScansRoute = '/scan-list';
 const String doctorPatientsRoute = 'doctor-patients';
+const String labPatientsRoute = 'lab-patients';
+const String labAddScanRoute = 'add-scan/:patientId';
+const String labAddHealthMeasurementRoute = 'add-health-measurement/:patientId';
 const String patientDetailsRoute = 'patient-details/:patientId';
 const String patientDiagnosesRoute = 'patient-diagnoses/:patientId';
 const String patientScansRoute = 'patient-scans/:patientId';
@@ -66,6 +72,8 @@ GoRouter router(Ref ref) {
   final userRole = ref.watch(userRoleProvider);
   final hasSelectedRole = userRole != null;
   final isDoctor = userRole == 'doctor';
+  final isLabSpecialist = userRole == 'labSpecialist';
+  final isMedicalStaff = isDoctor || isLabSpecialist;
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: authRoute,
@@ -221,6 +229,39 @@ GoRouter router(Ref ref) {
                       ),
                     ],
                   ),
+                  GoRoute(
+                    name: AppRoute.labPatients.name,
+                    path: labPatientsRoute,
+                    builder: (context, state) => const LabPatientsScreen(),
+                    routes: [
+                      GoRoute(
+                        name: AppRoute.labAddScan.name,
+                        path: labAddScanRoute,
+                        builder: (context, state) {
+                          final patientIdString =
+                              state.pathParameters['patientId'] ?? '';
+                          final patientUuid = UuidValue.fromString(
+                            patientIdString,
+                          );
+                          return LabAddScanScreen(patientId: patientUuid);
+                        },
+                      ),
+                      GoRoute(
+                        name: AppRoute.labAddHealthMeasurement.name,
+                        path: labAddHealthMeasurementRoute,
+                        builder: (context, state) {
+                          final patientIdString =
+                              state.pathParameters['patientId'] ?? '';
+                          final patientUuid = UuidValue.fromString(
+                            patientIdString,
+                          );
+                          return LabAddHealthMeasurementScreen(
+                            patientId: patientUuid,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -228,12 +269,20 @@ GoRouter router(Ref ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                name: isDoctor
-                    ? '${AppRoute.doctorPatients.name}Tab'
+                name: isMedicalStaff
+                    ? isDoctor
+                          ? '${AppRoute.doctorPatients.name}Tab'
+                          : '${AppRoute.labPatients.name}Tab'
                     : AppRoute.upload.name,
-                path: isDoctor ? '/$doctorPatientsRoute' : uploadRoute,
-                builder: (context, state) => isDoctor
-                    ? const DoctorPatientsScreen()
+                path: isMedicalStaff
+                    ? isDoctor
+                          ? '/$doctorPatientsRoute'
+                          : '/$labPatientsRoute'
+                    : uploadRoute,
+                builder: (context, state) => isMedicalStaff
+                    ? isDoctor
+                          ? const DoctorPatientsScreen()
+                          : const LabPatientsScreen()
                     : const UploadScreen(),
               ),
             ],
