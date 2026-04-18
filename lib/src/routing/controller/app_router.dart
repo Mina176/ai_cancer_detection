@@ -17,7 +17,7 @@ import 'package:cancer_ai_detection/src/features/patient/medical_history/present
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/add_medication_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/allergies/presentation/allergies_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/medications_screen.dart';
-import 'package:cancer_ai_detection/src/features/patient/select_doctor/select_doctor_screen.dart';
+import 'package:cancer_ai_detection/src/features/patient/select_doctor/selected_doctor_screen.dart';
 import 'package:cancer_ai_detection/src/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/upload/upload_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
@@ -129,7 +129,8 @@ GoRouter router(Ref ref) {
                   GoRoute(
                     name: AppRoute.chooseDoctor.name,
                     path: chooseDoctorRoute,
-                    builder: (context, state) => const SelectDoctorScreen(),
+                    builder: (context, state) =>
+                        const PatientSelectedDoctorsScreen(),
                   ),
                   GoRoute(
                     name: AppRoute.doctorPatients.name,
