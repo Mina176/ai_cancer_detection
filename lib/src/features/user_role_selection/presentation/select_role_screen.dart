@@ -33,6 +33,16 @@ class SelectRoleScreen extends ConsumerWidget {
                 },
               ),
             ),
+            Expanded(
+              child: UserOption(
+                icon: Icons.biotech_rounded,
+                text: 'Lab Specialist',
+                onTap: () {
+                  ref.read(userRoleProvider.notifier).setRole('labSpecialist');
+                  context.goNamed(AppRoute.home.name);
+                },
+              ),
+            ),
           ],
         ),
       ),
