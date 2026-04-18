@@ -19,10 +19,6 @@ class LabPatientsScreen extends ConsumerWidget {
           ? null
           : AppBar(
               title: const Text('Assigned Patients'),
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
             ),
       body: Center(
         child: ConstrainedBox(

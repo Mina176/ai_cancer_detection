@@ -88,10 +88,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ? null
           : AppBar(
               title: const Text('Home Screen'),
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
             ),
       body: content,
     );

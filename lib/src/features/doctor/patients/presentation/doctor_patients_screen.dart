@@ -27,10 +27,6 @@ class _DoctorPatientsScreenState extends ConsumerState<DoctorPatientsScreen> {
           ? null
           : AppBar(
               title: const Text('Patients'),
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
             ),
       body: Center(
         child: ConstrainedBox(

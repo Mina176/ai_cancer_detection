@@ -13,7 +13,6 @@ import 'package:cancer_ai_detection/src/features/lab/presentation/lab_patients_s
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
-import 'package:cancer_ai_detection/src/features/home/root_home.dart';
 import 'package:cancer_ai_detection/src/features/patient/allergies/presentation/add_allergy_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/presentation/add_medical_history_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/presentation/medical_history_screen.dart';
@@ -123,140 +122,93 @@ GoRouter router(Ref ref) {
           return const DoctorFormScreen();
         },
       ),
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            RootHome(navigationShell: navigationShell),
-        branches: [
-          StatefulShellBranch(
+      GoRoute(
+        name: AppRoute.home.name,
+        path: homeRoute,
+        builder: (context, state) => const HomeScreen(),
+        routes: [
+          GoRoute(
+            name: AppRoute.chooseDoctor.name,
+            path: chooseDoctorRoute,
+            builder: (context, state) => const PatientSelectedDoctorsScreen(),
+          ),
+          GoRoute(
+            name: AppRoute.doctorPatients.name,
+            path: doctorPatientsRoute,
+            builder: (context, state) => const DoctorPatientsScreen(),
             routes: [
               GoRoute(
-                name: AppRoute.home.name,
-                path: homeRoute,
-                builder: (context, state) => const HomeScreen(),
+                name: AppRoute.patientDetails.name,
+                path: patientDetailsRoute,
+                builder: (context, state) {
+                  final patientIdString =
+                      state.pathParameters['patientId'] ?? '';
+                  final patientUuid = UuidValue.fromString(
+                    patientIdString,
+                  );
+                  return PatientDetails(patientId: patientUuid);
+                },
+              ),
+              GoRoute(
+                name: AppRoute.patientDiagnoses.name,
+                path: patientDiagnosesRoute,
+                builder: (context, state) {
+                  final patientIdString =
+                      state.pathParameters['patientId'] ?? '';
+                  final patientUuid = UuidValue.fromString(
+                    patientIdString,
+                  );
+                  return PatientDiagnosesScreen(patientId: patientUuid);
+                },
                 routes: [
                   GoRoute(
-                    name: AppRoute.chooseDoctor.name,
-                    path: chooseDoctorRoute,
-                    builder: (context, state) =>
-                        const PatientSelectedDoctorsScreen(),
+                    name: AppRoute.addDiagnosis.name,
+                    path: addDiagnosisRoute,
+                    builder: (context, state) {
+                      final patientIdString =
+                          state.pathParameters['patientId'] ?? '';
+                      final patientUuid = UuidValue.fromString(
+                        patientIdString,
+                      );
+                      return AddDiagnosisScreen(patientId: patientUuid);
+                    },
                   ),
+                ],
+              ),
+              GoRoute(
+                name: AppRoute.patientScans.name,
+                path: patientScansRoute,
+                builder: (context, state) {
+                  final patientIdString =
+                      state.pathParameters['patientId'] ?? '';
+                  final patientUuid = UuidValue.fromString(
+                    patientIdString,
+                  );
+                  return PatientScansScreen(patientId: patientUuid);
+                },
+                routes: [
                   GoRoute(
-                    name: AppRoute.doctorPatients.name,
-                    path: doctorPatientsRoute,
-                    builder: (context, state) => const DoctorPatientsScreen(),
+                    name: AppRoute.scan.name,
+                    path: scanRoute,
+                    builder: (context, state) {
+                      final scan = state.extra;
+                      return ScanDetailsScreen(
+                        scan: scan is MedicalScanModel ? scan : null,
+                      );
+                    },
                     routes: [
                       GoRoute(
-                        name: AppRoute.patientDetails.name,
-                        path: patientDetailsRoute,
+                        name: AppRoute.scanAnalysis.name,
+                        path: scanAnalysisRoute,
                         builder: (context, state) {
-                          final patientIdString =
-                              state.pathParameters['patientId'] ?? '';
-                          final patientUuid = UuidValue.fromString(
-                            patientIdString,
-                          );
-                          return PatientDetails(patientId: patientUuid);
-                        },
-                      ),
-                      GoRoute(
-                        name: AppRoute.patientDiagnoses.name,
-                        path: patientDiagnosesRoute,
-                        builder: (context, state) {
-                          final patientIdString =
-                              state.pathParameters['patientId'] ?? '';
-                          final patientUuid = UuidValue.fromString(
-                            patientIdString,
-                          );
-                          return PatientDiagnosesScreen(patientId: patientUuid);
-                        },
-                        routes: [
-                          GoRoute(
-                            name: AppRoute.addDiagnosis.name,
-                            path: addDiagnosisRoute,
-                            builder: (context, state) {
-                              final patientIdString =
-                                  state.pathParameters['patientId'] ?? '';
-                              final patientUuid = UuidValue.fromString(
-                                patientIdString,
-                              );
-                              return AddDiagnosisScreen(patientId: patientUuid);
-                            },
-                          ),
-                        ],
-                      ),
-                      GoRoute(
-                        name: AppRoute.patientScans.name,
-                        path: patientScansRoute,
-                        builder: (context, state) {
-                          final patientIdString =
-                              state.pathParameters['patientId'] ?? '';
-                          final patientUuid = UuidValue.fromString(
-                            patientIdString,
-                          );
-                          return PatientScansScreen(patientId: patientUuid);
-                        },
-                        routes: [
-                          GoRoute(
-                            name: AppRoute.scan.name,
-                            path: scanRoute,
-                            builder: (context, state) {
-                              final scan = state.extra;
-                              return ScanDetailsScreen(
-                                scan: scan is MedicalScanModel ? scan : null,
-                              );
-                            },
-                            routes: [
-                              GoRoute(
-                                name: AppRoute.scanAnalysis.name,
-                                path: scanAnalysisRoute,
-                                builder: (context, state) {
-                                  final extra = state.extra;
-                                  final Map<String, dynamic>? extraMap =
-                                      extra is Map<String, dynamic>
-                                      ? extra
-                                      : null;
-                                  final medicalScan = extra is MedicalScanModel
-                                      ? extra
-                                      : extraMap?['medicalScan']
-                                            as MedicalScanModel?;
-                                  return ScanAiAnalysisScreen(
-                                    medicalScan: medicalScan,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    name: AppRoute.labPatients.name,
-                    path: labPatientsRoute,
-                    builder: (context, state) => const LabPatientsScreen(),
-                    routes: [
-                      GoRoute(
-                        name: AppRoute.labAddScan.name,
-                        path: labAddScanRoute,
-                        builder: (context, state) {
-                          final patientIdString =
-                              state.pathParameters['patientId'] ?? '';
-                          final patientUuid = UuidValue.fromString(
-                            patientIdString,
-                          );
-                          return LabAddScanScreen(patientId: patientUuid);
-                        },
-                      ),
-                      GoRoute(
-                        name: AppRoute.labAddHealthMeasurement.name,
-                        path: labAddHealthMeasurementRoute,
-                        builder: (context, state) {
-                          final patientIdString =
-                              state.pathParameters['patientId'] ?? '';
-                          final patientUuid = UuidValue.fromString(
-                            patientIdString,
-                          );
-                          return LabAddHealthMeasurementScreen(
-                            patientId: patientUuid,
+                          final extra = state.extra;
+                          final Map<String, dynamic>? extraMap =
+                              extra is Map<String, dynamic> ? extra : null;
+                          final medicalScan = extra is MedicalScanModel
+                              ? extra
+                              : extraMap?['medicalScan'] as MedicalScanModel?;
+                          return ScanAiAnalysisScreen(
+                            medicalScan: medicalScan,
                           );
                         },
                       ),
@@ -266,95 +218,120 @@ GoRouter router(Ref ref) {
               ),
             ],
           ),
-          StatefulShellBranch(
+          GoRoute(
+            name: AppRoute.labPatients.name,
+            path: labPatientsRoute,
+            builder: (context, state) => const LabPatientsScreen(),
             routes: [
               GoRoute(
-                name: isMedicalStaff
-                    ? isDoctor
-                          ? '${AppRoute.doctorPatients.name}Tab'
-                          : '${AppRoute.labPatients.name}Tab'
-                    : AppRoute.upload.name,
-                path: isMedicalStaff
-                    ? isDoctor
-                          ? '/$doctorPatientsRoute'
-                          : '/$labPatientsRoute'
-                    : uploadRoute,
-                builder: (context, state) => isMedicalStaff
-                    ? isDoctor
-                          ? const DoctorPatientsScreen()
-                          : const LabPatientsScreen()
-                    : const UploadScreen(),
+                name: AppRoute.labAddScan.name,
+                path: labAddScanRoute,
+                builder: (context, state) {
+                  final patientIdString =
+                      state.pathParameters['patientId'] ?? '';
+                  final patientUuid = UuidValue.fromString(
+                    patientIdString,
+                  );
+                  return LabAddScanScreen(patientId: patientUuid);
+                },
+              ),
+              GoRoute(
+                name: AppRoute.labAddHealthMeasurement.name,
+                path: labAddHealthMeasurementRoute,
+                builder: (context, state) {
+                  final patientIdString =
+                      state.pathParameters['patientId'] ?? '';
+                  final patientUuid = UuidValue.fromString(
+                    patientIdString,
+                  );
+                  return LabAddHealthMeasurementScreen(
+                    patientId: patientUuid,
+                  );
+                },
               ),
             ],
           ),
-          StatefulShellBranch(
+        ],
+      ),
+      GoRoute(
+        name: isMedicalStaff
+            ? isDoctor
+                  ? '${AppRoute.doctorPatients.name}Tab'
+                  : '${AppRoute.labPatients.name}Tab'
+            : AppRoute.upload.name,
+        path: isMedicalStaff
+            ? isDoctor
+                  ? '/$doctorPatientsRoute'
+                  : '/$labPatientsRoute'
+            : uploadRoute,
+        builder: (context, state) => isMedicalStaff
+            ? isDoctor
+                  ? const DoctorPatientsScreen()
+                  : const LabPatientsScreen()
+            : const UploadScreen(),
+      ),
+      GoRoute(
+        name: AppRoute.settings.name,
+        path: settingsRoute,
+        builder: (context, state) => const SettingsScreen(),
+        routes: [
+          GoRoute(
+            name: AppRoute.allergies.name,
+            path: allergiesRoute,
+            builder: (context, state) => const AllergiesScreen(),
             routes: [
               GoRoute(
-                name: AppRoute.settings.name,
-                path: settingsRoute,
-                builder: (context, state) => const SettingsScreen(),
-                routes: [
-                  GoRoute(
-                    name: AppRoute.allergies.name,
-                    path: allergiesRoute,
-                    builder: (context, state) => const AllergiesScreen(),
-                    routes: [
-                      GoRoute(
-                        name: AppRoute.addAllergy.name,
-                        path: addAllergyRoute,
-                        builder: (context, state) => const AddAllergyScreen(),
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    name: AppRoute.medications.name,
-                    path: medicationsRoute,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const MedicationsScreen();
-                    },
-                    routes: [
-                      GoRoute(
-                        name: AppRoute.addMedication.name,
-                        path: addMedicationRoute,
-                        builder: (BuildContext context, GoRouterState state) {
-                          return const AddMedicationScreen();
-                        },
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    name: AppRoute.medicalHistory.name,
-                    path: medicalHistoryRoute,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const MedicalHistoryScreen();
-                    },
-                    routes: [
-                      GoRoute(
-                        name: AppRoute.addMedicalHistory.name,
-                        path: addMedicalHistoryRoute,
-                        builder: (BuildContext context, GoRouterState state) {
-                          return const AddMedicalHistoryScreen();
-                        },
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    name: AppRoute.healthMeasurments.name,
-                    path: healthMeasurmentsRoute,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const HealthMeasurementsScreen();
-                    },
-                    routes: [
-                      GoRoute(
-                        name: AppRoute.addHealthMeasurement.name,
-                        path: addHealthMeasurmentRoute,
-                        builder: (BuildContext context, GoRouterState state) {
-                          return const AddHealthMeasurementScreen();
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                name: AppRoute.addAllergy.name,
+                path: addAllergyRoute,
+                builder: (context, state) => const AddAllergyScreen(),
+              ),
+            ],
+          ),
+          GoRoute(
+            name: AppRoute.medications.name,
+            path: medicationsRoute,
+            builder: (BuildContext context, GoRouterState state) {
+              return const MedicationsScreen();
+            },
+            routes: [
+              GoRoute(
+                name: AppRoute.addMedication.name,
+                path: addMedicationRoute,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const AddMedicationScreen();
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            name: AppRoute.medicalHistory.name,
+            path: medicalHistoryRoute,
+            builder: (BuildContext context, GoRouterState state) {
+              return const MedicalHistoryScreen();
+            },
+            routes: [
+              GoRoute(
+                name: AppRoute.addMedicalHistory.name,
+                path: addMedicalHistoryRoute,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const AddMedicalHistoryScreen();
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            name: AppRoute.healthMeasurments.name,
+            path: healthMeasurmentsRoute,
+            builder: (BuildContext context, GoRouterState state) {
+              return const HealthMeasurementsScreen();
+            },
+            routes: [
+              GoRoute(
+                name: AppRoute.addHealthMeasurement.name,
+                path: addHealthMeasurmentRoute,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const AddHealthMeasurementScreen();
+                },
               ),
             ],
           ),

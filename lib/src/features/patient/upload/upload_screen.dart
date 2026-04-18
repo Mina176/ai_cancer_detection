@@ -69,10 +69,6 @@ class _UploadScreenState extends State<UploadScreen> {
           ? null
           : AppBar(
               title: const Text('Upload Scan'),
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
             ),
       body: context.isLandscape
           ? Row(
