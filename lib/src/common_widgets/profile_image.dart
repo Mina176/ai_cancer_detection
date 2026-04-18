@@ -15,7 +15,18 @@ class ProfileImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDoctor = ref.watch(userRoleProvider) == 'doctor';
+    final role = ref.watch(userRoleProvider);
+    final isDoctor = role == 'doctor';
+    final isLabSpecialist = role == 'labSpecialist';
+    if (isLabSpecialist) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: const NetworkImage(
+          'https://ui-avatars.com/api/?name=Lab+Specialist&size=200&background=2B9DEE&color=fff',
+        ),
+      );
+    }
+
     final userProfileAsync = isDoctor
         ? ref.watch(doctorProfileProvider)
         : ref.watch(patientProfileProvider);
