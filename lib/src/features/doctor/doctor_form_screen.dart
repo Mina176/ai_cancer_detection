@@ -34,8 +34,13 @@ class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
       phone: phone ?? existingProfile.phone,
       bio: bio ?? existingProfile.bio,
     );
+    ref.invalidate(doctorProfileProvider);
     if (!mounted) return;
-    context.goNamed(AppRoute.home.name);
+    if (GoRouter.of(context).canPop()) {
+      context.pop();
+    } else {
+      context.goNamed(AppRoute.home.name);
+    }
   }
 
   @override

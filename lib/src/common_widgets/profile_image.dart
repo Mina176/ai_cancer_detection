@@ -1,4 +1,3 @@
-import 'package:awesome_extensions/awesome_extensions_flutter.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
@@ -41,7 +40,7 @@ class ProfileImage extends ConsumerWidget {
         ? (profile as DoctorProfileModel).fullName
         : (profile as PatientProfileModel).fullName;
     return GestureDetector(
-      onTap: () => context.goNamed(AppRoute.settings.name),
+      onTap: () => context.pushNamed(AppRoute.settings.name),
       child: CircleAvatar(
         radius: radius,
         backgroundImage: NetworkImage(
