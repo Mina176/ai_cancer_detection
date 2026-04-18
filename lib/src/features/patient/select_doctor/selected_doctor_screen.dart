@@ -1,5 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/generic_list_screen.dart';
+import 'package:cancer_ai_detection/src/common_widgets/swipe_to_delete_wrapper.dart';
 import 'package:cancer_ai_detection/src/features/patient/pateint_doctors/controller/patient_doctors_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -22,25 +24,39 @@ class _PatientSelectedDoctorsScreenState
       body: GenericListScreen(
         title: 'Your Doctors',
         asyncData: ref.watch(patientDoctorsProvider),
-        onAddPressed: () => context.goNamed(AppRoute.chooseDoctor.name),
-        itemBuilder: (context, doctorPatient) => Card(
-          child: ListTile(
-            title: Text(doctorPatient.doctor!.fullName!),
-            subtitle: Text(doctorPatient.doctor!.specialization!),
-            trailing: Column(
-              mainAxisAlignment: .center,
-              crossAxisAlignment: .end,
 
-              children: [
-                Text(
-                  '${doctorPatient.doctor!.yearsOfExperience!.toString()} Years',
-                ),
-                8.heightBox,
-                Text(
-                  doctorPatient.doctor!.patients?.length.toString() ??
-                      'No patients',
-                ),
-              ],
+        onAddPressed: () => context.goNamed(AppRoute.chooseDoctor.name),
+        itemBuilder: (context, doctorPatient) => SwipeToDeleteWrapper(
+          itemKey: ValueKey(doctorPatient.doctorId),
+          onConfirmDelete: () async {
+            try {
+              await client.patientDoctor.removeDoctor(doctorPatient.doctorId);
+              ref.invalidate(patientDoctorsProvider);
+              return true;
+            } on Exception catch (e) {
+              print(e);
+              return false;
+            }
+          },
+          child: Card(
+            child: ListTile(
+              title: Text(doctorPatient.doctor!.fullName!),
+              subtitle: Text(doctorPatient.doctor!.id.toString()),
+              trailing: Column(
+                mainAxisAlignment: .center,
+                crossAxisAlignment: .end,
+
+                children: [
+                  Text(
+                    '${doctorPatient.doctor!.yearsOfExperience!.toString()} Years',
+                  ),
+                  8.heightBox,
+                  Text(
+                    doctorPatient.doctor!.patients?.length.toString() ??
+                        'No patients',
+                  ),
+                ],
+              ),
             ),
           ),
         ),
