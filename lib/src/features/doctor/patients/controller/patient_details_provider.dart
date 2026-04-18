@@ -8,3 +8,8 @@ part 'patient_details_provider.g.dart';
 Future<PatientProfileModel> patientDetails(Ref ref, UuidValue patientId) async {
   return client.patient.getPatient(patientId);
 }
+
+@Riverpod()
+Future<String> generatePatientAnalysis(Ref ref, UuidValue patientId) async {
+  return client.patient.generatePatientAnalysis(patientId);
+}
