@@ -51,7 +51,7 @@ class AppTheme {
         focusedBorder: buildOutlineInputBorder(primaryColor),
       ),
       dividerTheme: DividerThemeData(
-        color: Color(0xFFE2E8F0),
+        color: Color.fromARGB(255, 163, 166, 170),
         space: 32,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

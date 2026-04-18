@@ -9,6 +9,8 @@ import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
+import 'package:intl/intl.dart';
+import 'package:photo_view/photo_view.dart';
 
 class PatientDetails extends ConsumerWidget {
   const PatientDetails({super.key, required this.patientId});
@@ -37,210 +39,367 @@ class PatientDetails extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 8,
                   children: [
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 16,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage: patient.imageUrl != null
-                                  ? NetworkImage(patient.imageUrl!)
-                                  : null,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 6,
-                                children: [
-                                  Text(
-                                    patient.fullName ?? 'Unknown Patient',
-                                    style: context.headlineSmall?.extraBold,
-                                  ),
-                                  Flex(
-                                    crossAxisAlignment: context.isLandscape
-                                        ? .center
-                                        : .end,
-                                    direction: context.isLandscape
-                                        ? .horizontal
-                                        : .vertical,
-                                    children: [
-                                      Text(
-                                        'Patient ID: ${patient.id}',
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      CopyIcon(
-                                        textToCopy: patient.id.toString(),
-                                      ),
-                                    ],
-                                  ),
-                                  Flex(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    direction: context.isLandscape
-                                        ? .horizontal
-                                        : .vertical,
-                                    spacing: 8,
-                                    children: [
-                                      OutlinedButton(
-                                        onPressed: () =>
-                                            GoRouter.of(context).pushNamed(
-                                              AppRoute.patientDiagnoses.name,
-                                              pathParameters: {
-                                                'patientId': patientId
-                                                    .toString(),
-                                              },
-                                            ),
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(180, 40),
-                                        ),
-                                        child: const Text(
-                                          'View Diagnoses',
-                                        ),
-                                      ),
-                                      OutlinedButton(
-                                        onPressed: () =>
-                                            GoRouter.of(context).pushNamed(
-                                              AppRoute.patientScans.name,
-                                              pathParameters: {
-                                                'patientId': patientId
-                                                    .toString(),
-                                              },
-                                            ),
-                                        child: const Text('View Scans'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    ContactCard(patient: patient, patientId: patientId),
                     DetailsCard(patient: patient),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              'Diagnoses',
-                              style: context.titleMedium?.extraBold,
-                            ),
-                            12.heightBox,
-                            Text(
-                              patient.diagnoses!.isEmpty
-                                  ? 'No diagnoses found.'
-                                  : patient.diagnoses!
-                                        .map((d) => d.diagnosisText)
-                                        .join('\n- '),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // medications card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              'Medications',
-                              style: context.titleMedium?.extraBold,
-                            ),
-                            12.heightBox,
-                            Text(
-                              patient.medications!.isEmpty
-                                  ? 'No medications found.'
-                                  : patient.medications!
-                                        .map((m) => m.name)
-                                        .join('\n- '),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // allergies card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              'Allergies',
-                              style: context.titleMedium?.extraBold,
-                            ),
-                            12.heightBox,
-                            Text(
-                              patient.allergies!.isEmpty
-                                  ? 'No allergies found.'
-                                  : patient.allergies!
-                                        .map((a) => a.allergen)
-                                        .join('\n- '),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // healthMeasurements card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              'Health Measurements',
-                              style: context.titleMedium?.extraBold,
-                            ),
-                            12.heightBox,
-                            if (patient.healthMeasurements == null ||
-                                patient.healthMeasurements!.isEmpty)
-                              const Text('No health measurements found.')
-                            else
-                              Column(
-                                crossAxisAlignment: .start,
-                                children: patient.healthMeasurements!
-                                    .map(
-                                      (hm) => Text(
-                                        '${hm.name}: ${hm.value}',
+                    GenericDetailsCard(
+                      patient: patient,
+                      title: 'Diagnoses',
+                      child: patient.diagnoses!.isEmpty
+                          ? const Text('No diagnoses found.')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < patient.diagnoses!.length;
+                                  i++
+                                ) ...[
+                                  LabeledText(
+                                    icon: Icons.biotech_outlined,
+                                    label: 'Diagnosis',
+                                    value: patient.diagnoses![i].diagnosisText,
+                                  ),
+                                  if ((patient.diagnoses![i].icd10Code ?? '')
+                                      .isNotEmpty)
+                                    LabeledText(
+                                      icon: Icons.qr_code_2_outlined,
+                                      label: 'ICD-10',
+                                      value: patient.diagnoses![i].icd10Code!,
+                                    ),
+                                  LabeledText(
+                                    icon: Icons.warning_amber_rounded,
+                                    label: 'Severity',
+                                    value: patient.diagnoses![i].severity.name,
+                                  ),
+                                  if (patient.diagnoses![i].createdAt != null)
+                                    LabeledText(
+                                      icon: Icons.event_outlined,
+                                      label: 'Created At',
+                                      value: DateFormat('d/M/y').format(
+                                        patient.diagnoses![i].createdAt!,
                                       ),
-                                    )
-                                    .toList(),
-                              ),
-                          ],
-                        ),
+                                    ),
+                                  if ((patient.diagnoses![i].notes ?? '')
+                                      .isNotEmpty)
+                                    LabeledText(
+                                      icon: Icons.notes_outlined,
+                                      label: 'Notes',
+                                      value: patient.diagnoses![i].notes!,
+                                    ),
+                                  if (patient.diagnoses![i].id != null)
+                                    LabeledText(
+                                      icon: Icons.tag_outlined,
+                                      label: 'ID',
+                                      value: patient.diagnoses![i].id
+                                          .toString(),
+                                    ),
+                                  if (i != patient.diagnoses!.length - 1)
+                                    const Divider(height: 20),
+                                ],
+                              ],
+                            ),
+                      onViewAllPressed: () => GoRouter.of(context).pushNamed(
+                        AppRoute.patientDiagnoses.name,
+                        pathParameters: {
+                          'patientId': patientId.toString(),
+                        },
                       ),
                     ),
-                    //medicalHistory card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              'Medical History',
-                              style: context.titleMedium?.extraBold,
+                    GenericDetailsCard(
+                      patient: patient,
+                      title: 'Medical Scans',
+                      child: (patient.medicalScans ?? []).isEmpty
+                          ? const Text('No scans found.')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < (patient.medicalScans ?? []).length;
+                                  i++
+                                ) ...[
+                                  if ((patient.medicalScans![i].imageUrl ?? '')
+                                      .isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: GestureDetector(
+                                          onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => PhotoView(
+                                                imageProvider: NetworkImage(
+                                                  patient
+                                                      .medicalScans![i]
+                                                      .imageUrl!,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          child: Image.network(
+                                            patient.medicalScans![i].imageUrl!,
+                                            height: 140,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  LabeledText(
+                                    icon: Icons.document_scanner_rounded,
+                                    label: 'Scan Type',
+                                    value:
+                                        patient.medicalScans![i].scanType.name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.accessibility_new_outlined,
+                                    label: 'Body Part',
+                                    value:
+                                        patient.medicalScans![i].bodyPart.name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.event_outlined,
+                                    label: 'Scan Date',
+                                    value: DateFormat('d/M/y').format(
+                                      patient.medicalScans![i].scanDate,
+                                    ),
+                                  ),
+                                  if ((patient.medicalScans![i].notes ?? '')
+                                      .isNotEmpty)
+                                    LabeledText(
+                                      icon: Icons.sticky_note_2_outlined,
+                                      label: 'Notes',
+                                      value: patient.medicalScans![i].notes!,
+                                    ),
+                                  if (patient.medicalScans![i].uploadedAt !=
+                                      null)
+                                    LabeledText(
+                                      icon: Icons.cloud_upload_outlined,
+                                      label: 'Uploaded At',
+                                      value: DateFormat('d/M/y').format(
+                                        patient.medicalScans![i].uploadedAt!,
+                                      ),
+                                    ),
+                                  if (patient.medicalScans![i].prediction ==
+                                      null)
+                                    LabeledText(
+                                      icon: Icons.psychology_outlined,
+                                      label: 'AI Prediction',
+                                      value: 'No AI prediction yet',
+                                    )
+                                  else ...[
+                                    LabeledText(
+                                      icon: Icons.psychology_outlined,
+                                      label: 'Prediction',
+                                      value: patient
+                                          .medicalScans![i]
+                                          .prediction!
+                                          .predictionLabel,
+                                    ),
+                                    LabeledText(
+                                      icon: Icons.percent_outlined,
+                                      label: 'Probability',
+                                      value:
+                                          '${(patient.medicalScans![i].prediction!.probability * 100).toStringAsFixed(1)}%',
+                                    ),
+                                    LabeledText(
+                                      icon: Icons.tune_outlined,
+                                      label: 'Threshold',
+                                      value:
+                                          '${(patient.medicalScans![i].prediction!.threshold * 100).toStringAsFixed(1)}%',
+                                    ),
+                                  ],
+                                  if (i !=
+                                      (patient.medicalScans ?? []).length - 1)
+                                    const Divider(height: 20),
+                                ],
+                              ],
                             ),
-                            12.heightBox,
-                            Text(
-                              patient.medicalHistory!.isEmpty
-                                  ? 'No medical history found.'
-                                  : patient.medicalHistory!
-                                        .map((mh) => mh.description)
-                                        .join('\n- '),
-                            ),
-                          ],
-                        ),
+                      onViewAllPressed: () => GoRouter.of(context).pushNamed(
+                        AppRoute.patientScans.name,
+                        pathParameters: {
+                          'patientId': patientId.toString(),
+                        },
                       ),
+                    ),
+                    GenericDetailsCard(
+                      patient: patient,
+                      title: 'Medications',
+                      child: patient.medications!.isEmpty
+                          ? const Text('No medications found.')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < patient.medications!.length;
+                                  i++
+                                ) ...[
+                                  LabeledText(
+                                    icon: Icons.medication_outlined,
+                                    label: 'Name',
+                                    value: patient.medications![i].name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.straighten_outlined,
+                                    label: 'Dosage',
+                                    value: patient.medications![i].dosage,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.repeat_outlined,
+                                    label: 'Frequency',
+                                    value: patient.medications![i].frequency,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.event_outlined,
+                                    label: 'Start Date',
+                                    value: DateFormat('d/M/y').format(
+                                      patient.medications![i].startDate,
+                                    ),
+                                  ),
+                                  if (i != patient.medications!.length - 1)
+                                    const Divider(height: 20),
+                                ],
+                              ],
+                            ),
+                    ),
+                    GenericDetailsCard(
+                      patient: patient,
+                      title: 'Allergies',
+                      child: patient.allergies!.isEmpty
+                          ? const Text('No allergies found.')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < patient.allergies!.length;
+                                  i++
+                                ) ...[
+                                  LabeledText(
+                                    icon: Icons.coronavirus_outlined,
+                                    label: 'Allergen',
+                                    value: patient.allergies![i].allergen,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.sick_outlined,
+                                    label: 'Reaction',
+                                    value: patient.allergies![i].reaction,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.warning_amber_rounded,
+                                    label: 'Severity',
+                                    value: patient.allergies![i].severity.name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.event_outlined,
+                                    label: 'Diagnosed Date',
+                                    value: DateFormat('d/M/y').format(
+                                      patient.allergies![i].diagnosedDate,
+                                    ),
+                                  ),
+                                  if (i != patient.allergies!.length - 1)
+                                    const Divider(height: 20),
+                                ],
+                              ],
+                            ),
+                    ),
+                    GenericDetailsCard(
+                      patient: patient,
+                      title: 'Health Measurements',
+                      child:
+                          patient.healthMeasurements == null ||
+                              patient.healthMeasurements!.isEmpty
+                          ? const Text('No health measurements found.')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < patient.healthMeasurements!.length;
+                                  i++
+                                ) ...[
+                                  LabeledText(
+                                    icon: Icons.monitor_heart_outlined,
+                                    label: 'Name',
+                                    value: patient
+                                        .healthMeasurements![i]
+                                        .name
+                                        .name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.numbers_outlined,
+                                    label: 'Value',
+                                    value: patient.healthMeasurements![i].value
+                                        .toString(),
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.event_outlined,
+                                    label: 'Measured At',
+                                    value: DateFormat('d/M/y').format(
+                                      patient.healthMeasurements![i].measuredAt,
+                                    ),
+                                  ),
+                                  if (i !=
+                                      patient.healthMeasurements!.length - 1)
+                                    const Divider(height: 20),
+                                ],
+                              ],
+                            ),
+                    ),
+                    GenericDetailsCard(
+                      patient: patient,
+                      title: 'Medical History',
+                      child:
+                          patient.medicalHistory == null ||
+                              patient.medicalHistory!.isEmpty
+                          ? const Text('No medical history found.')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < patient.medicalHistory!.length;
+                                  i++
+                                ) ...[
+                                  LabeledText(
+                                    icon: Icons.history_edu_outlined,
+                                    label: 'Title',
+                                    value: patient.medicalHistory![i].title,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.category_outlined,
+                                    label: 'Type',
+                                    value: patient.medicalHistory![i].type.name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.rule_folder_outlined,
+                                    label: 'Severity / Status',
+                                    value:
+                                        patient.medicalHistory![i].severity !=
+                                            null
+                                        ? patient
+                                              .medicalHistory![i]
+                                              .severity!
+                                              .name
+                                        : patient
+                                              .medicalHistory![i]
+                                              .status
+                                              .name,
+                                  ),
+                                  LabeledText(
+                                    icon: Icons.event_outlined,
+                                    label: 'Date',
+                                    value: DateFormat('d/M/y').format(
+                                      patient.medicalHistory![i].date,
+                                    ),
+                                  ),
+                                  if (i != patient.medicalHistory!.length - 1)
+                                    const Divider(height: 20),
+                                ],
+                              ],
+                            ),
                     ),
                     Card(
                       child: Consumer(
@@ -286,6 +445,147 @@ class PatientDetails extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text(error.toString())),
+      ),
+    );
+  }
+}
+
+class GenericDetailsCard extends StatelessWidget {
+  const GenericDetailsCard({
+    super.key,
+    required this.patient,
+    required this.title,
+    required this.child,
+    this.onViewAllPressed,
+  });
+  final PatientProfileModel patient;
+  final String title;
+  final Widget child;
+  final VoidCallback? onViewAllPressed;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Text(
+              title,
+              style: context.titleMedium?.extraBold,
+            ),
+            12.heightBox,
+            child,
+            if (onViewAllPressed != null)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: onViewAllPressed,
+                  child: const Text('View All'),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LabeledText extends StatelessWidget {
+  const LabeledText({
+    super.key,
+    required this.label,
+    required this.value,
+    this.icon,
+  });
+
+  final String label;
+  final String value;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon ?? Icons.circle_outlined, size: 16),
+          8.widthBox,
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                text: '$label: ',
+                style: context.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+                children: [
+                  TextSpan(
+                    text: value,
+                    style: context.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ContactCard extends StatelessWidget {
+  const ContactCard({
+    super.key,
+    required this.patient,
+    required this.patientId,
+  });
+  final PatientProfileModel patient;
+  final UuidValue patientId;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16,
+          children: [
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: patient.imageUrl != null
+                  ? NetworkImage(patient.imageUrl!)
+                  : null,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 6,
+                children: [
+                  Text(
+                    patient.fullName ?? 'Unknown Patient',
+                    style: context.headlineSmall?.extraBold,
+                  ),
+                  Flex(
+                    crossAxisAlignment: context.isLandscape ? .center : .end,
+                    direction: context.isLandscape ? .horizontal : .vertical,
+                    children: [
+                      Text(
+                        'ID: ${patient.id}',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      CopyIcon(
+                        textToCopy: patient.id.toString(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
