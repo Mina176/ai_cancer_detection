@@ -27,6 +27,11 @@ enum PatientQuickAction implements ActionModel {
     'Add Health Measurements',
     Icons.monitor_heart_rounded,
     AppRoute.addHealthMeasurement,
+  ),
+  chooseDoctor(
+    'choose your',
+    Icons.medical_information,
+    AppRoute.chooseDoctor,
   )
   ;
 

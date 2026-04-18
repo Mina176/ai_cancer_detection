@@ -17,6 +17,7 @@ import 'package:cancer_ai_detection/src/features/patient/medical_history/present
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/add_medication_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/allergies/presentation/allergies_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/medications_screen.dart';
+import 'package:cancer_ai_detection/src/features/patient/patient_doctors/select_doctor_screen.dart';
 import 'package:cancer_ai_detection/src/features/settings/presentation/settings_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/upload/upload_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
@@ -58,6 +59,7 @@ const String medicalHistoryRoute = 'medical-history';
 const String addMedicalHistoryRoute = 'add-medical-history';
 const String healthMeasurmentsRoute = 'health-measurments';
 const String addHealthMeasurmentRoute = 'add-health-measurment';
+const String chooseDoctorRoute = 'choose-doctor';
 
 @Riverpod()
 GoRouter router(Ref ref) {
@@ -124,6 +126,11 @@ GoRouter router(Ref ref) {
                 path: homeRoute,
                 builder: (context, state) => const HomeScreen(),
                 routes: [
+                  GoRoute(
+                    name: AppRoute.chooseDoctor.name,
+                    path: chooseDoctorRoute,
+                    builder: (context, state) => const SelectDoctorScreen(),
+                  ),
                   GoRoute(
                     name: AppRoute.doctorPatients.name,
                     path: doctorPatientsRoute,
