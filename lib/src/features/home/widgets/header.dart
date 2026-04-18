@@ -31,14 +31,17 @@ class Greeting extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final role = ref.read(userRoleProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Good Morning', style: context.headlineMedium?.extraBold),
         Text(
-          ref.read(userRoleProvider) == 'doctor'
+          role == 'doctor'
               ? "Ready to start today's diagnostics?"
-              : "Welcome back!",
+              : role == 'labSpecialist'
+              ? 'Ready to process patients?'
+              : 'Welcome back!',
         ),
       ],
     );
@@ -52,8 +55,40 @@ class UserCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDoctor = ref.watch(userRoleProvider) == 'doctor';
-    final userProfileAsync = ref.watch(userRoleProvider) == 'doctor'
+    final role = ref.watch(userRoleProvider);
+    final isDoctor = role == 'doctor';
+    final isLabSpecialist = role == 'labSpecialist';
+
+    if (isLabSpecialist) {
+      return Card(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: const Color(0xFFF3F4F6),
+          ),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
+          child: Row(
+            children: [
+              ProfileImage(radius: 20),
+              if (context.isLandscape) 8.widthBox,
+              if (context.isLandscape)
+                Text(
+                  'Lab Specialist',
+                  style: context.bodyMedium?.extraBold,
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final userProfileAsync = isDoctor
         ? ref.watch(doctorProfileProvider)
         : ref.watch(patientProfileProvider);
     return Card(
@@ -71,7 +106,6 @@ class UserCard extends ConsumerWidget {
         ),
         child: userProfileAsync.when(
           data: (profile) {
-            final profile = userProfileAsync.value;
             final name = isDoctor
                 ? (profile as DoctorProfileModel).fullName
                 : (profile as PatientProfileModel).fullName;
