@@ -1,24 +1,21 @@
-import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/src/common_widgets/copy_icon.dart';
+import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
+import 'package:cancer_ai_detection/src/features/lab/controller/lab_profile_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/allergies_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/pateint_doctors/controller/patient_doctors_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
-import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/allergies_provider.dart';
-import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
-import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
-import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gp_backend_client/gp_backend_client.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -28,179 +25,269 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  void goToEditProfile() {
+    final role = ref.read(userRoleProvider);
+    if (role == 'doctor') {
+      context.pushNamed(AppRoute.doctorForm.name);
+      return;
+    }
+    if (role == 'patient') {
+      context.pushNamed(AppRoute.patientForm.name);
+      return;
+    }
 
-  String? newUserName;
-  String? newFullName;
-
-  Future<void> pickProfileImage() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (image != null) {
-      final uint8ListImage = await image.readAsBytes();
-      final ByteData imageByteData = ByteData.view(uint8ListImage.buffer);
-      final isDoctor = ref.read(userRoleProvider) == 'doctor';
-
-      isDoctor
-          ? await client.doctorProfile.update(image: imageByteData)
-          : await client.patientProfile.update(image: imageByteData);
-
-      final _ = isDoctor
-          ? await ref.refresh(doctorProfileProvider.future)
-          : await ref.refresh(patientProfileProvider.future);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Lab specialist profile form is not available yet.'),
+        ),
+      );
     }
   }
 
-  Future<void> saveChanges() async {
-    if (!formKey.currentState!.validate()) return;
-    formKey.currentState!.save();
-    final isDoctor = ref.read(userRoleProvider) == 'doctor';
+  Widget _buildCommonProfileHeader({
+    required String userId,
+    required String? fullName,
+  }) {
+    return Column(
+      spacing: 14,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const ProfileImage(radius: 50),
+        TextButton.icon(
+          onPressed: goToEditProfile,
+          label: const Text('Edit Profile'),
+        ),
+        TextFormField(
+          key: ValueKey(userId),
+          initialValue: userId,
+          readOnly: true,
+          decoration: InputDecoration(
+            labelText: 'User ID',
+            suffixIcon: CopyIcon(
+              textToCopy: userId,
+            ),
+          ),
+        ),
+        TextFormField(
+          initialValue: fullName ?? '',
+          readOnly: true,
+          decoration: const InputDecoration(
+            labelText: 'Full Name',
+          ),
+        ),
+      ],
+    );
+  }
 
-    if (newFullName != null && newFullName!.trim().isNotEmpty) {
-      isDoctor
-          ? await client.doctorProfile.update(fullName: newFullName!.trim())
-          : await client.patientProfile.update(fullName: newFullName!.trim());
-    }
-
-    final _ = isDoctor
-        ? ref.refresh(doctorProfileProvider)
-        : ref.refresh(patientProfileProvider);
-
-    if (mounted) context.goNamed(AppRoute.home.name);
+  Widget _buildProfileContent({required Widget profileHeader}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: context.isLandscape
+            ? Sizes.kHorizontalPadding
+            : Sizes.kHorizontalPadding,
+      ),
+      child: Column(
+        children: [
+          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
+          Expanded(
+            child: SingleChildScrollView(
+              child: profileHeader,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDoctor = ref.read(userRoleProvider) == 'doctor';
-    final userProfileAsync = isDoctor
-        ? ref.watch(doctorProfileProvider)
-        : ref.watch(patientProfileProvider);
+    final role = ref.watch(userRoleProvider);
+    final isDoctor = role == 'doctor';
+    final isLabSpecialist = role == 'labSpecialist';
+
     final allergiesAsync = ref.watch(allergiesProvider);
     final medicationsAsync = ref.watch(medicationsProvider);
     final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
     final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
     final patientDoctorAsync = ref.watch(patientDoctorsProvider);
+
+    final userProfileBody = isDoctor
+        ? ref
+              .watch(doctorProfileProvider)
+              .when(
+                data: (profile) {
+                  return _buildProfileContent(
+                    profileHeader: _buildCommonProfileHeader(
+                      userId: profile.id.toString(),
+                      fullName: profile.fullName,
+                    ),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              )
+        : isLabSpecialist
+        ? ref
+              .watch(labProfileProvider)
+              .when(
+                data: (profile) {
+                  return _buildProfileContent(
+                    profileHeader: Column(
+                      spacing: 14,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _buildCommonProfileHeader(
+                          userId: profile.id.toString(),
+                          fullName: profile.name,
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.science_outlined,
+                          title: 'Lab Type',
+                          value: profile.labType ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.location_on_outlined,
+                          title: 'Address',
+                          value: profile.address ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.phone_outlined,
+                          title: 'Phone',
+                          value: profile.phone ?? 'Not set',
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              )
+        : ref
+              .watch(patientProfileProvider)
+              .when(
+                data: (profile) {
+                  return _buildProfileContent(
+                    profileHeader: Column(
+                      spacing: 14,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _buildCommonProfileHeader(
+                          userId: profile.id.toString(),
+                          fullName: profile.fullName,
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.cake_outlined,
+                          title: 'Date of Birth',
+                          value: profile.dob != null
+                              ? DateFormat('dd/MM/yyyy').format(profile.dob!)
+                              : 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.wc_rounded,
+                          title: 'Gender',
+                          value: profile.gender?.name ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.bloodtype_outlined,
+                          title: 'Blood Type',
+                          value: profile.bloodType?.name ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.smoke_free_rounded,
+                          title: 'Smoking Status',
+                          value: profile.smokingStatus ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.timelapse_rounded,
+                          title: 'Smoking Years',
+                          value: profile.smokingYears?.toString() ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.local_bar_outlined,
+                          title: 'Alcohol Frequency',
+                          value: profile.alcoholFreq ?? 'Not set',
+                        ),
+                        ProfileInfoTile(
+                          icon: Icons.directions_run_rounded,
+                          title: 'Exercise Frequency',
+                          value: profile.exerciseFreq ?? 'Not set',
+                        ),
+                        UserInfoListTile(
+                          title: 'Allergies',
+                          asyncData: allergiesAsync,
+                          onTap: () => context.goNamed(AppRoute.allergies.name),
+                          itemLabelBuilder: (allergy) => allergy.allergen,
+                        ),
+                        UserInfoListTile(
+                          title: 'Medications',
+                          asyncData: medicationsAsync,
+                          onTap: () =>
+                              context.goNamed(AppRoute.medications.name),
+                          itemLabelBuilder: (medication) => medication.name,
+                        ),
+                        UserInfoListTile(
+                          title: 'Medical History',
+                          asyncData: medicalHistoryAsync,
+                          onTap: () =>
+                              context.goNamed(AppRoute.medicalHistory.name),
+                          itemLabelBuilder: (medicalHistory) =>
+                              medicalHistory.title,
+                        ),
+                        UserInfoListTile(
+                          title: 'Health Measurements',
+                          asyncData: healthMeasurementsAsync,
+                          onTap: () =>
+                              context.goNamed(AppRoute.healthMeasurments.name),
+                          itemLabelBuilder: (measurement) =>
+                              '${measurement.name.name}: ${measurement.value}',
+                        ),
+                        UserInfoListTile(
+                          title: 'Your Doctors',
+                          asyncData: patientDoctorAsync,
+                          onTap: () =>
+                              context.goNamed(AppRoute.chooseDoctor.name),
+                          itemLabelBuilder: (patientDoctor) =>
+                              patientDoctor.doctor!.fullName!,
+                        ),
+                        1.heightBox,
+                      ],
+                    ),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              );
     return Scaffold(
       appBar: context.isLandscape
           ? null
           : AppBar(
               title: const Text('Settings'),
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
             ),
-      body: userProfileAsync.when(
-        data: (profile) {
-          final profile = userProfileAsync.value;
-          final userId = isDoctor
-              ? (profile as DoctorProfileModel).id
-              : (profile as PatientProfileModel).id;
-          final fullName = isDoctor
-              ? (profile as DoctorProfileModel).fullName
-              : (profile as PatientProfileModel).fullName;
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.isLandscape
-                  ? Sizes.kHorizontalPadding
-                  : Sizes.kHorizontalPadding,
-            ),
-            child: Column(
-              children: [
-                context.isLandscape
-                    ? Sizes.kVerticalPadding.heightBox
-                    : 0.heightBox,
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        spacing: 14,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ProfileImage(radius: 50),
-                          TextButton(
-                            onPressed: pickProfileImage,
-                            child: const Text('Change Profile Picture'),
-                          ),
-                          TextFormField(
-                            key: ValueKey(userId.toString()),
-                            initialValue: userId.toString(),
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              labelText: 'User ID',
-                              suffixIcon: CopyIcon(
-                                textToCopy: userId.toString(),
-                              ),
-                            ),
-                          ),
-                          TextFormField(
-                            initialValue: fullName ?? '',
-                            decoration: const InputDecoration(
-                              labelText: 'Full Name',
-                            ),
-                            onSaved: (value) => newFullName = value,
-                          ),
-                          if (!isDoctor) ...[
-                            UserInfoListTile(
-                              title: 'Allergires',
-                              asyncData: allergiesAsync,
-                              onTap: () =>
-                                  context.goNamed(AppRoute.allergies.name),
-                              itemLabelBuilder: (allergy) => allergy.allergen,
-                            ),
-                            UserInfoListTile(
-                              title: 'Medications',
-                              asyncData: medicationsAsync,
-                              onTap: () =>
-                                  context.goNamed(AppRoute.medications.name),
-                              itemLabelBuilder: (medication) => medication.name,
-                            ),
-                            UserInfoListTile(
-                              title: 'Medical History',
-                              asyncData: medicalHistoryAsync,
-                              onTap: () =>
-                                  context.goNamed(AppRoute.medicalHistory.name),
-                              itemLabelBuilder: (medicalHistory) =>
-                                  medicalHistory.title,
-                            ),
-                            UserInfoListTile(
-                              title: 'Health Measurements',
-                              asyncData: healthMeasurementsAsync,
-                              onTap: () => context.goNamed(
-                                AppRoute.healthMeasurments.name,
-                              ),
-                              itemLabelBuilder: (measurement) =>
-                                  '${measurement.name.name}: ${measurement.value}',
-                            ),
-                            UserInfoListTile(
-                              title: 'Your Doctors',
-                              asyncData: patientDoctorAsync,
-                              onTap: () => context.goNamed(
-                                AppRoute.chooseDoctor.name,
-                              ),
-                              itemLabelBuilder: (patientDoctor) =>
-                                  patientDoctor.doctor!.fullName!,
-                            ),
-                            1.heightBox,
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                PrimaryButton(
-                  label: 'Save Changes',
-                  onPressed: saveChanges,
-                ),
-              ],
-            ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+      body: userProfileBody,
+    );
+  }
+}
+
+class ProfileInfoTile extends StatelessWidget {
+  const ProfileInfoTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(title),
+        subtitle: Text(value),
       ),
     );
   }
