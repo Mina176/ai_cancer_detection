@@ -173,6 +173,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               itemLabelBuilder: (measurement) =>
                                   '${measurement.name.name}: ${measurement.value}',
                             ),
+                            Card(
+                              child: ListTile(
+                                title: Text('Your Doctors'),
+                                trailing: const Icon(Icons.arrow_forward_ios),
+
+                                onTap: () =>
+                                    context.goNamed(AppRoute.chooseDoctor.name),
+                              ),
+                            ),
                             1.heightBox,
                           ],
                         ],
