@@ -19,15 +19,16 @@ class DrawerContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDoctor = ref.watch(userRoleProvider) == 'doctor';
+    final role = ref.watch(userRoleProvider);
+    final isMedicalStaff = role == 'doctor' || role == 'labSpecialist';
     List<String> menuItems = [
       'Home',
-      isDoctor ? 'Patients' : 'Scan',
+      isMedicalStaff ? 'Patients' : 'Scan',
       'Settings',
     ];
     List<IconData> menuIcons = [
       Icons.home,
-      isDoctor ? Icons.person : Icons.qr_code_scanner_rounded,
+      isMedicalStaff ? Icons.person : Icons.qr_code_scanner_rounded,
       Icons.settings,
     ];
     return Column(
