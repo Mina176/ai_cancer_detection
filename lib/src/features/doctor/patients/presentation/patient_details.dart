@@ -5,6 +5,7 @@ import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/de
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
@@ -117,6 +118,42 @@ class PatientDetails extends ConsumerWidget {
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    Card(
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          final analysisAsync = ref.watch(
+                            generatePatientAnalysisProvider(patientId),
+                          );
+                          return analysisAsync.when(
+                            data: (analysis) => Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: .start,
+                                children: [
+                                  Text(
+                                    'AI Analysis',
+                                    style: context.titleMedium?.extraBold,
+                                  ),
+                                  12.heightBox,
+                                  MarkdownBody(data: analysis),
+                                ],
+                              ),
+                            ),
+                            loading: () => const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Text(
+                                'Generating AI analysis...',
+                                textAlign: .center,
+                              ),
+                            ),
+                            error: (error, stackTrace) => Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Text('Error generating analysis: $error'),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     DetailsCard(patient: patient),
