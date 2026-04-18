@@ -434,7 +434,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () =>
-                          context.pushNamed(AppRoute.chooseDoctor.name),
+                          context.pushNamed(AppRoute.selectedDoctor.name),
                     ),
                   ),
                   1.heightBox,
