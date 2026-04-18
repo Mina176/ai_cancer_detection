@@ -15,115 +15,44 @@ import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
 
-class SettingsScreen extends ConsumerStatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  @override
-  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  void goToEditProfile() {
-    final role = ref.read(userRoleProvider);
-    if (role == 'doctor') {
-      context.pushNamed(AppRoute.doctorForm.name);
-      return;
+  String formatEnumLabel(dynamic value, {String fallback = 'Not set'}) {
+    if (value == null) return fallback;
+    try {
+      final enumName = (value as dynamic).name;
+      if (enumName is String && enumName.isNotEmpty) {
+        return enumName;
+      }
+    } catch (_) {
+      // Fall through to string parsing.
     }
-    if (role == 'patient') {
-      context.pushNamed(AppRoute.patientForm.name);
-      return;
+    final raw = value.toString();
+    if (raw.contains('.')) {
+      return raw.split('.').last;
     }
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Lab specialist profile form is not available yet.'),
-        ),
-      );
-    }
-  }
-
-  Widget _buildCommonProfileHeader({
-    required String userId,
-    required String? fullName,
-  }) {
-    return Column(
-      spacing: 14,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const ProfileImage(radius: 50),
-        TextButton.icon(
-          onPressed: goToEditProfile,
-          label: const Text('Edit Profile'),
-        ),
-        TextFormField(
-          key: ValueKey(userId),
-          initialValue: userId,
-          readOnly: true,
-          decoration: InputDecoration(
-            labelText: 'User ID',
-            suffixIcon: CopyIcon(
-              textToCopy: userId,
-            ),
-          ),
-        ),
-        TextFormField(
-          initialValue: fullName ?? '',
-          readOnly: true,
-          decoration: const InputDecoration(
-            labelText: 'Full Name',
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProfileContent({required Widget profileHeader}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isLandscape
-            ? Sizes.kHorizontalPadding
-            : Sizes.kHorizontalPadding,
-      ),
-      child: Column(
-        children: [
-          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
-          Expanded(
-            child: SingleChildScrollView(
-              child: profileHeader,
-            ),
-          ),
-        ],
-      ),
-    );
+    return raw;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final role = ref.watch(userRoleProvider);
     final isDoctor = role == 'doctor';
     final isLabSpecialist = role == 'labSpecialist';
-
     final allergiesAsync = ref.watch(allergiesProvider);
     final medicationsAsync = ref.watch(medicationsProvider);
     final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
     final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
     final patientDoctorAsync = ref.watch(patientDoctorsProvider);
-
-    final userProfileBody = isDoctor
+    final body = isDoctor
         ? ref
               .watch(doctorProfileProvider)
               .when(
-                data: (profile) {
-                  return _buildProfileContent(
-                    profileHeader: _buildCommonProfileHeader(
-                      userId: profile.id.toString(),
-                      fullName: profile.fullName,
-                    ),
-                  );
-                },
+                data: (profile) => buildDoctorLayout(context, ref, profile),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: $error')),
               )
@@ -131,200 +60,389 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ? ref
               .watch(labProfileProvider)
               .when(
-                data: (profile) {
-                  return _buildProfileContent(
-                    profileHeader: Column(
-                      spacing: 14,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _buildCommonProfileHeader(
-                          userId: profile.id.toString(),
-                          fullName: profile.name,
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.science_outlined,
-                          title: 'Lab Type',
-                          value: profile.labType ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.location_on_outlined,
-                          title: 'Address',
-                          value: profile.address ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.phone_outlined,
-                          title: 'Phone',
-                          value: profile.phone ?? 'Not set',
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                data: (profile) => buildLabLayout(context, ref, profile),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: $error')),
               )
         : ref
               .watch(patientProfileProvider)
               .when(
-                data: (profile) {
-                  return _buildProfileContent(
-                    profileHeader: Column(
-                      spacing: 14,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _buildCommonProfileHeader(
-                          userId: profile.id.toString(),
-                          fullName: profile.fullName,
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.cake_outlined,
-                          title: 'Date of Birth',
-                          value: profile.dob != null
-                              ? DateFormat('dd/MM/yyyy').format(profile.dob!)
-                              : 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.wc_rounded,
-                          title: 'Gender',
-                          value: profile.gender?.name ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.bloodtype_outlined,
-                          title: 'Blood Type',
-                          value: profile.bloodType?.name ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.smoke_free_rounded,
-                          title: 'Smoking Status',
-                          value: profile.smokingStatus ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.timelapse_rounded,
-                          title: 'Smoking Years',
-                          value: profile.smokingYears?.toString() ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.local_bar_outlined,
-                          title: 'Alcohol Frequency',
-                          value: profile.alcoholFreq ?? 'Not set',
-                        ),
-                        ProfileInfoTile(
-                          icon: Icons.directions_run_rounded,
-                          title: 'Exercise Frequency',
-                          value: profile.exerciseFreq ?? 'Not set',
-                        ),
-                        UserInfoListTile(
-                          title: 'Allergies',
-                          asyncData: allergiesAsync,
-                          onTap: () => context.goNamed(AppRoute.allergies.name),
-                          itemLabelBuilder: (allergy) => allergy.allergen,
-                        ),
-                        UserInfoListTile(
-                          title: 'Medications',
-                          asyncData: medicationsAsync,
-                          onTap: () =>
-                              context.goNamed(AppRoute.medications.name),
-                          itemLabelBuilder: (medication) => medication.name,
-                        ),
-                        UserInfoListTile(
-                          title: 'Medical History',
-                          asyncData: medicalHistoryAsync,
-                          onTap: () =>
-                              context.goNamed(AppRoute.medicalHistory.name),
-                          itemLabelBuilder: (medicalHistory) =>
-                              medicalHistory.title,
-                        ),
-                        UserInfoListTile(
-                          title: 'Health Measurements',
-                          asyncData: healthMeasurementsAsync,
-                          onTap: () =>
-                              context.goNamed(AppRoute.healthMeasurments.name),
-                          itemLabelBuilder: (measurement) =>
-                              '${measurement.name.name}: ${measurement.value}',
-                        ),
-                        UserInfoListTile(
-                          title: 'Your Doctors',
-                          asyncData: patientDoctorAsync,
-                          onTap: () =>
-                              context.goNamed(AppRoute.chooseDoctor.name),
-                          itemLabelBuilder: (patientDoctor) =>
-                              patientDoctor.doctor!.fullName!,
-                        ),
-                        1.heightBox,
-                      ],
-                    ),
-                  );
-                },
+                data: (profile) => buildPatientLayout(
+                  context,
+                  ref,
+                  profile,
+                  allergiesAsync,
+                  medicationsAsync,
+                  medicalHistoryAsync,
+                  healthMeasurementsAsync,
+                  patientDoctorAsync,
+                ),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: $error')),
               );
     return Scaffold(
       appBar: context.isLandscape
           ? null
-          : AppBar(
-              title: const Text('Settings'),
-            ),
-      body: userProfileBody,
+          : AppBar(title: const Text('Settings')),
+      body: body,
     );
   }
-}
 
-class ProfileInfoTile extends StatelessWidget {
-  const ProfileInfoTile({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.value,
-  });
-
-  final IconData icon;
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(icon),
-        title: Text(title),
-        subtitle: Text(value),
+  Widget buildDoctorLayout(
+    BuildContext context,
+    WidgetRef ref,
+    DoctorProfileModel profile,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
+      child: Column(
+        children: [
+          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 14,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const ProfileImage(radius: 50),
+                  TextButton(
+                    onPressed: () =>
+                        context.pushNamed(AppRoute.doctorForm.name),
+                    child: const Text('Edit Profile'),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Personal Information',
+                        style: context.bodyMedium?.semiBold,
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    key: ValueKey(profile.id.toString()),
+                    initialValue: profile.id.toString(),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: 'User ID',
+                      suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
+                    ),
+                  ),
+                  TextFormField(
+                    initialValue: profile.fullName ?? '',
+                    readOnly: true,
+                    decoration: const InputDecoration(labelText: 'Full Name'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
-}
 
-class UserInfoListTile<T> extends StatelessWidget {
-  const UserInfoListTile({
-    super.key,
-    required this.title,
-    required this.asyncData,
-    required this.onTap,
-    required this.itemLabelBuilder,
-  });
+  Widget buildLabLayout(
+    BuildContext context,
+    WidgetRef ref,
+    LabProfileModel profile,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
+      child: Column(
+        children: [
+          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 14,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const ProfileImage(radius: 50),
+                  TextButton(
+                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Lab specialist profile form is not available yet.',
+                        ),
+                      ),
+                    ),
+                    child: const Text('Edit Profile'),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Personal Information',
+                        style: context.bodyMedium?.semiBold,
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    key: ValueKey(profile.id.toString()),
+                    initialValue: profile.id.toString(),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: 'User ID',
+                      suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
+                    ),
+                  ),
+                  TextFormField(
+                    initialValue: profile.name ?? '',
+                    readOnly: true,
+                    decoration: const InputDecoration(labelText: 'Full Name'),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.science_outlined),
+                      title: const Text('Lab Type'),
+                      subtitle: Text(profile.labType ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.location_on_outlined),
+                      title: const Text('Address'),
+                      subtitle: Text(profile.address ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.phone_outlined),
+                      title: const Text('Phone'),
+                      subtitle: Text(profile.phone ?? 'Not set'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  final String title;
-  final AsyncValue<List<T>> asyncData;
-  final VoidCallback onTap;
-  final String Function(T) itemLabelBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(title),
-        subtitle: asyncData.when(
-          data: (data) {
-            if (data.isEmpty) return const Text('None added yet');
-            return Text(
-              data.map(itemLabelBuilder).join(', '),
-              overflow: TextOverflow.ellipsis,
-            );
-          },
-          loading: () => const Text(''),
-          error: (error, stack) => Text('Error: $error'),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: onTap,
+  Widget buildPatientLayout(
+    BuildContext context,
+    WidgetRef ref,
+    PatientProfileModel profile,
+    AsyncValue allergiesAsync,
+    AsyncValue medicationsAsync,
+    AsyncValue medicalHistoryAsync,
+    AsyncValue healthMeasurementsAsync,
+    AsyncValue patientDoctorAsync,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
+      child: Column(
+        children: [
+          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 14,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const ProfileImage(radius: 50),
+                  TextButton(
+                    onPressed: () =>
+                        context.pushNamed(AppRoute.patientForm.name),
+                    child: const Text('Edit Profile'),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Personal Information',
+                        style: context.bodyMedium?.semiBold,
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    key: ValueKey(profile.id.toString()),
+                    initialValue: profile.id.toString(),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: 'User ID',
+                      suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
+                    ),
+                  ),
+                  TextFormField(
+                    initialValue: profile.fullName ?? '',
+                    decoration: const InputDecoration(labelText: 'Full Name'),
+                    readOnly: true,
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.cake_outlined),
+                      title: const Text('Date of Birth'),
+                      subtitle: Text(
+                        profile.dob != null
+                            ? DateFormat('dd/MM/yyyy').format(profile.dob!)
+                            : 'Not set',
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.wc_rounded),
+                      title: const Text('Gender'),
+                      subtitle: Text(formatEnumLabel(profile.gender)),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.bloodtype_outlined),
+                      title: const Text('Blood Type'),
+                      subtitle: Text(formatEnumLabel(profile.bloodType)),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.smoke_free_rounded),
+                      title: const Text('Smoking Status'),
+                      subtitle: Text(profile.smokingStatus ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.timelapse_rounded),
+                      title: const Text('Smoking Years'),
+                      subtitle: Text(
+                        profile.smokingYears?.toString() ?? 'Not set',
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.local_bar_outlined),
+                      title: const Text('Alcohol Frequency'),
+                      subtitle: Text(profile.alcoholFreq ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.directions_run_rounded),
+                      title: const Text('Exercise Frequency'),
+                      subtitle: Text(profile.exerciseFreq ?? 'Not set'),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Medical Information',
+                        style: context.bodyMedium?.semiBold,
+                      ),
+                    ],
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Allergies'),
+                      subtitle: allergiesAsync.when(
+                        data: (data) {
+                          if (data.isEmpty) return const Text('None added yet');
+                          return Text(
+                            data.map((allergy) => allergy.allergen).join(', '),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                        loading: () => const Text(''),
+                        error: (error, stack) => Text('Error: $error'),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () => context.pushNamed(AppRoute.allergies.name),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Medications'),
+                      subtitle: medicationsAsync.when(
+                        data: (data) {
+                          if (data.isEmpty) return const Text('None added yet');
+                          return Text(
+                            data
+                                .map((medication) => medication.name)
+                                .join(', '),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                        loading: () => const Text(''),
+                        error: (error, stack) => Text('Error: $error'),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () => context.pushNamed(AppRoute.medications.name),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Medical History'),
+                      subtitle: medicalHistoryAsync.when(
+                        data: (data) {
+                          if (data.isEmpty) return const Text('None added yet');
+                          return Text(
+                            data.map((history) => history.title).join(', '),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                        loading: () => const Text(''),
+                        error: (error, stack) => Text('Error: $error'),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () =>
+                          context.pushNamed(AppRoute.medicalHistory.name),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Health Measurements'),
+                      subtitle: healthMeasurementsAsync.when(
+                        data: (data) {
+                          if (data.isEmpty) return const Text('None added yet');
+                          return Text(
+                            data
+                                .map(
+                                  (measurement) =>
+                                      '${formatEnumLabel(measurement.name)}: ${measurement.value}',
+                                )
+                                .join(', '),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                        loading: () => const Text(''),
+                        error: (error, stack) => Text('Error: $error'),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () =>
+                          context.pushNamed(AppRoute.healthMeasurments.name),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Your Doctors'),
+                      subtitle: patientDoctorAsync.when(
+                        data: (data) {
+                          if (data.isEmpty) return const Text('None added yet');
+                          return Text(
+                            data
+                                .map(
+                                  (patientDoctor) =>
+                                      patientDoctor.doctor!.fullName!,
+                                )
+                                .join(', '),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                        loading: () => const Text(''),
+                        error: (error, stack) => Text('Error: $error'),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () =>
+                          context.pushNamed(AppRoute.chooseDoctor.name),
+                    ),
+                  ),
+                  1.heightBox,
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

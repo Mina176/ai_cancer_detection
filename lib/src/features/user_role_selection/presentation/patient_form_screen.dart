@@ -18,6 +18,7 @@ class PatientFormScreen extends ConsumerStatefulWidget {
 
 class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
   final formKey = GlobalKey<FormState>();
+  String? fullName;
   DateTime? selectedDate;
   Gender? selectedGender;
   BloodType? selectedBloodType;
@@ -26,21 +27,46 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
   String? alcoholFrequency;
   String? exerciseFrequency;
 
+  String formatEnumLabel(dynamic value, {String fallback = ''}) {
+    if (value == null) return fallback;
+    try {
+      final enumName = (value as dynamic).name;
+      if (enumName is String && enumName.isNotEmpty) {
+        return enumName;
+      }
+    } catch (_) {}
+    final raw = value.toString();
+    if (raw.contains('.')) {
+      return raw.split('.').last;
+    }
+    return raw;
+  }
+
   Future<void> onSaved() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       final existingProfile = await ref.read(patientProfileProvider.future);
-      await client.patientProfile.update(
-        dob: selectedDate ?? existingProfile.dob ?? DateTime.now(),
-        gender: selectedGender ?? existingProfile.gender,
-        smokingStatus: smokingStatus ?? existingProfile.smokingStatus,
-        smokingYears: smokingYears ?? existingProfile.smokingYears,
-        alcoholFreq: alcoholFrequency ?? existingProfile.alcoholFreq,
-        exerciseFreq: exerciseFrequency ?? existingProfile.exerciseFreq,
-        bloodType: selectedBloodType ?? existingProfile.bloodType,
-      );
-      if (!mounted) return;
-      context.goNamed(AppRoute.home.name);
+      try {
+        await client.patientProfile.update(
+          fullName: fullName ?? existingProfile.fullName,
+          dob: selectedDate ?? existingProfile.dob ?? DateTime.now(),
+          gender: selectedGender ?? existingProfile.gender,
+          smokingStatus: smokingStatus ?? existingProfile.smokingStatus,
+          smokingYears: smokingYears ?? existingProfile.smokingYears,
+          alcoholFreq: alcoholFrequency ?? existingProfile.alcoholFreq,
+          exerciseFreq: exerciseFrequency ?? existingProfile.exerciseFreq,
+          bloodType: selectedBloodType ?? existingProfile.bloodType,
+        );
+        ref.invalidate(patientProfileProvider);
+        if (!mounted) return;
+        if (GoRouter.of(context).canPop()) {
+          context.pop();
+        } else {
+          context.goNamed(AppRoute.home.name);
+        }
+      } catch (e) {
+        print('Error updating patient profile: $e');
+      }
     }
   }
 
@@ -56,22 +82,23 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
             child: Column(
               spacing: 8,
               children: [
-                DateListTile(
-                  title: 'Date of Birth',
-                  selectedDate: selectedDate ?? profile.dob ?? DateTime.now(),
-                  onSelectDate: (date) => setState(() => selectedDate = date),
+                TextFormField(
+                  initialValue: profile.fullName ?? '',
+                  decoration: InputDecoration(hintText: 'Full Name'),
+                  readOnly: true,
+                  onChanged: (value) => fullName = value,
                 ),
                 GenderSelector(
                   selectedGender: selectedGender ?? profile.gender,
                   onChanged: (value) => setState(() => selectedGender = value),
                 ),
                 DropdownButtonFormField<BloodType>(
-                  value: selectedBloodType ?? profile.bloodType,
+                  initialValue: selectedBloodType ?? profile.bloodType,
                   decoration: const InputDecoration(hintText: 'Blood Type'),
                   items: BloodType.values.map((type) {
                     return DropdownMenuItem<BloodType>(
                       value: type,
-                      child: Text(type.name),
+                      child: Text(formatEnumLabel(type)),
                     );
                   }).toList(),
                   onChanged: (value) => setState(() {
@@ -97,6 +124,11 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
                   initialValue: profile.exerciseFreq ?? '',
                   decoration: InputDecoration(hintText: 'Exercise Frequency'),
                   onChanged: (value) => exerciseFrequency = value,
+                ),
+                DateListTile(
+                  title: 'Date of Birth',
+                  selectedDate: selectedDate ?? profile.dob ?? DateTime.now(),
+                  onSelectDate: (date) => setState(() => selectedDate = date),
                 ),
               ],
             ),
