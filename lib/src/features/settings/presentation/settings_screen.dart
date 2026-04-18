@@ -3,6 +3,7 @@ import 'package:cancer_ai_detection/src/common_widgets/copy_icon.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/pateint_doctors/controller/patient_doctors_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
@@ -80,6 +81,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final medicationsAsync = ref.watch(medicationsProvider);
     final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
     final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
+    final patientDoctorAsync = ref.watch(patientDoctorsProvider);
     return Scaffold(
       appBar: context.isLandscape
           ? null
@@ -172,6 +174,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               ),
                               itemLabelBuilder: (measurement) =>
                                   '${measurement.name.name}: ${measurement.value}',
+                            ),
+                            UserInfoListTile(
+                              title: 'Your Doctors',
+                              asyncData: patientDoctorAsync,
+                              onTap: () => context.goNamed(
+                                AppRoute.chooseDoctor.name,
+                              ),
+                              itemLabelBuilder: (patientDoctor) =>
+                                  patientDoctor.doctor!.fullName!,
                             ),
                             1.heightBox,
                           ],
