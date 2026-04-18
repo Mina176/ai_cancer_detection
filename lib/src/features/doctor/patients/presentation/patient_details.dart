@@ -120,6 +120,128 @@ class PatientDetails extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    DetailsCard(patient: patient),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              'Diagnoses',
+                              style: context.titleMedium?.extraBold,
+                            ),
+                            12.heightBox,
+                            Text(
+                              patient.diagnoses!.isEmpty
+                                  ? 'No diagnoses found.'
+                                  : patient.diagnoses!
+                                        .map((d) => d.diagnosisText)
+                                        .join('\n- '),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // medications card
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              'Medications',
+                              style: context.titleMedium?.extraBold,
+                            ),
+                            12.heightBox,
+                            Text(
+                              patient.medications!.isEmpty
+                                  ? 'No medications found.'
+                                  : patient.medications!
+                                        .map((m) => m.name)
+                                        .join('\n- '),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // allergies card
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              'Allergies',
+                              style: context.titleMedium?.extraBold,
+                            ),
+                            12.heightBox,
+                            Text(
+                              patient.allergies!.isEmpty
+                                  ? 'No allergies found.'
+                                  : patient.allergies!
+                                        .map((a) => a.allergen)
+                                        .join('\n- '),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // healthMeasurements card
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              'Health Measurements',
+                              style: context.titleMedium?.extraBold,
+                            ),
+                            12.heightBox,
+                            if (patient.healthMeasurements == null ||
+                                patient.healthMeasurements!.isEmpty)
+                              const Text('No health measurements found.')
+                            else
+                              Column(
+                                crossAxisAlignment: .start,
+                                children: patient.healthMeasurements!
+                                    .map(
+                                      (hm) => Text(
+                                        '${hm.name}: ${hm.value}',
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    //medicalHistory card
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              'Medical History',
+                              style: context.titleMedium?.extraBold,
+                            ),
+                            12.heightBox,
+                            Text(
+                              patient.medicalHistory!.isEmpty
+                                  ? 'No medical history found.'
+                                  : patient.medicalHistory!
+                                        .map((mh) => mh.description)
+                                        .join('\n- '),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     Card(
                       child: Consumer(
                         builder: (context, ref, child) {
@@ -156,7 +278,6 @@ class PatientDetails extends ConsumerWidget {
                         },
                       ),
                     ),
-                    DetailsCard(patient: patient),
                   ],
                 ),
               ),
