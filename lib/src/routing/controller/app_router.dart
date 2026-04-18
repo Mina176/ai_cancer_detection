@@ -58,6 +58,7 @@ const String medicalHistoryRoute = 'medical-history';
 const String addMedicalHistoryRoute = 'add-medical-history';
 const String healthMeasurmentsRoute = 'health-measurments';
 const String addHealthMeasurmentRoute = 'add-health-measurment';
+const String chooseDoctorRoute = 'choose-doctor';
 
 @Riverpod()
 GoRouter router(Ref ref) {
