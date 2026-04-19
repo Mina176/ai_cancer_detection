@@ -26,7 +26,6 @@ class AppTheme {
         elevation: 0,
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        titleSpacing: Sizes.kHorizontalPadding,
         actionsPadding: EdgeInsets.symmetric(
           horizontal: Sizes.kHorizontalPadding,
         ),

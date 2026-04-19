@@ -111,115 +111,28 @@ class SettingsScreen extends ConsumerWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                spacing: 14,
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const ProfileImage(radius: 50),
-                  TextButton(
-                    onPressed: () =>
-                        context.pushNamed(AppRoute.doctorForm.name),
-                    child: const Text('Edit Profile'),
-                  ),
                   Row(
+                    mainAxisAlignment: .spaceBetween,
                     children: [
                       Text(
                         'Personal Information',
                         style: context.bodyMedium?.semiBold,
                       ),
+                      TextButton(
+                        onPressed: () =>
+                            context.pushNamed(AppRoute.doctorForm.name),
+                        child: const Text('Edit Profile'),
+                      ),
                     ],
-                  ),
-                  TextFormField(
-                    key: ValueKey(profile.id.toString()),
-                    initialValue: profile.id.toString(),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      labelText: 'User ID',
-                      suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
-                    ),
                   ),
                   TextFormField(
                     initialValue: profile.fullName ?? '',
                     readOnly: true,
                     decoration: const InputDecoration(labelText: 'Full Name'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildLabLayout(
-    BuildContext context,
-    WidgetRef ref,
-    LabProfileModel profile,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
-      child: Column(
-        children: [
-          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                spacing: 14,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const ProfileImage(radius: 50),
-                  TextButton(
-                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Lab specialist profile form is not available yet.',
-                        ),
-                      ),
-                    ),
-                    child: const Text('Edit Profile'),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Personal Information',
-                        style: context.bodyMedium?.semiBold,
-                      ),
-                    ],
-                  ),
-                  TextFormField(
-                    key: ValueKey(profile.id.toString()),
-                    initialValue: profile.id.toString(),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      labelText: 'User ID',
-                      suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
-                    ),
-                  ),
-                  TextFormField(
-                    initialValue: profile.name ?? '',
-                    readOnly: true,
-                    decoration: const InputDecoration(labelText: 'Full Name'),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.science_outlined),
-                      title: const Text('Lab Type'),
-                      subtitle: Text(profile.labType ?? 'Not set'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.location_on_outlined),
-                      title: const Text('Address'),
-                      subtitle: Text(profile.address ?? 'Not set'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.phone_outlined),
-                      title: const Text('Phone'),
-                      subtitle: Text(profile.phone ?? 'Not set'),
-                    ),
                   ),
                 ],
               ),
@@ -248,36 +161,30 @@ class SettingsScreen extends ConsumerWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                spacing: 14,
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const ProfileImage(radius: 50),
-                  TextButton(
-                    onPressed: () =>
-                        context.pushNamed(AppRoute.patientForm.name),
-                    child: const Text('Edit Profile'),
-                  ),
                   Row(
+                    mainAxisAlignment: .spaceBetween,
                     children: [
                       Text(
                         'Personal Information',
                         style: context.bodyMedium?.semiBold,
                       ),
+                      TextButton(
+                        onPressed: () =>
+                            context.pushNamed(AppRoute.patientForm.name),
+                        child: const Text('Edit Profile'),
+                      ),
                     ],
                   ),
-                  TextFormField(
-                    key: ValueKey(profile.id.toString()),
-                    initialValue: profile.id.toString(),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      labelText: 'User ID',
-                      suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Full Name'),
+                      subtitle: Text(profile.fullName ?? 'Not set'),
                     ),
-                  ),
-                  TextFormField(
-                    initialValue: profile.fullName ?? '',
-                    decoration: const InputDecoration(labelText: 'Full Name'),
-                    readOnly: true,
                   ),
                   Card(
                     child: ListTile(
@@ -456,4 +363,89 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+Widget buildLabLayout(
+  BuildContext context,
+  WidgetRef ref,
+  LabProfileModel profile,
+) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
+    child: Column(
+      children: [
+        context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const ProfileImage(radius: 50),
+                TextButton(
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Lab specialist profile form is not available yet.',
+                      ),
+                    ),
+                  ),
+                  child: const Text('Edit Profile'),
+                ),
+                Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    Text(
+                      'Personal Information',
+                      style: context.bodyMedium?.semiBold,
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          context.pushNamed(AppRoute.doctorForm.name),
+                      child: const Text('Edit Profile'),
+                    ),
+                  ],
+                ),
+                TextFormField(
+                  key: ValueKey(profile.id.toString()),
+                  initialValue: profile.id.toString(),
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: 'User ID',
+                    suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
+                  ),
+                ),
+                TextFormField(
+                  initialValue: profile.name ?? '',
+                  readOnly: true,
+                  decoration: const InputDecoration(labelText: 'Full Name'),
+                ),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.science_outlined),
+                    title: const Text('Lab Type'),
+                    subtitle: Text(profile.labType ?? 'Not set'),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.location_on_outlined),
+                    title: const Text('Address'),
+                    subtitle: Text(profile.address ?? 'Not set'),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.phone_outlined),
+                    title: const Text('Phone'),
+                    subtitle: Text(profile.phone ?? 'Not set'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

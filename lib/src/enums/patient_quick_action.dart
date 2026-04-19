@@ -3,11 +3,6 @@ import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 
 enum PatientQuickAction implements ActionModel {
-  upload(
-    'Upload Scan',
-    Icons.upload_file,
-    AppRoute.upload,
-  ),
   allergy(
     'Add Allergy',
     Icons.add_circle_rounded,
@@ -29,7 +24,7 @@ enum PatientQuickAction implements ActionModel {
     AppRoute.addHealthMeasurement,
   ),
   chooseDoctor(
-    'choose your',
+    'Choose Your Doctor',
     Icons.medical_information,
     AppRoute.chooseDoctor,
   )

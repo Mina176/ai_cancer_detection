@@ -70,12 +70,9 @@ class DetailRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: 140,
-            child: Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           Text(value),
         ],

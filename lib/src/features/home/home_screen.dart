@@ -55,25 +55,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             ),
           ),
-          SliverFillRemaining(
-            child: Consumer(
-              builder: (context, ref, child) {
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: context.isLandscape ? 3 : 1,
-                    childAspectRatio: context.isLandscape ? 3 : 3.5,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                  ),
-                  itemCount: quickActions.length,
-                  itemBuilder: (context, index) {
+          Consumer(
+            builder: (context, ref, child) {
+              return SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: context.isLandscape ? 3 : 1,
+                  childAspectRatio: context.isLandscape ? 3 : 3.5,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     return QuickActionCard(
                       model: quickActions[index],
                     );
                   },
-                );
-              },
-            ),
+                  childCount: quickActions.length,
+                ),
+              );
+            },
           ),
         ],
       ),

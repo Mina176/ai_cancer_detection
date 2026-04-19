@@ -85,7 +85,6 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
                 TextFormField(
                   initialValue: profile.fullName ?? '',
                   decoration: InputDecoration(hintText: 'Full Name'),
-                  readOnly: true,
                   onChanged: (value) => fullName = value,
                 ),
                 GenderSelector(
