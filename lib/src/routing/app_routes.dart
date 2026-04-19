@@ -2,6 +2,7 @@ enum AppRoute {
   auth,
   selectRole,
   doctorForm,
+  labForm,
   patientForm,
   home,
   doctorPatients,
