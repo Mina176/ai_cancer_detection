@@ -39,18 +39,15 @@ class ProfileImage extends ConsumerWidget {
     final name = isDoctor
         ? (profile as DoctorProfileModel).fullName
         : (profile as PatientProfileModel).fullName;
-    return GestureDetector(
-      onTap: () => context.pushNamed(AppRoute.settings.name),
-      child: CircleAvatar(
-        radius: radius,
-        backgroundImage: NetworkImage(
-          imageUrl != null
-              ? '${imageUrl.toString().replaceAll(
-                  'http://localhost:6000',
-                  'https://gp-api.lasheen.dev',
-                )}&v=${DateTime.now().millisecondsSinceEpoch}'
-              : 'https://ui-avatars.com/api/?name=${name ?? 'User'}&size=200&background=2B9DEE&color=fff',
-        ),
+    return CircleAvatar(
+      radius: radius,
+      backgroundImage: NetworkImage(
+        imageUrl != null
+            ? '${imageUrl.toString().replaceAll(
+                'http://localhost:6000',
+                'https://gp-api.lasheen.dev',
+              )}&v=${DateTime.now().millisecondsSinceEpoch}'
+            : 'https://ui-avatars.com/api/?name=${name ?? 'User'}&size=200&background=2B9DEE&color=fff',
       ),
     );
   }
