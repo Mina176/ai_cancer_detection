@@ -26,7 +26,7 @@ enum PatientQuickAction implements ActionModel {
   chooseDoctor(
     'Choose Your Doctor',
     Icons.medical_information,
-    AppRoute.chooseDoctor,
+    AppRoute.selectedDoctor,
   )
   ;
 

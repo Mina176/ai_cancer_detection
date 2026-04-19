@@ -8,7 +8,7 @@ import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/a
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
-import 'package:cancer_ai_detection/src/features/patient/pateint_doctors/controller/patient_doctors_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/pateint_doctors/controller/list_my_doctors.dart';
 import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
@@ -49,7 +49,7 @@ class SettingsScreen extends ConsumerWidget {
     final medicationsAsync = ref.watch(medicationsProvider);
     final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
     final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
-    final patientDoctorAsync = ref.watch(patientDoctorsProvider);
+    final patientDoctorAsync = ref.watch(listMyDoctorsProvider);
     final body = isDoctor
         ? ref
               .watch(doctorProfileProvider)

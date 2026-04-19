@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'select_doctors_provider.dart';
+part of 'get_all_doctors.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,10 +9,10 @@ part of 'select_doctors_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(selectDoctors)
-final selectDoctorsProvider = SelectDoctorsProvider._();
+@ProviderFor(getAllDoctors)
+final getAllDoctorsProvider = GetAllDoctorsProvider._();
 
-final class SelectDoctorsProvider
+final class GetAllDoctorsProvider
     extends
         $FunctionalProvider<
           AsyncValue<List<DoctorProfileModel>>,
@@ -22,19 +22,19 @@ final class SelectDoctorsProvider
     with
         $FutureModifier<List<DoctorProfileModel>>,
         $FutureProvider<List<DoctorProfileModel>> {
-  SelectDoctorsProvider._()
+  GetAllDoctorsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'selectDoctorsProvider',
+        name: r'getAllDoctorsProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$selectDoctorsHash();
+  String debugGetCreateSourceHash() => _$getAllDoctorsHash();
 
   @$internal
   @override
@@ -44,8 +44,8 @@ final class SelectDoctorsProvider
 
   @override
   FutureOr<List<DoctorProfileModel>> create(Ref ref) {
-    return selectDoctors(ref);
+    return getAllDoctors(ref);
   }
 }
 
-String _$selectDoctorsHash() => r'1b6a2a44366d7f878725ca1f18d005aeeb5abfd1';
+String _$getAllDoctorsHash() => r'3a6709091e823f9c1aa96f82abcb7eeb87c861d6';
