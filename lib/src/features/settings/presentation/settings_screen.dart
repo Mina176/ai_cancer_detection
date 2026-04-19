@@ -1,4 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
+import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/copy_icon.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -83,7 +85,15 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: context.isLandscape
           ? null
-          : AppBar(title: const Text('Settings')),
+          : AppBar(
+              title: const Text('Settings'),
+              actions: [
+                IconButton(
+                  onPressed: () async => await client.auth.signOutDevice(),
+                  icon: const Icon(Icons.logout_rounded),
+                ),
+              ],
+            ),
       body: body,
     );
   }
