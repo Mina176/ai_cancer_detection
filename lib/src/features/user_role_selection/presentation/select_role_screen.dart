@@ -30,7 +30,7 @@ class SelectRoleScreen extends ConsumerWidget {
               text: 'Patient',
               onTap: () {
                 ref.read(userRoleProvider.notifier).setRole('patient');
-                context.goNamed(AppRoute.patientForm.name);
+                context.goNamed(AppRoute.home.name);
               },
             ),
             UserOption(
@@ -38,7 +38,7 @@ class SelectRoleScreen extends ConsumerWidget {
               text: 'Doctor',
               onTap: () {
                 ref.read(userRoleProvider.notifier).setRole('doctor');
-                context.goNamed(AppRoute.doctorForm.name);
+                context.goNamed(AppRoute.home.name);
               },
             ),
             UserOption(

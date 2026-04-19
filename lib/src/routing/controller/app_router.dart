@@ -9,6 +9,7 @@ import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/sc
 import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/scan_details_screen.dart';
 import 'package:cancer_ai_detection/src/features/lab/presentation/lab_add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/lab/presentation/lab_add_scan_screen.dart';
+import 'package:cancer_ai_detection/src/features/lab/presentation/lab_form_screen.dart';
 import 'package:cancer_ai_detection/src/features/lab/presentation/lab_patients_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/health_measurement_screen.dart';
@@ -41,6 +42,7 @@ const String authRoute = '/';
 const String homeRoute = '/home';
 const String selectRoleRoute = '/select-role';
 const String doctorFormRoute = '/doctor-form';
+const String labFormRoute = '/lab-form';
 const String patientFormRoute = '/patient-form';
 const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
@@ -67,10 +69,39 @@ const String addHealthMeasurmentRoute = 'add-health-measurment';
 const String selectedDoctorsRoute = 'selected-doctors';
 const String addDoctorsRoute = 'add-doctors';
 
+bool _isBlank(String? value) => value == null || value.trim().isEmpty;
+
+bool _isDoctorProfileEmpty(DoctorProfileModel profile) {
+  return _isBlank(profile.fullName) &&
+      _isBlank(profile.specialization) &&
+      _isBlank(profile.licenseNumber) &&
+      _isBlank(profile.hospitalName) &&
+      profile.yearsOfExperience == null &&
+      _isBlank(profile.phone) &&
+      _isBlank(profile.bio);
+}
+
+bool _isPatientProfileEmpty(PatientProfileModel profile) {
+  return _isBlank(profile.fullName) &&
+      profile.dob == null &&
+      profile.gender == null &&
+      profile.bloodType == null &&
+      _isBlank(profile.smokingStatus) &&
+      profile.smokingYears == null &&
+      _isBlank(profile.alcoholFreq) &&
+      _isBlank(profile.exerciseFreq);
+}
+
+bool _isLabProfileEmpty(LabProfileModel profile) {
+  return _isBlank(profile.name) &&
+      _isBlank(profile.labType) &&
+      _isBlank(profile.address) &&
+      _isBlank(profile.phone);
+}
+
 @Riverpod()
 GoRouter router(Ref ref) {
   final userRole = ref.watch(userRoleProvider);
-  final hasSelectedRole = userRole != null;
   final isDoctor = userRole == 'doctor';
   final isLabSpecialist = userRole == 'labSpecialist';
   final isMedicalStaff = isDoctor || isLabSpecialist;
@@ -78,18 +109,53 @@ GoRouter router(Ref ref) {
     navigatorKey: rootNavigatorKey,
     initialLocation: authRoute,
     refreshListenable: client.authSessionManager.authInfoListenable,
-    redirect: (context, state) {
+    redirect: (context, state) async {
       final isAuthed = client.auth.isAuthenticated;
-      final path = state.matchedLocation;
+      final currentPath = state.matchedLocation;
+      final selectedRole = ref.read(userRoleProvider);
+      final hasSelectedRole = selectedRole != null;
+      final isDoctorFormPath = currentPath == doctorFormRoute;
+      final isPatientFormPath = currentPath == patientFormRoute;
+      final isLabFormPath = currentPath == labFormRoute;
 
       if (!isAuthed) {
-        return path == authRoute ? null : authRoute;
+        return currentPath == authRoute ? null : authRoute;
       }
+
+      if (currentPath == authRoute) {
+        return selectRoleRoute;
+      }
+
       if (!hasSelectedRole) {
-        return path == selectRoleRoute ? null : selectRoleRoute;
+        return currentPath == selectRoleRoute ? null : selectRoleRoute;
       }
-      if (path == authRoute || path == selectRoleRoute) {
+
+      if (currentPath == selectRoleRoute) {
         return homeRoute;
+      }
+
+      try {
+        if (selectedRole == 'doctor') {
+          final profile = await client.doctorProfile.getOrCreate();
+          final shouldShowForm = _isDoctorProfileEmpty(profile);
+          if (shouldShowForm && !isDoctorFormPath) {
+            return doctorFormRoute;
+          }
+        } else if (selectedRole == 'patient') {
+          final profile = await client.patientProfile.getOrCreate();
+          final shouldShowForm = _isPatientProfileEmpty(profile);
+          if (shouldShowForm && !isPatientFormPath) {
+            return patientFormRoute;
+          }
+        } else if (selectedRole == 'labSpecialist') {
+          final profile = await client.labProfile.getOrCreate();
+          final shouldShowForm = _isLabProfileEmpty(profile);
+          if (shouldShowForm && !isLabFormPath) {
+            return labFormRoute;
+          }
+        }
+      } catch (_) {
+        // If profile fetch fails, avoid blocking navigation.
       }
 
       return null;
@@ -121,6 +187,13 @@ GoRouter router(Ref ref) {
         path: doctorFormRoute,
         builder: (BuildContext context, GoRouterState state) {
           return const DoctorFormScreen();
+        },
+      ),
+      GoRoute(
+        name: AppRoute.labForm.name,
+        path: labFormRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          return const LabFormScreen();
         },
       ),
       GoRoute(
