@@ -15,6 +15,7 @@ class DoctorFormScreen extends ConsumerStatefulWidget {
 
 class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
   final formKey = GlobalKey<FormState>();
+  String? fullName;
   String? specialization;
   String? licenseNumber;
   String? hospitalName;
@@ -27,6 +28,7 @@ class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
     formKey.currentState!.save();
     final existingProfile = await ref.read(doctorProfileProvider.future);
     await client.doctorProfile.update(
+      fullName: fullName ?? existingProfile.fullName,
       specialization: specialization ?? existingProfile.specialization,
       licenseNumber: licenseNumber ?? existingProfile.licenseNumber,
       hospitalName: hospitalName ?? existingProfile.hospitalName,
@@ -53,37 +55,56 @@ class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
           formContent: Form(
             key: formKey,
             child: Column(
-              spacing: 8,
+              spacing: 14,
               children: [
                 TextFormField(
+                  initialValue: profile.fullName ?? '',
+                  decoration: InputDecoration(
+                    labelText: 'Full Name',
+                  ),
+                  onChanged: (value) => fullName = value,
+                ),
+                TextFormField(
+                  initialValue: profile.bio ?? '',
+                  decoration: InputDecoration(
+                    labelText: 'Bio',
+                  ),
+                  onChanged: (value) => bio = value,
+                ),
+                TextFormField(
                   initialValue: profile.specialization ?? '',
-                  decoration: InputDecoration(hintText: 'Specialization'),
+                  decoration: InputDecoration(
+                    labelText: 'Specialization',
+                  ),
                   onChanged: (value) => specialization = value,
                 ),
                 TextFormField(
                   initialValue: profile.licenseNumber ?? '',
-                  decoration: InputDecoration(hintText: 'License Number'),
+                  decoration: InputDecoration(
+                    labelText: 'License Number',
+                  ),
                   onChanged: (value) => licenseNumber = value,
                 ),
                 TextFormField(
                   initialValue: profile.hospitalName ?? '',
-                  decoration: InputDecoration(hintText: 'Hospital Name'),
+                  decoration: InputDecoration(
+                    labelText: 'Hospital Name',
+                  ),
                   onChanged: (value) => hospitalName = value,
                 ),
                 TextFormField(
                   initialValue: profile.yearsOfExperience?.toString() ?? '',
-                  decoration: InputDecoration(hintText: 'Years of Experience'),
+                  decoration: InputDecoration(
+                    labelText: 'Years of Experience',
+                  ),
                   onChanged: (value) => yearsOfExperience = int.tryParse(value),
                 ),
                 TextFormField(
                   initialValue: profile.phone ?? '',
-                  decoration: InputDecoration(hintText: 'Phone'),
+                  decoration: InputDecoration(
+                    labelText: 'Phone',
+                  ),
                   onChanged: (value) => phone = value,
-                ),
-                TextFormField(
-                  initialValue: profile.bio ?? '',
-                  decoration: InputDecoration(hintText: 'Bio'),
-                  onChanged: (value) => bio = value,
                 ),
               ],
             ),

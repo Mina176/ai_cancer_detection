@@ -1,6 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/common_widgets/copy_icon.dart';
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/lab/controller/lab_profile_provider.dart';
@@ -129,11 +128,48 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  TextFormField(
-                    initialValue: profile.fullName ?? '',
-                    readOnly: true,
-                    decoration: const InputDecoration(labelText: 'Full Name'),
+                  ProfileInfoCard(
+                    icon: Icons.person,
+                    title: 'Full Name',
+                    subtitle: profile.fullName ?? 'Not set',
                   ),
+                  ProfileInfoCard(
+                    icon: Icons.info_outline,
+                    title: 'Bio',
+                    subtitle: profile.bio ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.work_outline,
+                    title: 'Specialization',
+                    subtitle: profile.specialization ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.badge_outlined,
+                    title: 'License Number',
+                    subtitle: profile.licenseNumber ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.local_hospital_outlined,
+                    title: 'Hospital Name',
+                    subtitle: profile.hospitalName ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.timelapse_rounded,
+                    title: 'Years of Experience',
+                    subtitle:
+                        profile.yearsOfExperience?.toString() ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.phone_outlined,
+                    title: 'Phone',
+                    subtitle: profile.phone ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.info_outline,
+                    title: 'Patient Count',
+                    subtitle: profile.patients?.length.toString() ?? '0',
+                  ),
+                  8.heightBox,
                 ],
               ),
             ),
@@ -179,67 +215,47 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.person),
-                      title: const Text('Full Name'),
-                      subtitle: Text(profile.fullName ?? 'Not set'),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.person,
+                    title: 'Full Name',
+                    subtitle: profile.fullName ?? 'Not set',
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.cake_outlined),
-                      title: const Text('Date of Birth'),
-                      subtitle: Text(
-                        profile.dob != null
-                            ? DateFormat('dd/MM/yyyy').format(profile.dob!)
-                            : 'Not set',
-                      ),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.cake_outlined,
+                    title: 'Date of Birth',
+                    subtitle: profile.dob != null
+                        ? DateFormat('dd/MM/yyyy').format(profile.dob!)
+                        : 'Not set',
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.wc_rounded),
-                      title: const Text('Gender'),
-                      subtitle: Text(formatEnumLabel(profile.gender)),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.wc_rounded,
+                    title: 'Gender',
+                    subtitle: formatEnumLabel(profile.gender),
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.bloodtype_outlined),
-                      title: const Text('Blood Type'),
-                      subtitle: Text(formatEnumLabel(profile.bloodType)),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.bloodtype_outlined,
+                    title: 'Blood Type',
+                    subtitle: formatEnumLabel(profile.bloodType),
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.smoke_free_rounded),
-                      title: const Text('Smoking Status'),
-                      subtitle: Text(profile.smokingStatus ?? 'Not set'),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.smoke_free_rounded,
+                    title: 'Smoking Status',
+                    subtitle: profile.smokingStatus ?? 'Not set',
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.timelapse_rounded),
-                      title: const Text('Smoking Years'),
-                      subtitle: Text(
-                        profile.smokingYears?.toString() ?? 'Not set',
-                      ),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.timelapse_rounded,
+                    title: 'Smoking Years',
+                    subtitle: profile.smokingYears?.toString() ?? 'Not set',
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.local_bar_outlined),
-                      title: const Text('Alcohol Frequency'),
-                      subtitle: Text(profile.alcoholFreq ?? 'Not set'),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.local_bar_outlined,
+                    title: 'Alcohol Frequency',
+                    subtitle: profile.alcoholFreq ?? 'Not set',
                   ),
-                  Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.directions_run_rounded),
-                      title: const Text('Exercise Frequency'),
-                      subtitle: Text(profile.exerciseFreq ?? 'Not set'),
-                    ),
+                  ProfileInfoCard(
+                    icon: Icons.directions_run_rounded,
+                    title: 'Exercise Frequency',
+                    subtitle: profile.exerciseFreq ?? 'Not set',
                   ),
                   Row(
                     children: [
@@ -249,110 +265,51 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Allergies'),
-                      subtitle: allergiesAsync.when(
-                        data: (data) {
-                          if (data.isEmpty) return const Text('None added yet');
-                          return Text(
-                            data.map((allergy) => allergy.allergen).join(', '),
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                        loading: () => const Text(''),
-                        error: (error, stack) => Text('Error: $error'),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () => context.pushNamed(AppRoute.allergies.name),
-                    ),
+                  AsyncNavigationCard(
+                    title: 'Allergies',
+                    asyncValue: allergiesAsync,
+                    nextRoute: AppRoute.allergies,
+                    subtitleBuilder: (data) =>
+                        data.map((allergy) => allergy.allergen).join(', '),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Medications'),
-                      subtitle: medicationsAsync.when(
-                        data: (data) {
-                          if (data.isEmpty) return const Text('None added yet');
-                          return Text(
-                            data
-                                .map((medication) => medication.name)
-                                .join(', '),
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                        loading: () => const Text(''),
-                        error: (error, stack) => Text('Error: $error'),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () => context.pushNamed(AppRoute.medications.name),
-                    ),
+                  AsyncNavigationCard(
+                    title: 'Medications',
+                    asyncValue: medicationsAsync,
+                    nextRoute: AppRoute.medications,
+                    subtitleBuilder: (data) =>
+                        data.map((medication) => medication.name).join(', '),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Medical History'),
-                      subtitle: medicalHistoryAsync.when(
-                        data: (data) {
-                          if (data.isEmpty) return const Text('None added yet');
-                          return Text(
-                            data.map((history) => history.title).join(', '),
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                        loading: () => const Text(''),
-                        error: (error, stack) => Text('Error: $error'),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () =>
-                          context.pushNamed(AppRoute.medicalHistory.name),
-                    ),
+                  AsyncNavigationCard(
+                    title: 'Medical History',
+                    asyncValue: medicalHistoryAsync,
+                    nextRoute: AppRoute.medicalHistory,
+                    subtitleBuilder: (data) =>
+                        data.map((history) => history.title).join(', '),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Health Measurements'),
-                      subtitle: healthMeasurementsAsync.when(
-                        data: (data) {
-                          if (data.isEmpty) return const Text('None added yet');
-                          return Text(
-                            data
-                                .map(
-                                  (measurement) =>
-                                      '${formatEnumLabel(measurement.name)}: ${measurement.value}',
-                                )
-                                .join(', '),
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                        loading: () => const Text(''),
-                        error: (error, stack) => Text('Error: $error'),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () =>
-                          context.pushNamed(AppRoute.healthMeasurments.name),
-                    ),
+                  AsyncNavigationCard(
+                    title: 'Health Measurements',
+                    asyncValue: healthMeasurementsAsync,
+                    nextRoute: AppRoute.healthMeasurments,
+                    subtitleBuilder: (data) {
+                      return data
+                          .map(
+                            (measurement) =>
+                                '${formatEnumLabel(measurement.name)}: ${measurement.value}',
+                          )
+                          .join(', ');
+                    },
                   ),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Your Doctors'),
-                      subtitle: patientDoctorAsync.when(
-                        data: (data) {
-                          if (data.isEmpty) return const Text('None added yet');
-                          return Text(
-                            data
-                                .map(
-                                  (patientDoctor) =>
-                                      patientDoctor.doctor!.fullName!,
-                                )
-                                .join(', '),
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                        loading: () => const Text(''),
-                        error: (error, stack) => Text('Error: $error'),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () =>
-                          context.pushNamed(AppRoute.selectedDoctor.name),
-                    ),
+                  AsyncNavigationCard(
+                    title: 'Your Doctors',
+                    asyncValue: patientDoctorAsync,
+                    nextRoute: AppRoute.selectedDoctor,
+                    subtitleBuilder: (data) {
+                      return data
+                          .map(
+                            (patientDoctor) => patientDoctor.doctor!.fullName!,
+                          )
+                          .join(', ');
+                    },
                   ),
                   1.heightBox,
                 ],
@@ -360,6 +317,69 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AsyncNavigationCard extends StatelessWidget {
+  const AsyncNavigationCard({
+    super.key,
+    required this.title,
+    required this.asyncValue,
+    required this.nextRoute,
+    required this.subtitleBuilder,
+  });
+
+  final String title;
+  final AsyncValue asyncValue;
+  final AppRoute nextRoute;
+  final String Function(dynamic data) subtitleBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(title),
+        subtitle: asyncValue.when(
+          data: (data) {
+            if (data is List && data.isEmpty) {
+              return const Text('None added yet');
+            }
+            return Text(
+              subtitleBuilder(data),
+              overflow: TextOverflow.ellipsis,
+            );
+          },
+          loading: () => const Text(''),
+          error: (error, stack) => Text('Error: $error'),
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: () => context.pushNamed(nextRoute.name),
+      ),
+    );
+  }
+}
+
+class ProfileInfoCard extends StatelessWidget {
+  const ProfileInfoCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(title),
+        subtitle: Text(subtitle),
       ),
     );
   }
@@ -406,40 +426,25 @@ Widget buildLabLayout(
                     ),
                   ],
                 ),
-                TextFormField(
-                  key: ValueKey(profile.id.toString()),
-                  initialValue: profile.id.toString(),
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: 'User ID',
-                    suffixIcon: CopyIcon(textToCopy: profile.id.toString()),
-                  ),
+                ProfileInfoCard(
+                  icon: Icons.person,
+                  title: 'Full Name',
+                  subtitle: profile.name ?? 'Not set',
                 ),
-                TextFormField(
-                  initialValue: profile.name ?? '',
-                  readOnly: true,
-                  decoration: const InputDecoration(labelText: 'Full Name'),
+                ProfileInfoCard(
+                  icon: Icons.science_outlined,
+                  title: 'Lab Type',
+                  subtitle: profile.labType ?? 'Not set',
                 ),
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.science_outlined),
-                    title: const Text('Lab Type'),
-                    subtitle: Text(profile.labType ?? 'Not set'),
-                  ),
+                ProfileInfoCard(
+                  icon: Icons.location_on_outlined,
+                  title: 'Address',
+                  subtitle: profile.address ?? 'Not set',
                 ),
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.location_on_outlined),
-                    title: const Text('Address'),
-                    subtitle: Text(profile.address ?? 'Not set'),
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.phone_outlined),
-                    title: const Text('Phone'),
-                    subtitle: Text(profile.phone ?? 'Not set'),
-                  ),
+                ProfileInfoCard(
+                  icon: Icons.phone_outlined,
+                  title: 'Phone',
+                  subtitle: profile.phone ?? 'Not set',
                 ),
               ],
             ),
