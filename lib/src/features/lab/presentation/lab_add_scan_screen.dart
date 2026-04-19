@@ -29,11 +29,18 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
   XFile? selectedXFile;
   Uint8List? webImageBytes;
   final ImagePicker picker = ImagePicker();
+  final TextEditingController notesController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   ScanType selectedScanType = ScanType.mri;
   BodyPart selectedBodyPart = BodyPart.head;
   bool isUploading = false;
+
+  @override
+  void dispose() {
+    notesController.dispose();
+    super.dispose();
+  }
 
   Future<void> pickImage() async {
     final XFile? pickedFile = await picker.pickImage(
@@ -67,15 +74,26 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
         selectedScanType,
         selectedBodyPart,
         selectedDate,
-        null,
+        notesController.text.trim().isEmpty
+            ? null
+            : notesController.text.trim(),
       );
       if (!mounted) return;
       ref.invalidate(labPatientsProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Scan uploaded successfully.')),
+      );
       GoRouter.of(context).pop();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading scan: $e')),
+        SnackBar(
+          content: Text('Error uploading scan: $e'),
+          action: SnackBarAction(
+            label: 'Retry',
+            onPressed: uploadScan,
+          ),
+        ),
       );
     } finally {
       if (mounted) {
@@ -129,6 +147,7 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                               selectedDate = date;
                             });
                           },
+                          notesController: notesController,
                         ),
                       ),
                       Padding(
@@ -178,6 +197,7 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                               selectedDate = date;
                             });
                           },
+                          notesController: notesController,
                         ),
                       ],
                     ),

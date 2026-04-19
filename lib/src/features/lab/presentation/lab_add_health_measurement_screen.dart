@@ -50,11 +50,20 @@ class _LabAddHealthMeasurementScreenState
       );
       ref.invalidate(labPatientsProvider);
       if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Health measurement saved.')),
+      );
       GoRouter.of(context).pop();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save health measurement: $e')),
+        SnackBar(
+          content: Text('Failed to save health measurement: $e'),
+          action: SnackBarAction(
+            label: 'Retry',
+            onPressed: saveMeasurement,
+          ),
+        ),
       );
     } finally {
       if (mounted) {
@@ -78,7 +87,7 @@ class _LabAddHealthMeasurementScreenState
               onSelectDate: (date) => setState(() => measuredAt = date),
             ),
             DropdownButtonFormField<MeasurementName>(
-              value: measurementName,
+              initialValue: measurementName,
               items: MeasurementName.values
                   .map(
                     (type) => DropdownMenuItem(

@@ -7,18 +7,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 
-class LabPatientsScreen extends ConsumerWidget {
+class LabPatientsScreen extends ConsumerStatefulWidget {
   const LabPatientsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final patientsAsyncValue = ref.watch(labPatientsProvider);
+  ConsumerState<LabPatientsScreen> createState() => _LabPatientsScreenState();
+}
 
+class _LabPatientsScreenState extends ConsumerState<LabPatientsScreen> {
+  static const int _pageSize = 10;
+  int _currentPage = 0;
+  String _searchQuery = '';
+  @override
+  Widget build(BuildContext context) {
+    final request = LabPatientsPageRequest(
+      limit: _pageSize,
+      offset: _currentPage * _pageSize,
+    );
+    final patientsAsyncValue = ref.watch(labPatientsPageProvider(request));
     return Scaffold(
       appBar: context.isLandscape
           ? null
           : AppBar(
               title: const Text('Assigned Patients'),
+              actions: [
+                IconButton(
+                  onPressed: () =>
+                      ref.invalidate(labPatientsPageProvider(request)),
+                  icon: const Icon(Icons.refresh_rounded),
+                ),
+              ],
             ),
       body: Center(
         child: ConstrainedBox(
@@ -29,26 +47,89 @@ class LabPatientsScreen extends ConsumerWidget {
             ),
             child: patientsAsyncValue.when(
               data: (patients) {
+                final filteredPatients = patients.where((patient) {
+                  if (_searchQuery.trim().isEmpty) return true;
+                  final query = _searchQuery.trim().toLowerCase();
+                  final name = (patient.fullName ?? '').toLowerCase();
+                  final phone = (patient.phone ?? '').toLowerCase();
+                  return name.contains(query) || phone.contains(query);
+                }).toList();
                 if (patients.isEmpty) {
                   return const Center(
                     child: Text('No assigned patients found.'),
                   );
                 }
-
-                return ListView.separated(
-                  itemCount: patients.length,
-                  separatorBuilder: (context, index) => 8.heightBox,
-                  itemBuilder: (context, index) {
-                    final patient = patients[index];
-                    return _PatientActionsCard(patient: patient);
-                  },
+                final hasNextPage = patients.length == _pageSize;
+                return Column(
+                  children: [
+                    TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'Search by patient name or phone',
+                        prefixIcon: Icon(Icons.search_rounded),
+                      ),
+                      onChanged: (value) {
+                        setState(() => _searchQuery = value);
+                      },
+                    ),
+                    12.heightBox,
+                    Expanded(
+                      child: filteredPatients.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No matching patients on this page.',
+                              ),
+                            )
+                          : ListView.separated(
+                              itemCount: filteredPatients.length,
+                              separatorBuilder: (context, index) => 8.heightBox,
+                              itemBuilder: (context, index) {
+                                final patient = filteredPatients[index];
+                                return _PatientActionsCard(patient: patient);
+                              },
+                            ),
+                    ),
+                    8.heightBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: _currentPage == 0
+                              ? null
+                              : () => setState(() => _currentPage -= 1),
+                          icon: const Icon(Icons.chevron_left_rounded),
+                          label: const Text('Previous'),
+                        ),
+                        Text('Page ${_currentPage + 1}'),
+                        OutlinedButton.icon(
+                          onPressed: hasNextPage
+                              ? () => setState(() => _currentPage += 1)
+                              : null,
+                          icon: const Icon(Icons.chevron_right_rounded),
+                          label: const Text('Next'),
+                        ),
+                      ],
+                    ),
+                  ],
                 );
               },
               loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),
               error: (error, stackTrace) => Center(
-                child: Text('Error loading patients: $error'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Error loading patients: $error'),
+                    8.heightBox,
+                    FilledButton.icon(
+                      onPressed: () {
+                        ref.invalidate(labPatientsPageProvider(request));
+                      },
+                      icon: const Icon(Icons.refresh_rounded),
+                      label: const Text('Retry'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

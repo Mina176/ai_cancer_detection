@@ -13,6 +13,8 @@ class ScanDataForm extends StatelessWidget {
     required this.onBodyPartChanged,
     required this.selectedDate,
     required this.onSelectDate,
+    this.notesController,
+    this.onNotesChanged,
   });
   final ValueChanged<ScanType?> onScanChanged;
   final ValueChanged<BodyPart?> onBodyPartChanged;
@@ -20,6 +22,8 @@ class ScanDataForm extends StatelessWidget {
   final BodyPart bodyPart;
   final DateTime selectedDate;
   final ValueChanged<DateTime> onSelectDate;
+  final TextEditingController? notesController;
+  final ValueChanged<String>? onNotesChanged;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -87,6 +91,8 @@ class ScanDataForm extends StatelessWidget {
             ],
           ),
           TextField(
+            controller: notesController,
+            onChanged: onNotesChanged,
             maxLines: 4,
             decoration: InputDecoration(
               hintText:
