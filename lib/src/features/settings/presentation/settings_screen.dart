@@ -88,7 +88,10 @@ class SettingsScreen extends ConsumerWidget {
               title: const Text('Settings'),
               actions: [
                 IconButton(
-                  onPressed: () async => await client.auth.signOutDevice(),
+                  onPressed: () async {
+                    await client.auth.signOutDevice();
+                    ref.read(userRoleProvider.notifier).setRole(null);
+                  },
                   icon: const Icon(Icons.logout_rounded),
                 ),
               ],
@@ -320,6 +323,66 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+
+  Widget buildLabLayout(
+    BuildContext context,
+    WidgetRef ref,
+    LabProfileModel profile,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
+      child: Column(
+        children: [
+          context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 4,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const ProfileImage(radius: 50),
+                  Row(
+                    mainAxisAlignment: .spaceBetween,
+                    children: [
+                      Text(
+                        'Personal Information',
+                        style: context.bodyMedium?.semiBold,
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            context.pushNamed(AppRoute.labForm.name),
+                        child: const Text('Edit Profile'),
+                      ),
+                    ],
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.person,
+                    title: 'Full Name',
+                    subtitle: profile.name ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.science_outlined,
+                    title: 'Lab Type',
+                    subtitle: profile.labType ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.location_on_outlined,
+                    title: 'Address',
+                    subtitle: profile.address ?? 'Not set',
+                  ),
+                  ProfileInfoCard(
+                    icon: Icons.phone_outlined,
+                    title: 'Phone',
+                    subtitle: profile.phone ?? 'Not set',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class AsyncNavigationCard extends StatelessWidget {
@@ -383,74 +446,4 @@ class ProfileInfoCard extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget buildLabLayout(
-  BuildContext context,
-  WidgetRef ref,
-  LabProfileModel profile,
-) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
-    child: Column(
-      children: [
-        context.isLandscape ? Sizes.kVerticalPadding.heightBox : 0.heightBox,
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const ProfileImage(radius: 50),
-                TextButton(
-                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Lab specialist profile form is not available yet.',
-                      ),
-                    ),
-                  ),
-                  child: const Text('Edit Profile'),
-                ),
-                Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Text(
-                      'Personal Information',
-                      style: context.bodyMedium?.semiBold,
-                    ),
-                    TextButton(
-                      onPressed: () =>
-                          context.pushNamed(AppRoute.doctorForm.name),
-                      child: const Text('Edit Profile'),
-                    ),
-                  ],
-                ),
-                ProfileInfoCard(
-                  icon: Icons.person,
-                  title: 'Full Name',
-                  subtitle: profile.name ?? 'Not set',
-                ),
-                ProfileInfoCard(
-                  icon: Icons.science_outlined,
-                  title: 'Lab Type',
-                  subtitle: profile.labType ?? 'Not set',
-                ),
-                ProfileInfoCard(
-                  icon: Icons.location_on_outlined,
-                  title: 'Address',
-                  subtitle: profile.address ?? 'Not set',
-                ),
-                ProfileInfoCard(
-                  icon: Icons.phone_outlined,
-                  title: 'Phone',
-                  subtitle: profile.phone ?? 'Not set',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }
