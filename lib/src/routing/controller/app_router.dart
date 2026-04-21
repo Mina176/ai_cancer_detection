@@ -10,6 +10,7 @@ import 'package:cancer_ai_detection/src/features/doctor/patients/presentation/sc
 import 'package:cancer_ai_detection/src/features/lab/presentation/lab_add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/lab/presentation/lab_add_scan_screen.dart';
 import 'package:cancer_ai_detection/src/features/lab/presentation/lab_patients_screen.dart';
+import 'package:cancer_ai_detection/src/features/lab/lab_form_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/add_health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/health_measurement/presentation/health_measurement_screen.dart';
 import 'package:cancer_ai_detection/src/features/home/home_screen.dart';
@@ -28,6 +29,7 @@ import 'package:cancer_ai_detection/src/features/user_role_selection/presentatio
 import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/select_role_screen.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
+import 'package:cancer_ai_detection/src/utils/is_form_empty.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
@@ -43,6 +45,7 @@ const String homeRoute = '/home';
 const String selectRoleRoute = '/select-role';
 const String doctorFormRoute = '/doctor-form';
 const String patientFormRoute = '/patient-form';
+const String labFormRoute = '/lab-form';
 const String uploadRoute = '/upload';
 const String settingsRoute = '/settings';
 const String allScansRoute = '/scan-list';
@@ -68,6 +71,7 @@ const String healthMeasurmentsRoute = '/health-measurments';
 const String addHealthMeasurmentRoute = '/add-health-measurment';
 const String selectedDoctorsRoute = '/selected-doctors';
 const String addDoctorsRoute = '/add-doctors';
+const String chooseLabRoute = '/choose-lab';
 
 @Riverpod()
 GoRouter router(Ref ref) {
@@ -75,7 +79,7 @@ GoRouter router(Ref ref) {
     navigatorKey: rootNavigatorKey,
     initialLocation: authRoute,
     refreshListenable: client.authSessionManager.authInfoListenable,
-    redirect: (context, state) {
+    redirect: (context, state) async {
       final isAuthed = client.auth.isAuthenticated;
       final path = state.matchedLocation;
       final selectedRole = ref.read(userRoleProvider);
@@ -140,6 +144,13 @@ GoRouter router(Ref ref) {
         },
       ),
       GoRoute(
+        name: AppRoute.labForm.name,
+        path: labFormRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          return const LabFormScreen();
+        },
+      ),
+      GoRoute(
         name: AppRoute.home.name,
         path: homeRoute,
         builder: (context, state) => const HomeScreen(),
@@ -152,6 +163,11 @@ GoRouter router(Ref ref) {
       GoRoute(
         name: AppRoute.chooseDoctor.name,
         path: addDoctorsRoute,
+        builder: (context, state) => const ChooseDoctorScreen(),
+      ),
+      GoRoute(
+        name: AppRoute.chooseLab.name,
+        path: chooseLabRoute,
         builder: (context, state) => const ChooseDoctorScreen(),
       ),
       GoRoute(
