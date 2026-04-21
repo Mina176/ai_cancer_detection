@@ -91,6 +91,23 @@ GoRouter router(Ref ref) {
         return homeRoute;
       }
 
+      if (path == patientFormRoute) {
+        final profile = await client.patientProfile.getOrCreate();
+        if (!isPatientFormEmpty(profile)) {
+          return homeRoute;
+        }
+      } else if (path == doctorFormRoute) {
+        final doctorProfile = await client.doctorProfile.getOrCreate();
+        if (!isDoctorFormEmpty(doctorProfile)) {
+          return homeRoute;
+        }
+      } else if (path == labFormRoute) {
+        final labProfile = await client.labProfile.getOrCreate();
+        if (!isLabFormEmpty(labProfile)) {
+          return homeRoute;
+        }
+      }
+
       return null;
     },
     routes: [
