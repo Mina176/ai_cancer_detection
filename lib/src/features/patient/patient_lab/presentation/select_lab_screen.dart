@@ -151,13 +151,12 @@ class LabTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locationLabel = lab.address ?? 'Address not set';
-    final testsCount = lab.patients?.length ?? 0;
-
+    final patientsCount = lab.patients?.length ?? 0;
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         title: Text(lab.name ?? 'Unnamed lab'),
-        subtitle: Text('$locationLabel • $testsCount Patients associated'),
+        subtitle: Text('$locationLabel • $patientsCount Patients associated'),
         trailing: IconButton(
           onPressed: onToggle,
           icon: Icon(isSelected ? Icons.remove_circle : Icons.add_circle),

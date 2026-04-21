@@ -20,13 +20,7 @@ class SelectLabViewState {
   bool isSelected(UuidValue labId) => selectedLabs.any((l) => l.labId == labId);
 
   List<LabProfileModel> get filteredAllLabs {
-    final selectedIds = selectedLabs.map((l) => l.labId).toSet();
-
-    final availableLabs = allLabs
-        .where((l) => !selectedIds.contains(l.id))
-        .toList();
-
-    return availableLabs.filterBySearch(searchQuery);
+    return allLabs.filterBySearch(searchQuery);
   }
 
   List<LabProfileModel> get filteredYourLabs {

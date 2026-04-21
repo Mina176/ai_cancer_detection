@@ -19,31 +19,11 @@ import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  String formatEnumLabel(dynamic value, {String fallback = 'Not set'}) {
-    if (value == null) return fallback;
-    try {
-      final enumName = (value as dynamic).name;
-      if (enumName is String && enumName.isNotEmpty) {
-        return enumName;
-      }
-    } catch (_) {}
-    final raw = value.toString();
-    if (raw.contains('.')) {
-      return raw.split('.').last;
-    }
-    return raw;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final role = ref.watch(userRoleProvider);
     final isDoctor = role == 'doctor';
     final isLabSpecialist = role == 'labSpecialist';
-    final allergiesAsync = ref.watch(allergiesProvider);
-    final medicationsAsync = ref.watch(medicationsProvider);
-    final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
-    final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
-    final patientDoctorAsync = ref.watch(selectDoctorControllerProvider);
     final body = isDoctor
         ? ref
               .watch(doctorProfileProvider)
@@ -73,14 +53,7 @@ class SettingsScreen extends ConsumerWidget {
               .when(
                 data: (profile) => PatientSettingsLayout(
                   context: context,
-                  ref: ref,
                   profile: profile,
-                  allergiesAsync: allergiesAsync,
-                  medicationsAsync: medicationsAsync,
-                  medicalHistoryAsync: medicalHistoryAsync,
-                  healthMeasurementsAsync: healthMeasurementsAsync,
-                  patientDoctorAsync: patientDoctorAsync,
-                  formatEnumLabel: formatEnumLabel,
                 ),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: $error')),

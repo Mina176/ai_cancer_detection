@@ -1,6 +1,11 @@
 import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
+import 'package:cancer_ai_detection/src/features/patient/allergies/controllers/allergies_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/health_measurement/controller/health_measurement_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/medical_history/controller/medical_history_provider.dart';
+import 'package:cancer_ai_detection/src/features/patient/medication/controller/medication_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/patient_doctor/controller/select_doctor_controller.dart';
+import 'package:cancer_ai_detection/src/features/patient/patient_lab/controller/select_lab_controller.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -9,32 +14,39 @@ import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:intl/intl.dart';
 
-class PatientSettingsLayout extends StatelessWidget {
+class PatientSettingsLayout extends ConsumerWidget {
   const PatientSettingsLayout({
     super.key,
     required this.context,
-    required this.ref,
     required this.profile,
-    required this.allergiesAsync,
-    required this.medicationsAsync,
-    required this.medicalHistoryAsync,
-    required this.healthMeasurementsAsync,
-    required this.patientDoctorAsync,
-    required this.formatEnumLabel,
   });
 
   final BuildContext context;
-  final WidgetRef ref;
   final PatientProfileModel profile;
-  final AsyncValue allergiesAsync;
-  final AsyncValue medicationsAsync;
-  final AsyncValue medicalHistoryAsync;
-  final AsyncValue healthMeasurementsAsync;
-  final AsyncValue<SelectDoctorViewState> patientDoctorAsync;
-  final String Function(dynamic value, {String fallback}) formatEnumLabel;
+
+  String formatEnumLabel(dynamic value, {String fallback = 'Not set'}) {
+    if (value == null) return fallback;
+    try {
+      final enumName = (value as dynamic).name;
+      if (enumName is String && enumName.isNotEmpty) {
+        return enumName;
+      }
+    } catch (_) {}
+    final raw = value.toString();
+    if (raw.contains('.')) {
+      return raw.split('.').last;
+    }
+    return raw;
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final allergiesAsync = ref.watch(allergiesProvider);
+    final medicationsAsync = ref.watch(medicationsProvider);
+    final medicalHistoryAsync = ref.watch(medicalHistoryProvider);
+    final healthMeasurementsAsync = ref.watch(healthMeasurementProvider);
+    final patientDoctorAsync = ref.watch(selectDoctorControllerProvider);
+    final selectLabAsync = ref.watch(selectLabControllerProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.kHorizontalPadding),
       child: Column(
@@ -55,8 +67,10 @@ class PatientSettingsLayout extends StatelessWidget {
                         style: context.bodyMedium?.semiBold,
                       ),
                       TextButton(
-                        onPressed: () =>
-                            context.pushNamed(AppRoute.patientForm.name),
+                        onPressed: () => context.pushNamed(
+                          AppRoute.labForm.name,
+                          queryParameters: {'isEditing': 'true'},
+                        ),
                         child: const Text('Edit Profile'),
                       ),
                     ],
@@ -235,6 +249,30 @@ class PatientSettingsLayout extends StatelessWidget {
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () =>
                           context.pushNamed(AppRoute.selectedDoctor.name),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Your Labs'),
+                      subtitle: selectLabAsync.when(
+                        data: (data) {
+                          if (data.filteredYourLabs.isEmpty) {
+                            return const Text('None added yet');
+                          }
+                          return Text(
+                            data.filteredYourLabs
+                                .map(
+                                  (patientLab) => patientLab.name!,
+                                )
+                                .join(', '),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                        loading: () => const Text(''),
+                        error: (error, stack) => Text('Error: $error'),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () => context.pushNamed(AppRoute.chooseLab.name),
                     ),
                   ),
                   1.heightBox,
