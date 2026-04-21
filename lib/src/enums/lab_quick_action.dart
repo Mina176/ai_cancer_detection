@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 enum LabQuickAction implements ActionModel {
   viewPatients(
     'View Patients',
-    Icons.people_outline_rounded,
+    Icons.people_alt_rounded,
     AppRoute.labPatients,
   ),
   ;
