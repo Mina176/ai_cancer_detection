@@ -55,22 +55,30 @@ class _LabFormScreenState extends ConsumerState<LabFormScreen> {
               children: [
                 TextFormField(
                   initialValue: profile.name ?? '',
-                  decoration: const InputDecoration(hintText: 'Lab Name'),
+                  decoration: const InputDecoration(
+                    labelText: 'Lab Name',
+                  ),
                   onChanged: (value) => name = value,
                 ),
                 TextFormField(
                   initialValue: profile.labType ?? '',
-                  decoration: const InputDecoration(hintText: 'Lab Type'),
+                  decoration: const InputDecoration(
+                    labelText: 'Lab Type',
+                  ),
                   onChanged: (value) => labType = value,
                 ),
                 TextFormField(
                   initialValue: profile.address ?? '',
-                  decoration: const InputDecoration(hintText: 'Address'),
+                  decoration: const InputDecoration(
+                    labelText: 'Address',
+                  ),
                   onChanged: (value) => address = value,
                 ),
                 TextFormField(
                   initialValue: profile.phone ?? '',
-                  decoration: const InputDecoration(hintText: 'Phone'),
+                  decoration: const InputDecoration(
+                    labelText: 'Phone',
+                  ),
                   onChanged: (value) => phone = value,
                 ),
               ],

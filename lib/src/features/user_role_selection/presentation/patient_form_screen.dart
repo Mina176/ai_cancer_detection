@@ -92,7 +92,9 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
           children: [
             TextFormField(
               initialValue: profile.fullName ?? '',
-              decoration: InputDecoration(hintText: 'Full Name'),
+              decoration: const InputDecoration(
+                labelText: 'Full Name',
+              ),
               onChanged: (value) => fullName = value,
             ),
             GenderSelector(
@@ -114,22 +116,30 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
             ),
             TextFormField(
               initialValue: profile.smokingStatus ?? '',
-              decoration: InputDecoration(hintText: 'Smoking Status'),
+              decoration: const InputDecoration(
+                labelText: 'Smoking Status',
+              ),
               onChanged: (value) => smokingStatus = value,
             ),
             TextFormField(
               initialValue: profile.smokingYears?.toString() ?? '',
-              decoration: InputDecoration(hintText: 'Smoking Years'),
+              decoration: const InputDecoration(
+                labelText: 'Smoking Years',
+              ),
               onChanged: (value) => smokingYears = int.tryParse(value),
             ),
             TextFormField(
               initialValue: profile.alcoholFreq ?? '',
-              decoration: InputDecoration(hintText: 'Alcohol Frequency'),
+              decoration: const InputDecoration(
+                labelText: 'Alcohol Frequency',
+              ),
               onChanged: (value) => alcoholFrequency = value,
             ),
             TextFormField(
               initialValue: profile.exerciseFreq ?? '',
-              decoration: InputDecoration(hintText: 'Exercise Frequency'),
+              decoration: const InputDecoration(
+                labelText: 'Exercise Frequency',
+              ),
               onChanged: (value) => exerciseFrequency = value,
             ),
             DateListTile(
