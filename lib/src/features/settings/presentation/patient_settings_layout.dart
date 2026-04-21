@@ -1,5 +1,6 @@
 import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/src/common_widgets/profile_image.dart';
+import 'package:cancer_ai_detection/src/features/patient/patient_doctor/controller/select_doctor_controller.dart';
 import 'package:cancer_ai_detection/src/routing/app_routes.dart';
 import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class PatientSettingsLayout extends StatelessWidget {
   final AsyncValue medicationsAsync;
   final AsyncValue medicalHistoryAsync;
   final AsyncValue healthMeasurementsAsync;
-  final AsyncValue patientDoctorAsync;
+  final AsyncValue<SelectDoctorViewState> patientDoctorAsync;
   final String Function(dynamic value, {String fallback}) formatEnumLabel;
 
   @override
@@ -155,7 +156,9 @@ class PatientSettingsLayout extends StatelessWidget {
                         data: (data) {
                           if (data.isEmpty) return const Text('None added yet');
                           return Text(
-                            data.map((medication) => medication.name).join(', '),
+                            data
+                                .map((medication) => medication.name)
+                                .join(', '),
                             overflow: TextOverflow.ellipsis,
                           );
                         },
@@ -214,12 +217,13 @@ class PatientSettingsLayout extends StatelessWidget {
                       title: const Text('Your Doctors'),
                       subtitle: patientDoctorAsync.when(
                         data: (data) {
-                          if (data.isEmpty) return const Text('None added yet');
+                          if (data.filteredYourDoctors.isEmpty) {
+                            return const Text('None added yet');
+                          }
                           return Text(
-                            data
+                            data.filteredYourDoctors
                                 .map(
-                                  (patientDoctor) =>
-                                      patientDoctor.doctor!.fullName!,
+                                  (patientDoctor) => patientDoctor.fullName!,
                                 )
                                 .join(', '),
                             overflow: TextOverflow.ellipsis,

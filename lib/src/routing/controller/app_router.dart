@@ -22,7 +22,7 @@ import 'package:cancer_ai_detection/src/features/patient/allergies/presentation/
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/medications_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/patient_doctor/select_doctor_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/patient_lab/presentation/select_lab_screen.dart';
-import 'package:cancer_ai_detection/src/features/settings/settings_screen.dart';
+import 'package:cancer_ai_detection/src/features/settings/root_settings.dart';
 import 'package:cancer_ai_detection/src/features/patient/upload/upload_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/presentation/patient_form_screen.dart';

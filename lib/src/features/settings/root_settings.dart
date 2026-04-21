@@ -26,9 +26,7 @@ class SettingsScreen extends ConsumerWidget {
       if (enumName is String && enumName.isNotEmpty) {
         return enumName;
       }
-    } catch (_) {
-      // Fall through to string parsing.
-    }
+    } catch (_) {}
     final raw = value.toString();
     if (raw.contains('.')) {
       return raw.split('.').last;
