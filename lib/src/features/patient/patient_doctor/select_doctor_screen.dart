@@ -1,18 +1,19 @@
-import 'package:cancer_ai_detection/src/features/patient/select_doctor/controller/choose_doctor_controller.dart';
+import 'package:cancer_ai_detection/src/features/patient/patient_doctor/controller/select_doctor_controller.dart';
+import 'package:cancer_ai_detection/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 
-class ChooseDoctorScreen extends ConsumerWidget {
-  const ChooseDoctorScreen({super.key});
+class SelectDoctorScreen extends ConsumerWidget {
+  const SelectDoctorScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewStateAsync = ref.watch(chooseDoctorControllerProvider);
+    final viewStateAsync = ref.watch(selectDoctorControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choose Your Doctor'),
+        title: const Text('Select Your Doctor'),
       ),
       body: viewStateAsync.when(
         data: (viewState) {
@@ -20,57 +21,54 @@ class ChooseDoctorScreen extends ConsumerWidget {
           final allDoctors = viewState.filteredAllDoctors;
 
           return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+            padding: const EdgeInsets.symmetric(
+              horizontal: Sizes.kHorizontalPadding,
+            ),
             children: [
               TextField(
-                onChanged: (value) {
-                  ref
-                      .read(chooseDoctorControllerProvider.notifier)
-                      .setSearchQuery(value);
-                },
+                onChanged: (value) => ref
+                    .read(selectDoctorControllerProvider.notifier)
+                    .setSearchQuery(value),
                 decoration: InputDecoration(
                   hintText: 'Search doctors',
                   prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                 ),
               ),
               const SizedBox(height: 18),
-              _SectionTitle(
+              SectionTitle(
                 title: 'Your Doctors',
                 count: yourDoctors.length,
               ),
               const SizedBox(height: 8),
               if (yourDoctors.isEmpty)
-                const _EmptySection(
-                  message: 'No doctors selected yet.',
+                const EmptySection(
+                  message: 'No doctors selected...',
                 )
               else
                 ...yourDoctors.map(
-                  (doctor) => _DoctorTile(
+                  (doctor) => DoctorTile(
                     doctor: doctor,
                     isSelected: true,
-                    onToggle: () => _onToggleDoctor(context, ref, doctor.id),
+                    onToggle: () => onToggleDoctor(context, ref, doctor.id),
                   ),
                 ),
               const SizedBox(height: 18),
-              _SectionTitle(
+              SectionTitle(
                 title: 'All Doctors',
                 count: allDoctors.length,
               ),
               const SizedBox(height: 8),
               if (allDoctors.isEmpty)
-                const _EmptySection(
-                  message: 'No doctors found for this search.',
+                const EmptySection(
+                  message: 'No doctors found...',
                 )
               else
                 ...allDoctors.map(
-                  (doctor) => _DoctorTile(
+                  (doctor) => DoctorTile(
                     doctor: doctor,
                     isSelected:
                         doctor.id != null && viewState.isSelected(doctor.id!),
-                    onToggle: () => _onToggleDoctor(context, ref, doctor.id),
+                    onToggle: () => onToggleDoctor(context, ref, doctor.id),
                   ),
                 ),
             ],
@@ -86,7 +84,7 @@ class ChooseDoctorScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _onToggleDoctor(
+  Future<void> onToggleDoctor(
     BuildContext context,
     WidgetRef ref,
     UuidValue? doctorId,
@@ -96,7 +94,7 @@ class ChooseDoctorScreen extends ConsumerWidget {
     }
 
     final success = await ref
-        .read(chooseDoctorControllerProvider.notifier)
+        .read(selectDoctorControllerProvider.notifier)
         .toggleDoctor(doctorId);
 
     if (!success && context.mounted) {
@@ -109,8 +107,9 @@ class ChooseDoctorScreen extends ConsumerWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({
+class SectionTitle extends StatelessWidget {
+  const SectionTitle({
+    super.key,
     required this.title,
     required this.count,
   });
@@ -142,8 +141,9 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _DoctorTile extends StatelessWidget {
-  const _DoctorTile({
+class DoctorTile extends StatelessWidget {
+  const DoctorTile({
+    super.key,
     required this.doctor,
     required this.isSelected,
     required this.onToggle,
@@ -179,20 +179,15 @@ class _DoctorTile extends StatelessWidget {
   }
 }
 
-class _EmptySection extends StatelessWidget {
-  const _EmptySection({required this.message});
+class EmptySection extends StatelessWidget {
+  const EmptySection({super.key, required this.message});
 
   final String message;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return Padding(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: Text(message),
     );
   }

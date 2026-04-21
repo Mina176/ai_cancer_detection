@@ -1,14 +1,13 @@
 import 'package:cancer_ai_detection/main.dart';
-import 'package:cancer_ai_detection/src/features/patient/pateint_doctors/controller/patient_doctors_provider.dart';
 import 'package:cancer_ai_detection/src/features/patient/profile/patient_profile_provider.dart';
 import 'package:cancer_ai_detection/src/utils/search_methods.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'choose_doctor_controller.g.dart';
+part 'select_doctor_controller.g.dart';
 
-class ChooseDoctorViewState {
-  const ChooseDoctorViewState({
+class SelectDoctorViewState {
+  const SelectDoctorViewState({
     this.searchQuery = '',
     required this.allDoctors,
     required this.selectedDoctors,
@@ -40,12 +39,12 @@ class ChooseDoctorViewState {
     return myDocs.filterBySearch(searchQuery);
   }
 
-  ChooseDoctorViewState copyWith({
+  SelectDoctorViewState copyWith({
     String? searchQuery,
     List<DoctorProfileModel>? allDoctors,
     List<PatientDoctorModel>? selectedDoctors,
   }) {
-    return ChooseDoctorViewState(
+    return SelectDoctorViewState(
       searchQuery: searchQuery ?? this.searchQuery,
       allDoctors: allDoctors ?? this.allDoctors,
       selectedDoctors: selectedDoctors ?? this.selectedDoctors,
@@ -54,10 +53,10 @@ class ChooseDoctorViewState {
 }
 
 @Riverpod()
-class ChooseDoctorController extends _$ChooseDoctorController {
+class SelectDoctorController extends _$SelectDoctorController {
   @override
-  Future<ChooseDoctorViewState> build() async {
-    return ChooseDoctorViewState(
+  Future<SelectDoctorViewState> build() async {
+    return SelectDoctorViewState(
       allDoctors: await client.doctorProfile.getAllDoctors(),
       selectedDoctors: await client.patientDoctor.listMyDoctors(),
     );
@@ -100,7 +99,7 @@ class ChooseDoctorController extends _$ChooseDoctorController {
       } else {
         await client.patientDoctor.addDoctor(doctorId);
       }
-      ref.invalidate(patientDoctorsProvider);
+      // TODO ref.invalidate(patientDoctorsProvider);
       return true;
     } catch (e) {
       state = AsyncData(

@@ -20,8 +20,8 @@ import 'package:cancer_ai_detection/src/features/patient/medical_history/present
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/add_medication_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/allergies/presentation/allergies_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/medication/presentation/medications_screen.dart';
-import 'package:cancer_ai_detection/src/features/patient/select_doctor/choose_doctor_screen.dart';
-import 'package:cancer_ai_detection/src/features/patient/select_doctor/selected_doctor_screen.dart';
+import 'package:cancer_ai_detection/src/features/patient/patient_doctor/select_doctor_screen.dart';
+import 'package:cancer_ai_detection/src/features/patient/patient_lab/presentation/select_lab_screen.dart';
 import 'package:cancer_ai_detection/src/features/settings/settings_screen.dart';
 import 'package:cancer_ai_detection/src/features/patient/upload/upload_screen.dart';
 import 'package:cancer_ai_detection/src/features/user_role_selection/controller/user_role_provider.dart';
@@ -156,19 +156,14 @@ GoRouter router(Ref ref) {
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
-        name: AppRoute.selectedDoctor.name,
-        path: selectedDoctorsRoute,
-        builder: (context, state) => const PatientSelectedDoctorsScreen(),
-      ),
-      GoRoute(
         name: AppRoute.chooseDoctor.name,
         path: addDoctorsRoute,
-        builder: (context, state) => const ChooseDoctorScreen(),
+        builder: (context, state) => const SelectDoctorScreen(),
       ),
       GoRoute(
         name: AppRoute.chooseLab.name,
         path: chooseLabRoute,
-        builder: (context, state) => const ChooseDoctorScreen(),
+        builder: (context, state) => const SelectLabScreen(),
       ),
       GoRoute(
         name: AppRoute.doctorPatients.name,
