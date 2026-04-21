@@ -75,68 +75,72 @@ class _PatientFormScreenState extends ConsumerState<PatientFormScreen> {
     final profileAsync = ref.watch(patientProfileProvider);
     return Scaffold(
       body: profileAsync.when(
-        data: (profile) => StickyBottomFormLayout(
-          title: 'Patient Form',
-          formContent: Form(
-            key: formKey,
-            child: Column(
-              spacing: 8,
-              children: [
-                TextFormField(
-                  initialValue: profile.fullName ?? '',
-                  decoration: InputDecoration(hintText: 'Full Name'),
-                  onChanged: (value) => fullName = value,
-                ),
-                GenderSelector(
-                  selectedGender: selectedGender ?? profile.gender,
-                  onChanged: (value) => setState(() => selectedGender = value),
-                ),
-                DropdownButtonFormField<BloodType>(
-                  initialValue: selectedBloodType ?? profile.bloodType,
-                  decoration: const InputDecoration(hintText: 'Blood Type'),
-                  items: BloodType.values.map((type) {
-                    return DropdownMenuItem<BloodType>(
-                      value: type,
-                      child: Text(formatEnumLabel(type)),
-                    );
-                  }).toList(),
-                  onChanged: (value) => setState(() {
-                    selectedBloodType = value;
-                  }),
-                ),
-                TextFormField(
-                  initialValue: profile.smokingStatus ?? '',
-                  decoration: InputDecoration(hintText: 'Smoking Status'),
-                  onChanged: (value) => smokingStatus = value,
-                ),
-                TextFormField(
-                  initialValue: profile.smokingYears?.toString() ?? '',
-                  decoration: InputDecoration(hintText: 'Smoking Years'),
-                  onChanged: (value) => smokingYears = int.tryParse(value),
-                ),
-                TextFormField(
-                  initialValue: profile.alcoholFreq ?? '',
-                  decoration: InputDecoration(hintText: 'Alcohol Frequency'),
-                  onChanged: (value) => alcoholFrequency = value,
-                ),
-                TextFormField(
-                  initialValue: profile.exerciseFreq ?? '',
-                  decoration: InputDecoration(hintText: 'Exercise Frequency'),
-                  onChanged: (value) => exerciseFrequency = value,
-                ),
-                DateListTile(
-                  title: 'Date of Birth',
-                  selectedDate: selectedDate ?? profile.dob ?? DateTime.now(),
-                  onSelectDate: (date) => setState(() => selectedDate = date),
-                ),
-              ],
-            ),
-          ),
-          onSave: () => onSaved(),
-        ),
+        data: _buildPatientForm,
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
+    );
+  }
+
+  Widget _buildPatientForm(PatientProfileModel profile) {
+    return StickyBottomFormLayout(
+      title: 'Patient Form',
+      formContent: Form(
+        key: formKey,
+        child: Column(
+          spacing: 8,
+          children: [
+            TextFormField(
+              initialValue: profile.fullName ?? '',
+              decoration: InputDecoration(hintText: 'Full Name'),
+              onChanged: (value) => fullName = value,
+            ),
+            GenderSelector(
+              selectedGender: selectedGender ?? profile.gender,
+              onChanged: (value) => setState(() => selectedGender = value),
+            ),
+            DropdownButtonFormField<BloodType>(
+              initialValue: selectedBloodType ?? profile.bloodType,
+              decoration: const InputDecoration(hintText: 'Blood Type'),
+              items: BloodType.values.map((type) {
+                return DropdownMenuItem<BloodType>(
+                  value: type,
+                  child: Text(formatEnumLabel(type)),
+                );
+              }).toList(),
+              onChanged: (value) => setState(() {
+                selectedBloodType = value;
+              }),
+            ),
+            TextFormField(
+              initialValue: profile.smokingStatus ?? '',
+              decoration: InputDecoration(hintText: 'Smoking Status'),
+              onChanged: (value) => smokingStatus = value,
+            ),
+            TextFormField(
+              initialValue: profile.smokingYears?.toString() ?? '',
+              decoration: InputDecoration(hintText: 'Smoking Years'),
+              onChanged: (value) => smokingYears = int.tryParse(value),
+            ),
+            TextFormField(
+              initialValue: profile.alcoholFreq ?? '',
+              decoration: InputDecoration(hintText: 'Alcohol Frequency'),
+              onChanged: (value) => alcoholFrequency = value,
+            ),
+            TextFormField(
+              initialValue: profile.exerciseFreq ?? '',
+              decoration: InputDecoration(hintText: 'Exercise Frequency'),
+              onChanged: (value) => exerciseFrequency = value,
+            ),
+            DateListTile(
+              title: 'Date of Birth',
+              selectedDate: selectedDate ?? profile.dob ?? DateTime.now(),
+              onSelectDate: (date) => setState(() => selectedDate = date),
+            ),
+          ],
+        ),
+      ),
+      onSave: onSaved,
     );
   }
 }

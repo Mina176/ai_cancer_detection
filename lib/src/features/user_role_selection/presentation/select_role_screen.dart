@@ -46,7 +46,7 @@ class SelectRoleScreen extends ConsumerWidget {
               text: 'Lab Specialist',
               onTap: () {
                 ref.read(userRoleProvider.notifier).setRole('labSpecialist');
-                context.goNamed(AppRoute.home.name);
+                context.goNamed(AppRoute.labForm.name);
               },
             ),
           ],
