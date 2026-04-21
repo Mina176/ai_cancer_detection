@@ -19,7 +19,7 @@ final class UserRoleProvider extends $NotifierProvider<UserRole, String?> {
         argument: null,
         retry: null,
         name: r'userRoleProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
