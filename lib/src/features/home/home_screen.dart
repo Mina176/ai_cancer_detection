@@ -26,7 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final role = ref.watch(userRoleProvider);
     final isDoctor = role == 'doctor';
     final isLabSpecialist = role == 'labSpecialist';
-    final quickActions = _getQuickActions(role);
+    final quickActions = getQuickActions(role);
     final profileAsync = isDoctor
         ? ref.watch(doctorProfileProvider)
         : isLabSpecialist
@@ -93,7 +93,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  List<ActionModel> _getQuickActions(String? role) {
+  List<ActionModel> getQuickActions(String? role) {
     if (role == 'doctor') {
       return DoctorQuickAction.values;
     }
