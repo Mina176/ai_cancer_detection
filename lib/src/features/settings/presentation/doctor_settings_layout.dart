@@ -45,10 +45,58 @@ class DoctorSettingsLayout extends StatelessWidget {
                       ),
                     ],
                   ),
-                  TextFormField(
-                    initialValue: profile.fullName ?? '',
-                    readOnly: true,
-                    decoration: const InputDecoration(labelText: 'Full Name'),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Full Name'),
+                      subtitle: Text(profile.fullName ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.info_outline),
+                      title: const Text('Bio'),
+                      subtitle: Text(profile.bio ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.science_outlined),
+                      title: const Text('Specialization'),
+                      subtitle: Text(profile.specialization ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.description),
+                      title: const Text('License Number'),
+                      subtitle: Text(profile.licenseNumber ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.local_hospital),
+                      title: const Text('Hospital Name'),
+                      subtitle: Text(profile.hospitalName ?? 'Not set'),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.work_outline),
+                      title: const Text('Years of Experience'),
+                      subtitle: Text(
+                        profile.yearsOfExperience?.toString() ?? 'Not set',
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.people_outline),
+                      title: const Text('Number of Patients'),
+                      subtitle: Text(
+                        profile.patients?.length.toString() ?? 'Not set',
+                      ),
+                    ),
                   ),
                 ],
               ),
