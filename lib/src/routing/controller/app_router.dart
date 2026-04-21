@@ -94,20 +94,20 @@ GoRouter router(Ref ref) {
       if (path == authRoute || path == selectRoleRoute) {
         return homeRoute;
       }
-
+      final isEditing = state.uri.queryParameters['isEditing'] == 'true';
       if (path == patientFormRoute) {
         final profile = await client.patientProfile.getOrCreate();
-        if (!isPatientFormEmpty(profile)) {
+        if (!isPatientFormEmpty(profile) && !isEditing) {
           return homeRoute;
         }
       } else if (path == doctorFormRoute) {
         final doctorProfile = await client.doctorProfile.getOrCreate();
-        if (!isDoctorFormEmpty(doctorProfile)) {
+        if (!isDoctorFormEmpty(doctorProfile) && !isEditing) {
           return homeRoute;
         }
       } else if (path == labFormRoute) {
         final labProfile = await client.labProfile.getOrCreate();
-        if (!isLabFormEmpty(labProfile)) {
+        if (!isLabFormEmpty(labProfile) && !isEditing) {
           return homeRoute;
         }
       }

@@ -41,8 +41,10 @@ class LabSettingsLayout extends StatelessWidget {
                         style: context.bodyMedium?.semiBold,
                       ),
                       TextButton(
-                        onPressed: () =>
-                            context.pushNamed(AppRoute.labForm.name),
+                        onPressed: () => context.pushNamed(
+                          AppRoute.labForm.name,
+                          queryParameters: {'isEditing': 'true'},
+                        ),
                         child: const Text('Edit Profile'),
                       ),
                     ],
