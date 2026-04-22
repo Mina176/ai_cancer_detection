@@ -536,7 +536,7 @@ packages:
   gp_backend_client:
     dependency: "direct main"
     description:
-      path: "gp/gp_backend/gp_backend_client"
+      path: "../gp/gp_backend/gp_backend_client"
       relative: true
     source: path
     version: "0.0.0"
