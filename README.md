@@ -6,7 +6,7 @@ Flutter app for AI-assisted cancer detection workflows.
 
 1. Ensure Flutter `3.41.2` is installed.
 2. Ensure `gp_backend_client` exists at:
-   - `/home/runner/work/ai_cancer_detection/ai_cancer_detection/gp/gp_backend/gp_backend_client`
+   - `./gp/gp_backend/gp_backend_client`
 3. Install dependencies:
    - `flutter pub get`
 4. Run app:
