@@ -1,4 +1,5 @@
 import 'package:cancer_ai_detection/src/theming/app_theme.dart';
+import 'package:cancer_ai_detection/src/config/app_config.dart';
 import 'package:cancer_ai_detection/src/routing/controller/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,7 @@ import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 late Client client;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const serverUrl = 'https://gp-api.lasheen.dev/';
+  final serverUrl = AppConfig.serverUrl;
   client = Client(serverUrl)
     ..connectivityMonitor = FlutterConnectivityMonitor()
     ..authSessionManager = FlutterAuthSessionManager();

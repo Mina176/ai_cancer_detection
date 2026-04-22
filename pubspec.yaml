@@ -19,7 +19,7 @@ dependencies:
   go_router: ^17.1.0
   google_fonts: ^8.0.2
   gp_backend_client:
-    path: .././gp/gp_backend/gp_backend_client
+    path: ./gp/gp_backend/gp_backend_client
   http: ^1.6.0
   image_picker: ^1.2.1
   intl: ^0.20.2

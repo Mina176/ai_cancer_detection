@@ -1,0 +1,78 @@
+name: Deploy Flutter Web to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app repository
+        uses: actions/checkout@v4
+
+      - name: Checkout gp backend repository
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: ${{ vars.GP_BACKEND_REPOSITORY != '' && vars.GP_BACKEND_REPOSITORY || 'Mina176/gp' }}
+          token: ${{ secrets.GP_REPO_TOKEN != '' && secrets.GP_REPO_TOKEN || github.token }}
+          path: gp
+
+      - name: Verify gp_backend_client dependency path
+        run: |
+          if [ ! -f gp/gp_backend/gp_backend_client/pubspec.yaml ]; then
+            echo "::error::Missing gp_backend_client at ./gp/gp_backend/gp_backend_client."
+            echo "::error::Set repository variable GP_BACKEND_REPOSITORY and (if private) secret GP_REPO_TOKEN."
+            exit 1
+          fi
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.2"
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Build web
+        run: |
+          flutter build web --release \
+            --base-href "/ai_cancer_detection/" \
+            --dart-define=SERVER_URL="${{ vars.SERVER_URL != '' && vars.SERVER_URL || 'https://gp-api.lasheen.dev/' }}"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
