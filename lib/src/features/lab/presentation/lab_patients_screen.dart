@@ -79,18 +79,6 @@ class _PatientActionsCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                FilledButton.icon(
-                  onPressed: () {
-                    context.pushNamed(
-                      AppRoute.labAddScan.name,
-                      pathParameters: {
-                        'patientId': patient.id.toString(),
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.upload_file_rounded),
-                  label: const Text('Upload Scan'),
-                ),
                 OutlinedButton.icon(
                   onPressed: () {
                     context.pushNamed(
@@ -102,6 +90,18 @@ class _PatientActionsCard extends StatelessWidget {
                   },
                   icon: const Icon(Icons.monitor_heart_rounded),
                   label: const Text('Add Health Measurement'),
+                ),
+                FilledButton.icon(
+                  onPressed: () {
+                    context.pushNamed(
+                      AppRoute.labAddScan.name,
+                      pathParameters: {
+                        'patientId': patient.id.toString(),
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.upload_file_rounded),
+                  label: const Text('Upload Scan'),
                 ),
               ],
             ),
