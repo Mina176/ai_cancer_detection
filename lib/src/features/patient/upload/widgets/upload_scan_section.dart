@@ -7,13 +7,15 @@ import 'package:flutter/material.dart';
 class UploadScanSection extends StatelessWidget {
   const UploadScanSection({
     super.key,
-    required this.imageBytes,
-    required this.onPickImage,
+    required this.fileBytes,
+    required this.fileName,
+    required this.onPickFile,
     required this.onCancel,
   });
 
-  final Uint8List? imageBytes;
-  final VoidCallback onPickImage;
+  final Uint8List? fileBytes;
+  final String? fileName;
+  final VoidCallback onPickFile;
   final VoidCallback onCancel;
 
   @override
@@ -49,16 +51,18 @@ class UploadScanSection extends StatelessWidget {
                 ),
                 32.heightBox,
                 UploadCard(
-                  imageBytes: imageBytes,
-                  onPickImage: onPickImage,
+                  fileBytes: fileBytes,
+                  fileName: fileName,
+                  onPickFile: onPickFile,
                   onCancel: onCancel,
                 ),
               ],
             ),
           )
         : UploadCard(
-            imageBytes: imageBytes,
-            onPickImage: onPickImage,
+            fileBytes: fileBytes,
+            fileName: fileName,
+            onPickFile: onPickFile,
             onCancel: onCancel,
           );
   }

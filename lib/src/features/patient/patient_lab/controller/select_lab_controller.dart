@@ -72,12 +72,16 @@ class SelectLabController extends _$SelectLabController {
     if (isSelected) {
       newLabs = previousLabs.where((l) => l.labId != labId).toList();
     } else {
-      final patientId = ref.read(patientProfileProvider).value?.id;
+      final patient = await ref.read(patientProfileProvider.future);
+      final patientId = patient.id;
+      if (patientId == null) {
+        return false;
+      }
       newLabs = [
         ...previousLabs,
         PatientLabModel(
           labId: labId,
-          patientId: patientId!,
+          patientId: patientId,
         ),
       ];
     }

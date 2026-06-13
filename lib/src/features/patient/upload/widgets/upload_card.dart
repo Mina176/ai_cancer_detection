@@ -6,18 +6,20 @@ import 'package:flutter/services.dart';
 class UploadCard extends StatelessWidget {
   const UploadCard({
     super.key,
-    required this.imageBytes,
-    required this.onPickImage,
+    required this.fileBytes,
+    required this.fileName,
+    required this.onPickFile,
     required this.onCancel,
   });
 
-  final Uint8List? imageBytes;
-  final VoidCallback onPickImage;
+  final Uint8List? fileBytes;
+  final String? fileName;
+  final VoidCallback onPickFile;
   final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
-    return imageBytes == null
+    return fileBytes == null
         ? Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: Sizes.kHorizontalPadding,
@@ -48,14 +50,14 @@ class UploadCard extends StatelessWidget {
                       ),
                       8.heightBox,
                       Text(
-                        'Supports DICOM, JPG, PNG up to 500MB',
+                        'Supports DICOM only',
                         style: context.bodyMedium?.copyWith(
                           color: context.theme.hintColor,
                         ),
                       ),
                       24.heightBox,
                       TextButton(
-                        onPressed: onPickImage,
+                        onPressed: onPickFile,
                         style: TextButton.styleFrom(
                           minimumSize: const Size(160, 48),
                         ),
@@ -74,7 +76,7 @@ class UploadCard extends StatelessWidget {
             ),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: context.theme.primaryColor.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: SizedBox(
@@ -83,10 +85,35 @@ class UploadCard extends StatelessWidget {
                   alignment: Alignment.topRight,
                   children: [
                     Center(
-                      child: Image.memory(
-                        imageBytes!,
-                        fit: BoxFit.contain,
-                      ).paddingSymmetric(vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.description_outlined,
+                            size: 64,
+                            color: Colors.white,
+                          ),
+                          16.heightBox,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Text(
+                              fileName ?? 'Selected DICOM file',
+                              textAlign: TextAlign.center,
+                              style:
+                                  (context.bodyLarge?.extraBold ??
+                                          const TextStyle())
+                                      .copyWith(color: Colors.white),
+                            ),
+                          ),
+                          8.heightBox,
+                          Text(
+                            'DICOM file ready to upload',
+                            style: context.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.close, color: Colors.white),

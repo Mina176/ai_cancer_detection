@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
+import 'package:file_picker/file_picker.dart';
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:cancer_ai_detection/src/features/lab/controller/lab_patients_provider.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gp_backend_client/gp_backend_client.dart';
-import 'package:image_picker/image_picker.dart';
 
 class LabAddScanScreen extends ConsumerStatefulWidget {
   const LabAddScanScreen({
@@ -26,41 +26,43 @@ class LabAddScanScreen extends ConsumerStatefulWidget {
 }
 
 class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
-  XFile? selectedXFile;
-  Uint8List? webImageBytes;
-  final ImagePicker picker = ImagePicker();
+  Uint8List? selectedFileBytes;
+  String? selectedFileName;
 
   DateTime selectedDate = DateTime.now();
   ScanType selectedScanType = ScanType.mri;
   BodyPart selectedBodyPart = BodyPart.head;
   bool isUploading = false;
 
-  Future<void> pickImage() async {
-    final XFile? pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1024,
-      maxHeight: 1024,
+  Future<void> pickScanFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const [
+        'dcm',
+        'dicom',
+      ],
+      withData: true,
     );
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
+    final pickedFile = result?.files.single;
+    if (pickedFile?.bytes != null) {
       setState(() {
-        selectedXFile = pickedFile;
-        webImageBytes = bytes;
+        selectedFileBytes = pickedFile!.bytes;
+        selectedFileName = pickedFile.name;
       });
     }
   }
 
   Future<void> uploadScan() async {
-    if (webImageBytes == null) {
+    if (selectedFileBytes == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a scan image first.')),
+        const SnackBar(content: Text('Please select a scan file first.')),
       );
       return;
     }
 
     setState(() => isUploading = true);
     try {
-      final ByteData imageByteData = ByteData.view(webImageBytes!.buffer);
+      final ByteData imageByteData = ByteData.view(selectedFileBytes!.buffer);
       await client.lab.addScan(
         widget.patientId,
         imageByteData,
@@ -96,11 +98,12 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                 Expanded(
                   flex: 6,
                   child: UploadScanSection(
-                    imageBytes: webImageBytes,
-                    onPickImage: pickImage,
+                    fileBytes: selectedFileBytes,
+                    fileName: selectedFileName,
+                    onPickFile: pickScanFile,
                     onCancel: () => setState(() {
-                      selectedXFile = null;
-                      webImageBytes = null;
+                      selectedFileBytes = null;
+                      selectedFileName = null;
                     }),
                   ),
                 ),
@@ -152,11 +155,12 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                     child: Column(
                       children: [
                         UploadScanSection(
-                          imageBytes: webImageBytes,
-                          onPickImage: pickImage,
+                          fileBytes: selectedFileBytes,
+                          fileName: selectedFileName,
+                          onPickFile: pickScanFile,
                           onCancel: () => setState(() {
-                            selectedXFile = null;
-                            webImageBytes = null;
+                            selectedFileBytes = null;
+                            selectedFileName = null;
                           }),
                         ),
                         ScanDataForm(

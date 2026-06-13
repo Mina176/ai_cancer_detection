@@ -34,7 +34,6 @@ class LabPatientsScreen extends ConsumerWidget {
                     child: Text('No assigned patients found.'),
                   );
                 }
-
                 return ListView.separated(
                   itemCount: patients.length,
                   separatorBuilder: (context, index) => 8.heightBox,
