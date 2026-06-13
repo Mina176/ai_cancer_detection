@@ -1,4 +1,3 @@
-import 'package:awesome_extensions/awesome_extensions.dart' hide NavigatorExt;
 import 'package:cancer_ai_detection/main.dart';
 import 'package:cancer_ai_detection/src/features/doctor/profile/doctor_profile_provider.dart';
 import 'package:cancer_ai_detection/src/features/lab/controller/lab_profile_provider.dart';
@@ -11,12 +10,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  bool _isSigningOut = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final role = ref.watch(userRoleProvider);
+
     final isDoctor = role == 'doctor';
     final isLabSpecialist = role == 'labSpecialist';
     final body = isDoctor
@@ -54,20 +62,33 @@ class SettingsScreen extends ConsumerWidget {
                 error: (error, stack) => Center(child: Text('Error: $error')),
               );
     return Scaffold(
-      appBar: context.isLandscape
-          ? null
-          : AppBar(
-              title: const Text('Settings'),
-              actions: [
-                IconButton(
-                  onPressed: () async {
-                    await client.auth.signOutDevice();
-                    ref.read(userRoleProvider.notifier).setRole(null);
+      appBar: AppBar(
+        title: const Text('Settings'),
+        actions: [
+          IconButton(
+            onPressed: _isSigningOut
+                ? null
+                : () async {
+                    setState(() => _isSigningOut = true);
+                    try {
+                      await client.auth.signOutDevice();
+                      ref.read(userRoleProvider.notifier).setRole(null);
+                    } finally {
+                      if (mounted) {
+                        setState(() => _isSigningOut = false);
+                      }
+                    }
                   },
-                  icon: const Icon(Icons.logout_rounded),
-                ),
-              ],
-            ),
+            icon: _isSigningOut
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.logout_rounded),
+          ),
+        ],
+      ),
       body: body,
     );
   }
