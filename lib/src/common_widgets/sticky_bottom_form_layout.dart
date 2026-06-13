@@ -25,17 +25,14 @@ class StickyBottomFormLayout extends StatelessWidget {
         ),
         child: Column(
           children: [
-            context.isLandscape
-                ? Sizes.kVerticalPadding.heightBox
-                : 0.heightBox,
             Expanded(
               child: SingleChildScrollView(
                 child: formContent,
               ),
             ),
-            PrimaryButton(
-              label: 'Save',
-              onPressed: onSave,
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Save'),
             ),
           ],
         ),
