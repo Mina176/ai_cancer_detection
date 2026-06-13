@@ -1,5 +1,4 @@
 import 'package:cancer_ai_detection/src/utils/constants.dart';
-import 'package:cancer_ai_detection/src/common_widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
 
