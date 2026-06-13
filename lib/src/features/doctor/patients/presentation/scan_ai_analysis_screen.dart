@@ -146,7 +146,7 @@ class ScanAiAnalysisScreen extends ConsumerWidget {
                 ),
               ),
               16.heightBox,
-              ElevatedButton.icon(
+              FilledButton.icon(
                 onPressed: () => context.goNamed(
                   AppRoute.addDiagnosis.name,
                   pathParameters: {

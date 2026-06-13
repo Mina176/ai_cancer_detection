@@ -29,10 +29,11 @@ class StickyBottomFormLayout extends StatelessWidget {
                 child: formContent,
               ),
             ),
-            ElevatedButton(
+            FilledButton(
               onPressed: () {},
               child: Text('Save'),
             ),
+            SizedBox(height: Sizes.kBottomButtonPadding),
           ],
         ),
       ),

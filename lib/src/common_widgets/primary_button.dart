@@ -35,7 +35,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
       padding: EdgeInsets.only(
         bottom: Sizes.kVerticalPadding,
       ),
-      child: ElevatedButton(
+      child: FilledButton(
         onPressed: isLoading ? null : handlePress,
         child: isLoading
             ? const SizedBox(

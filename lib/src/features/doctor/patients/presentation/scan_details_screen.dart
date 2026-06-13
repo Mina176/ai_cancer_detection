@@ -102,7 +102,7 @@ class ScanDetailsScreen extends StatelessWidget {
             ),
           ),
           16.heightBox,
-          ElevatedButton(
+          FilledButton(
             onPressed: () => context.pushNamed(
               AppRoute.scanAnalysis.name,
               pathParameters: {'patientId': scan!.patientProfileId.toString()},

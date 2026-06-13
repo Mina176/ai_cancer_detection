@@ -68,7 +68,7 @@ class PatientSettingsLayout extends ConsumerWidget {
                       ),
                       TextButton(
                         onPressed: () => context.pushNamed(
-                          AppRoute.labForm.name,
+                          AppRoute.patientForm.name,
                           queryParameters: {'isEditing': 'true'},
                         ),
                         child: const Text('Edit Profile'),

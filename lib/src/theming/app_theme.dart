@@ -53,8 +53,8 @@ class AppTheme {
         color: Color.fromARGB(255, 163, 166, 170),
         space: 32,
       ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
           minimumSize: const Size(double.infinity, 48),
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
