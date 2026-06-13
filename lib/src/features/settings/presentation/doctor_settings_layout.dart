@@ -40,7 +40,7 @@ class DoctorSettingsLayout extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () => context.pushNamed(
-                          AppRoute.labForm.name,
+                          AppRoute.doctorForm.name,
                           queryParameters: {'isEditing': 'true'},
                         ),
                         child: const Text('Edit Profile'),
