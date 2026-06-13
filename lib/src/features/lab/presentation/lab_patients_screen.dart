@@ -91,7 +91,7 @@ class _PatientActionsCard extends StatelessWidget {
                   icon: const Icon(Icons.monitor_heart_rounded),
                   label: const Text('Add Health Measurement'),
                 ),
-                FilledButton.icon(
+                OutlinedButton.icon(
                   onPressed: () {
                     context.pushNamed(
                       AppRoute.labAddScan.name,
