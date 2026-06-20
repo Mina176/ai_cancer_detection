@@ -26,7 +26,6 @@ enum AppRoute {
   addMedicalHistory,
   healthMeasurments,
   addHealthMeasurement,
-  selectedDoctor,
   chooseDoctor,
   chooseLab,
 }

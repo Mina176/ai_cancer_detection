@@ -105,7 +105,6 @@ class ScanDetailsScreen extends StatelessWidget {
           FilledButton(
             onPressed: () => context.pushNamed(
               AppRoute.scanAnalysis.name,
-              pathParameters: {'patientId': scan!.patientProfileId.toString()},
               extra: scan,
             ),
             child: const Text('View AI Analysis'),

@@ -248,7 +248,7 @@ class PatientSettingsLayout extends ConsumerWidget {
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () =>
-                          context.pushNamed(AppRoute.selectedDoctor.name),
+                          context.pushNamed(AppRoute.chooseDoctor.name),
                     ),
                   ),
                   Card(
