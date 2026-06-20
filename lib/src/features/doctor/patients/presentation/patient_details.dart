@@ -65,6 +65,16 @@ class _PatientDetailsState extends ConsumerState<PatientDetails> {
             ),
       body: patientAsync.when(
         data: (patient) {
+          final scans = [
+            MedicalScanModel(
+              patientProfileId: UuidValue.fromString(
+                '019d9dbd-08de-7caf-9481-6ca2edf343e8',
+              ),
+              scanType: ScanType.ct,
+              bodyPart: BodyPart.chest,
+              scanDate: DateTime.now(),
+            ),
+          ];
           return Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
@@ -152,139 +162,107 @@ class _PatientDetailsState extends ConsumerState<PatientDetails> {
                       GenericDetailsCard(
                         patient: patient,
                         title: 'Medical Scans',
-                        child: (patient.medicalScans ?? []).isEmpty
-                            ? const Text('No scans found.')
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  for (
-                                    int i = 0;
-                                    i < (patient.medicalScans ?? []).length;
-                                    i++
-                                  ) ...[
-                                    if ((patient.medicalScans![i].imageUrl ??
-                                            '')
-                                        .isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 8,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => PhotoView(
-                                                  imageProvider: NetworkImage(
-                                                    patient
-                                                        .medicalScans![i]
-                                                        .imageUrl!,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            child: Image.network(
-                                              patient
-                                                  .medicalScans![i]
-                                                  .imageUrl!,
-                                              height: 140,
-                                              width: double.infinity,
-                                              fit: BoxFit.cover,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (int i = 0; i < scans.length; i++) ...[
+                              if ((scans[i].imageUrl ?? '').isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: 8,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      10,
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PhotoView(
+                                            imageProvider: NetworkImage(
+                                              scans[i].imageUrl!,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    LabeledText(
-                                      icon: Icons.document_scanner_rounded,
-                                      label: 'Scan Type',
-                                      value: patient
-                                          .medicalScans![i]
-                                          .scanType
-                                          .name,
-                                    ),
-                                    LabeledText(
-                                      icon: Icons.accessibility_new_outlined,
-                                      label: 'Body Part',
-                                      value: patient
-                                          .medicalScans![i]
-                                          .bodyPart
-                                          .name,
-                                    ),
-                                    LabeledText(
-                                      icon: Icons.event_outlined,
-                                      label: 'Scan Date',
-                                      value: DateFormat('d/M/y').format(
-                                        patient.medicalScans![i].scanDate,
+                                      child: Image.network(
+                                        scans[i].imageUrl!,
+                                        height: 140,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                    if ((patient.medicalScans![i].notes ?? '')
-                                        .isNotEmpty)
-                                      LabeledText(
-                                        icon: Icons.sticky_note_2_outlined,
-                                        label: 'Notes',
-                                        value: patient.medicalScans![i].notes!,
-                                      ),
-                                    if (patient.medicalScans![i].uploadedAt !=
-                                        null)
-                                      LabeledText(
-                                        icon: Icons.cloud_upload_outlined,
-                                        label: 'Uploaded At',
-                                        value: DateFormat('d/M/y').format(
-                                          patient.medicalScans![i].uploadedAt!,
-                                        ),
-                                      ),
-                                    if (patient.medicalScans![i].prediction ==
-                                        null)
-                                      LabeledText(
-                                        icon: Icons.psychology_outlined,
-                                        label: 'AI Prediction',
-                                        value: 'No AI prediction yet',
-                                      )
-                                    else ...[
-                                      LabeledText(
-                                        icon: Icons.psychology_outlined,
-                                        label: 'Prediction',
-                                        value: patient
-                                            .medicalScans![i]
-                                            .prediction!
-                                            .predictionLabel,
-                                      ),
-                                      if ((patient
-                                                  .medicalScans![i]
-                                                  .prediction!
-                                                  .rawOutput ??
-                                              '')
-                                          .isNotEmpty)
-                                        LabeledText(
-                                          icon: Icons.description_outlined,
-                                          label: 'LLM Output',
-                                          value: patient
-                                              .medicalScans![i]
-                                              .prediction!
-                                              .rawOutput!,
-                                        ),
-                                      LabeledText(
-                                        icon: Icons.percent_outlined,
-                                        label: 'Probability',
-                                        value:
-                                            '${(patient.medicalScans![i].prediction!.probability * 100).toStringAsFixed(1)}%',
-                                      ),
-                                      LabeledText(
-                                        icon: Icons.tune_outlined,
-                                        label: 'Threshold',
-                                        value:
-                                            '${(patient.medicalScans![i].prediction!.threshold * 100).toStringAsFixed(1)}%',
-                                      ),
-                                    ],
-                                    if (i !=
-                                        (patient.medicalScans ?? []).length - 1)
-                                      const Divider(height: 20),
-                                  ],
-                                ],
+                                  ),
+                                ),
+                              LabeledText(
+                                icon: Icons.document_scanner_rounded,
+                                label: 'Scan Type',
+                                value: scans[i].scanType.name,
                               ),
+                              LabeledText(
+                                icon: Icons.accessibility_new_outlined,
+                                label: 'Body Part',
+                                value: scans[i].bodyPart.name,
+                              ),
+                              LabeledText(
+                                icon: Icons.event_outlined,
+                                label: 'Scan Date',
+                                value: DateFormat('d/M/y').format(
+                                  scans[i].scanDate,
+                                ),
+                              ),
+                              if ((scans[i].notes ?? '').isNotEmpty)
+                                LabeledText(
+                                  icon: Icons.sticky_note_2_outlined,
+                                  label: 'Notes',
+                                  value: scans[i].notes!,
+                                ),
+                              if (scans[i].uploadedAt != null)
+                                LabeledText(
+                                  icon: Icons.cloud_upload_outlined,
+                                  label: 'Uploaded At',
+                                  value: DateFormat('d/M/y').format(
+                                    scans[i].uploadedAt!,
+                                  ),
+                                ),
+                              if (scans[i].prediction == null)
+                                LabeledText(
+                                  icon: Icons.psychology_outlined,
+                                  label: 'AI Prediction',
+                                  value: 'No AI prediction yet',
+                                )
+                              else ...[
+                                LabeledText(
+                                  icon: Icons.psychology_outlined,
+                                  label: 'Prediction',
+                                  value: scans[i].prediction!.predictionLabel,
+                                ),
+                                if ((scans[i].prediction!.rawOutput ?? '')
+                                    .isNotEmpty)
+                                  LabeledText(
+                                    icon: Icons.description_outlined,
+                                    label: 'LLM Output',
+                                    value: scans[i].prediction!.rawOutput!,
+                                  ),
+                                LabeledText(
+                                  icon: Icons.percent_outlined,
+                                  label: 'Probability',
+                                  value:
+                                      '${(scans[i].prediction!.probability * 100).toStringAsFixed(1)}%',
+                                ),
+                                LabeledText(
+                                  icon: Icons.tune_outlined,
+                                  label: 'Threshold',
+                                  value:
+                                      '${(scans[i].prediction!.threshold * 100).toStringAsFixed(1)}%',
+                                ),
+                              ],
+                              if (i != scans.length - 1)
+                                const Divider(height: 20),
+                            ],
+                          ],
+                        ),
                         onViewAllPressed: () => GoRouter.of(context).pushNamed(
                           AppRoute.patientScans.name,
                           pathParameters: {

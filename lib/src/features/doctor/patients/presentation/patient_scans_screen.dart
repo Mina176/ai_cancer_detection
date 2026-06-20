@@ -19,7 +19,14 @@ class PatientScansScreen extends ConsumerWidget {
           : AppBar(title: const Text('Patient Scans')),
       body: patientAsync.when(
         data: (patient) {
-          final scans = patient.medicalScans ?? [];
+          final scans = [
+            MedicalScanModel(
+              patientProfileId: patientId,
+              scanType: ScanType.ct,
+              bodyPart: BodyPart.chest,
+              scanDate: DateTime.now(),
+            ),
+          ];
           if (scans.isEmpty) return const EmptyScansState();
           return ListView.separated(
             padding: const EdgeInsets.all(16),
@@ -112,7 +119,6 @@ class ScanCard extends StatelessWidget {
         ),
         onTap: () => context.pushNamed(
           AppRoute.scan.name,
-          pathParameters: {'patientId': patientId.toString()},
           extra: scan,
         ),
       ),
