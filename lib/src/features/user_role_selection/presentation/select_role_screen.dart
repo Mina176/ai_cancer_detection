@@ -15,41 +15,48 @@ class SelectRoleScreen extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.kHorizontalPadding,
         ),
-        child: Column(
-          mainAxisAlignment: .center,
-          crossAxisAlignment: .stretch,
-          spacing: 16,
-          children: [
-            Text(
-              'Hello, Select Your Role',
-              style: Theme.of(context).textTheme.headlineMedium,
-              textAlign: TextAlign.center,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 500),
+            child: Column(
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .stretch,
+              spacing: 16,
+              children: [
+                Text(
+                  'Hello, Select Your Role',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
+                ),
+                UserOption(
+                  icon: Icon(Icons.person_rounded, size: 36),
+                  text: 'Patient',
+                  onTap: () {
+                    ref.read(userRoleProvider.notifier).setRole('patient');
+                    context.goNamed(AppRoute.patientForm.name);
+                  },
+                ),
+                UserOption(
+                  icon: Icon(Icons.local_hospital_rounded, size: 32),
+                  text: 'Doctor',
+                  onTap: () {
+                    ref.read(userRoleProvider.notifier).setRole('doctor');
+                    context.goNamed(AppRoute.doctorForm.name);
+                  },
+                ),
+                UserOption(
+                  icon: Icon(Icons.biotech_rounded, size: 36),
+                  text: 'Lab Specialist',
+                  onTap: () {
+                    ref
+                        .read(userRoleProvider.notifier)
+                        .setRole('labSpecialist');
+                    context.goNamed(AppRoute.labForm.name);
+                  },
+                ),
+              ],
             ),
-            UserOption(
-              icon: Icon(Icons.person_rounded, size: 36),
-              text: 'Patient',
-              onTap: () {
-                ref.read(userRoleProvider.notifier).setRole('patient');
-                context.goNamed(AppRoute.patientForm.name);
-              },
-            ),
-            UserOption(
-              icon: Icon(Icons.local_hospital_rounded, size: 32),
-              text: 'Doctor',
-              onTap: () {
-                ref.read(userRoleProvider.notifier).setRole('doctor');
-                context.goNamed(AppRoute.doctorForm.name);
-              },
-            ),
-            UserOption(
-              icon: Icon(Icons.biotech_rounded, size: 36),
-              text: 'Lab Specialist',
-              onTap: () {
-                ref.read(userRoleProvider.notifier).setRole('labSpecialist');
-                context.goNamed(AppRoute.labForm.name);
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );

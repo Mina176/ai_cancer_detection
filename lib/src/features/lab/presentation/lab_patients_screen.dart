@@ -25,30 +25,43 @@ class LabPatientsScreen extends ConsumerWidget {
           constraints: const BoxConstraints(maxWidth: 760),
           child: Padding(
             padding: const EdgeInsets.symmetric(
+              vertical: Sizes.kVerticalPadding,
               horizontal: Sizes.kHorizontalPadding,
             ),
-            child: patientsAsyncValue.when(
-              data: (patients) {
-                if (patients.isEmpty) {
-                  return const Center(
-                    child: Text('No assigned patients found.'),
-                  );
-                }
-                return ListView.separated(
-                  itemCount: patients.length,
-                  separatorBuilder: (context, index) => 8.heightBox,
-                  itemBuilder: (context, index) {
-                    final patient = patients[index];
-                    return _PatientActionsCard(patient: patient);
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Patients Assigned',
+                  style: context.headlineMedium?.bold,
+                ),
+                patientsAsyncValue.when(
+                  data: (patients) {
+                    if (patients.isEmpty) {
+                      return const Center(
+                        child: Text('No assigned patients found.'),
+                      );
+                    }
+                    return Expanded(
+                      child: ListView.separated(
+                        itemCount: patients.length,
+                        separatorBuilder: (context, index) => 8.heightBox,
+                        itemBuilder: (context, index) {
+                          final patient = patients[index];
+                          return _PatientActionsCard(patient: patient);
+                        },
+                      ),
+                    );
                   },
-                );
-              },
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (error, stackTrace) => Center(
-                child: Text('Error loading patients: $error'),
-              ),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (error, stackTrace) => Center(
+                    child: Text('Error loading patients: $error'),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
