@@ -17,7 +17,7 @@ class StickyBottomFormLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: context.isLandscape ? null : AppBar(title: Text(title)),
+      appBar: AppBar(title: Text(title)),
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: Sizes.kHorizontalPadding,

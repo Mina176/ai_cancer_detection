@@ -50,7 +50,7 @@ class UploadCard extends StatelessWidget {
                       ),
                       8.heightBox,
                       Text(
-                        'Supports DICOM only',
+                        'Supports DICOM & PNG files',
                         style: context.bodyMedium?.copyWith(
                           color: context.theme.hintColor,
                         ),

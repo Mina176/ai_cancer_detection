@@ -107,7 +107,6 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                     }),
                   ),
                 ),
-                const VerticalDivider(width: 1),
                 Expanded(
                   flex: 3,
                   child: Column(

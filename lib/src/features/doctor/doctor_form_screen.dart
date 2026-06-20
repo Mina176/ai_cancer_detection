@@ -55,7 +55,7 @@ class _DoctorFormScreenState extends ConsumerState<DoctorFormScreen> {
           formContent: Form(
             key: formKey,
             child: Column(
-              spacing: 8,
+              spacing: 12,
               children: [
                 TextFormField(
                   initialValue: profile.fullName ?? '',
