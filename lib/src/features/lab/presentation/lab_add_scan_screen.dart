@@ -40,6 +40,7 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
       allowedExtensions: const [
         'dcm',
         'dicom',
+        'png',
       ],
       withData: true,
     );

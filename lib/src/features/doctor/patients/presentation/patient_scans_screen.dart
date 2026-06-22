@@ -19,14 +19,7 @@ class PatientScansScreen extends ConsumerWidget {
           : AppBar(title: const Text('Patient Scans')),
       body: patientAsync.when(
         data: (patient) {
-          final scans = [
-            MedicalScanModel(
-              patientProfileId: patientId,
-              scanType: ScanType.ct,
-              bodyPart: BodyPart.chest,
-              scanDate: DateTime.now(),
-            ),
-          ];
+          final scans = patient.medicalScans ?? [];
           if (scans.isEmpty) return const EmptyScansState();
           return ListView.separated(
             padding: const EdgeInsets.all(16),

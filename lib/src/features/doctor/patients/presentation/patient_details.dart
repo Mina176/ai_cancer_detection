@@ -65,16 +65,7 @@ class _PatientDetailsState extends ConsumerState<PatientDetails> {
             ),
       body: patientAsync.when(
         data: (patient) {
-          final scans = [
-            MedicalScanModel(
-              patientProfileId: UuidValue.fromString(
-                '019d9dbd-08de-7caf-9481-6ca2edf343e8',
-              ),
-              scanType: ScanType.ct,
-              bodyPart: BodyPart.chest,
-              scanDate: DateTime.now(),
-            ),
-          ];
+          final scans = patient.medicalScans ?? [];
           return Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
