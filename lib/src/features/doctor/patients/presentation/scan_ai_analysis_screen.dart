@@ -19,7 +19,7 @@ class ScanAiAnalysisScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final predictionAsync = ref.watch(scanPredictionProvider(medicalScan!.id!));
+    final prediction = medicalScan?.prediction;
     if (medicalScan == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('AI Analysis')),
@@ -29,7 +29,7 @@ class ScanAiAnalysisScreen extends ConsumerWidget {
       );
     }
     print(
-      'Scan ID: ${medicalScan!.id}, Prediction Async State: $predictionAsync',
+      'Scan ID: ${medicalScan!.id}, Prediction Async State: $prediction',
     );
     return Scaffold(
       appBar: AppBar(
@@ -45,128 +45,116 @@ class ScanAiAnalysisScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: predictionAsync.when(
-        data: (prediction) {
-          return ListView(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.kVerticalPadding,
-              horizontal: Sizes.kHorizontalPadding,
-            ),
-            children: [
-              Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    GestureDetector(
-                      onTap: medicalScan!.imageUrl == null
-                          ? null
-                          : () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PhotoView(
-                                  imageProvider: NetworkImage(
-                                    medicalScan!.imageUrl!,
-                                  ),
-                                ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(
+          vertical: Sizes.kVerticalPadding,
+          horizontal: Sizes.kHorizontalPadding,
+        ),
+        children: [
+          Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                GestureDetector(
+                  onTap: medicalScan!.imageUrl == null
+                      ? null
+                      : () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PhotoView(
+                              imageProvider: NetworkImage(
+                                medicalScan!.imageUrl!,
                               ),
                             ),
-                      child: Image.network(
-                        medicalScan!.imageUrl ??
-                            'https://via.placeholder.com/150?text=No+Image',
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Model Output',
-                            style: Theme.of(context).textTheme.titleLarge,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Review the prediction before adding a doctor\'s diagnosis.',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              16.heightBox,
-              if (prediction == null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.orange),
-                    ),
-                    child: const Text(
-                      'No AI prediction found in the database for this scan yet. It may still be processing.',
-                      style: TextStyle(color: Colors.orange),
-                    ),
+                        ),
+                  child: Image.network(
+                    medicalScan!.imageUrl ??
+                        'https://via.placeholder.com/150?text=No+Image',
+                    height: 180,
+                    fit: BoxFit.cover,
                   ),
                 ),
-              Card(
-                child: Padding(
+                Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AnalysisTile(
-                        label: 'Prediction Label',
-                        value: _formatText(prediction?.predictionLabel),
+                      Text(
+                        'Model Output',
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const Divider(height: 24),
-                      AnalysisTile(
-                        label: 'Probability',
-                        value: _formatValue(prediction?.probability),
-                      ),
-                      const Divider(height: 24),
-                      AnalysisTile(
-                        label: 'Threshold',
-                        value: _formatValue(prediction?.threshold),
-                      ),
-                      const Divider(height: 24),
-                      AnalysisTile(
-                        label: 'Scan Date',
-                        value: DateFormat(
-                          'd/M/y',
-                        ).format(medicalScan!.scanDate),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Review the prediction before adding a doctor\'s diagnosis.',
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
                 ),
-              ),
-              16.heightBox,
-              FilledButton.icon(
-                onPressed: () => context.goNamed(
-                  AppRoute.addDiagnosis.name,
-                  pathParameters: {
-                    'patientId': medicalScan!.patientProfileId.toString(),
-                  },
-                ),
-                icon: const Icon(Icons.note_add_outlined),
-                label: const Text('Add Doctor\'s Diagnosis'),
-              ),
-            ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'Failed to load AI prediction: $error',
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ],
+            ),
           ),
-        ),
+          16.heightBox,
+          if (prediction == null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange),
+                ),
+                child: const Text(
+                  'No AI prediction found in the database for this scan yet. It may still be processing.',
+                  style: TextStyle(color: Colors.orange),
+                ),
+              ),
+            ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AnalysisTile(
+                    label: 'Prediction Label',
+                    value: _formatText(prediction?.predictionLabel),
+                  ),
+                  const Divider(height: 24),
+                  AnalysisTile(
+                    label: 'Probability',
+                    value: _formatValue(prediction?.probability),
+                  ),
+                  const Divider(height: 24),
+                  AnalysisTile(
+                    label: 'Threshold',
+                    value: _formatValue(prediction?.threshold),
+                  ),
+                  const Divider(height: 24),
+                  AnalysisTile(
+                    label: 'Scan Date',
+                    value: DateFormat(
+                      'd/M/y',
+                    ).format(medicalScan!.scanDate),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          16.heightBox,
+          FilledButton.icon(
+            onPressed: () => context.goNamed(
+              AppRoute.addDiagnosis.name,
+              pathParameters: {
+                'patientId': medicalScan!.patientProfileId.toString(),
+              },
+            ),
+            icon: const Icon(Icons.note_add_outlined),
+            label: const Text('Add Doctor\'s Diagnosis'),
+          ),
+        ],
       ),
     );
   }

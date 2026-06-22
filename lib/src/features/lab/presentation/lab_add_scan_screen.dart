@@ -26,7 +26,7 @@ class LabAddScanScreen extends ConsumerStatefulWidget {
 }
 
 class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
-  Uint8List? selectedFileBytes;
+  PlatformFile? selectedFile;
   String? selectedFileName;
 
   DateTime selectedDate = DateTime.now();
@@ -44,17 +44,18 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
       ],
       withData: true,
     );
+
     final pickedFile = result?.files.single;
     if (pickedFile?.bytes != null) {
       setState(() {
-        selectedFileBytes = pickedFile!.bytes;
-        selectedFileName = pickedFile.name;
+        selectedFile = pickedFile;
+        selectedFileName = pickedFile!.name;
       });
     }
   }
 
   Future<void> uploadScan() async {
-    if (selectedFileBytes == null) {
+    if (selectedFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a scan file first.')),
       );
@@ -63,10 +64,14 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
 
     setState(() => isUploading = true);
     try {
-      final ByteData imageByteData = ByteData.view(selectedFileBytes!.buffer);
+      final rawBytes = selectedFile!.bytes!;
+      final safeByteData = rawBytes.buffer.asByteData(
+        rawBytes.offsetInBytes,
+        rawBytes.lengthInBytes,
+      );
       await client.lab.addScan(
         widget.patientId,
-        imageByteData,
+        safeByteData,
         selectedScanType,
         selectedBodyPart,
         selectedDate,
@@ -99,11 +104,11 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                 Expanded(
                   flex: 6,
                   child: UploadScanSection(
-                    fileBytes: selectedFileBytes,
+                    fileBytes: selectedFile?.bytes,
                     fileName: selectedFileName,
                     onPickFile: pickScanFile,
                     onCancel: () => setState(() {
-                      selectedFileBytes = null;
+                      selectedFile = null;
                       selectedFileName = null;
                     }),
                   ),
@@ -155,11 +160,11 @@ class _LabAddScanScreenState extends ConsumerState<LabAddScanScreen> {
                     child: Column(
                       children: [
                         UploadScanSection(
-                          fileBytes: selectedFileBytes,
+                          fileBytes: selectedFile?.bytes,
                           fileName: selectedFileName,
                           onPickFile: pickScanFile,
                           onCancel: () => setState(() {
-                            selectedFileBytes = null;
+                            selectedFile = null;
                             selectedFileName = null;
                           }),
                         ),
